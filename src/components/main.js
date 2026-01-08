@@ -6,7 +6,11 @@ import {
   Star, Award, Home, Clock, Calendar, Building,
   FileText, Share2, Target, PieChart
 } from 'lucide-react';
+import axios from 'axios';
 import heroImage from '../images/hero.jpg';
+
+// API Configuration
+const API_BASE_URL = 'http://localhost:8000/api';
 
 // --- BRAND CONSTANTS (Strictly from PDF) ---
 const COLORS = {
@@ -347,15 +351,34 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
   const [submitted, setSubmitted] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: '', mobile: '', email: '' });
-      onClose();
-    }, 2000);
+    
+    try {
+      const response = await axios.post(`${API_BASE_URL}/join-pilot`, {
+        name: formData.name,
+        mobile: formData.mobile,
+        email: formData.email
+      });
+      
+      if (response.data.success) {
+        setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+          setFormData({ name: '', mobile: '', email: '' });
+          onClose();
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error.response || error.message || error);
+      if (error.response) {
+        alert(`Error submitting form: ${error.response.status} - ${error.response.statusText || 'Server Error'}`);
+      } else if (error.request) {
+        alert('Network error: Unable to reach the server. Please check if the backend is running on http://localhost:8000');
+      } else {
+        alert(`Error submitting form: ${error.message || 'Unknown error'}`);
+      }
+    }
   };
 
   const handleChange = (e) => {
@@ -1628,13 +1651,29 @@ const Footer = ({ t }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
     if (email) {
-      console.log('Subscribed:', email);
-      setSubscribed(true);
-      setEmail('');
-      setTimeout(() => setSubscribed(false), 3000);
+      try {
+        const response = await axios.post(`${API_BASE_URL}/stay-updated`, {
+          email: email
+        });
+        
+        if (response.data.success) {
+          setSubscribed(true);
+          setEmail('');
+          setTimeout(() => setSubscribed(false), 3000);
+        }
+      } catch (error) {
+        console.error('Error subscribing:', error.response || error.message || error);
+        if (error.response) {
+          alert(`Error subscribing: ${error.response.status} - ${error.response.statusText || 'Server Error'}`);
+        } else if (error.request) {
+          alert('Network error: Unable to reach the server. Please check if the backend is running on http://localhost:8000');
+        } else {
+          alert(`Error subscribing: ${error.message || 'Unknown error'}`);
+        }
+      }
     }
   };
 
