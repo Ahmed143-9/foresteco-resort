@@ -338,7 +338,243 @@ const formatNumber = (num) => {
 
 // --- ENHANCED COMPONENTS ---
 
-const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t }) => {
+const JoinPilotModal = ({ isOpen, onClose, language }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    mobile: '',
+    email: ''
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+    setSubmitted(true);
+    setTimeout(() => {
+      setSubmitted(false);
+      setFormData({ name: '', mobile: '', email: '' });
+      onClose();
+    }, 2000);
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div 
+      className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
+      style={{
+        zIndex: 9999,
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backdropFilter: 'blur(5px)',
+        animation: 'fadeIn 0.3s ease'
+      }}
+      onClick={onClose}
+    >
+      <div 
+        className="position-relative rounded-4 overflow-hidden shadow-lg"
+        style={{
+          width: '90%',
+          maxWidth: '500px',
+          maxHeight: '90vh',
+          animation: 'slideUp 0.3s ease'
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Background Image */}
+        <div 
+          className="position-absolute top-0 start-0 w-100 h-100"
+          style={{
+            backgroundImage: !imageError ? 'url(/form.jpg)' : 'linear-gradient(135deg, #193C26, #2a5238)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'brightness(0.4)'
+          }}
+        >
+          <img 
+            src="/form.jpg" 
+            alt="" 
+            style={{ display: 'none' }}
+            onError={() => setImageError(true)}
+          />
+        </div>
+
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="position-absolute top-0 end-0 m-3 btn btn-link text-white p-2"
+          style={{
+            zIndex: 10,
+            opacity: 0.8,
+            transition: 'opacity 0.2s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = 1}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = 0.8}
+        >
+          <X style={{ width: '24px', height: '24px' }} />
+        </button>
+
+        {/* Form Content */}
+        <div className="position-relative p-4 p-md-5" style={{ zIndex: 1 }}>
+          {!submitted ? (
+            <>
+              <h2 className="h2 fw-bold mb-2 text-center" style={{ color: '#F0EAAF' }}>
+                {language === 'en' ? 'Join the 600 Club' : '৬০০ ক্লাবে যোগ দিন'}
+              </h2>
+              <p className="text-center mb-4 mb-md-5" style={{ color: '#F0EAAF', opacity: 0.9 }}>
+                {language === 'en' 
+                  ? 'Secure your exclusive membership today' 
+                  : 'আজই আপনার এক্সক্লুসিভ সদস্যপদ নিশ্চিত করুন'}
+              </p>
+
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label className="form-label fw-bold" style={{ color: '#F0EAAF' }}>
+                    {language === 'en' ? 'Full Name' : 'পূর্ণ নাম'}
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="form-control form-control-lg"
+                    placeholder={language === 'en' ? 'Enter your full name' : 'আপনার পূর্ণ নাম লিখুন'}
+                    required
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      border: '2px solid rgba(240, 234, 175, 0.3)',
+                      color: '#193C26',
+                      fontWeight: '500'
+                    }}
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="form-label fw-bold" style={{ color: '#F0EAAF' }}>
+                    {language === 'en' ? 'Mobile Number' : 'মোবাইল নম্বর'}
+                  </label>
+                  <input
+                    type="tel"
+                    name="mobile"
+                    value={formData.mobile}
+                    onChange={handleChange}
+                    className="form-control form-control-lg"
+                    placeholder={language === 'en' ? '+880 1XXX XXXXXX' : '+৮৮০ ১XXX XXXXXX'}
+                    required
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      border: '2px solid rgba(240, 234, 175, 0.3)',
+                      color: '#193C26',
+                      fontWeight: '500'
+                    }}
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="form-label fw-bold" style={{ color: '#F0EAAF' }}>
+                    {language === 'en' ? 'Email Address' : 'ইমেইল ঠিকানা'}
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="form-control form-control-lg"
+                    placeholder={language === 'en' ? 'your.email@example.com' : 'your.email@example.com'}
+                    required
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      border: '2px solid rgba(240, 234, 175, 0.3)',
+                      color: '#193C26',
+                      fontWeight: '500'
+                    }}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-lg w-100 fw-bold py-3"
+                  style={{
+                    background: 'linear-gradient(135deg, #F0EAAF, #e6de9a)',
+                    color: '#193C26',
+                    border: 'none',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 8px 20px rgba(240, 234, 175, 0.4)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 12px 25px rgba(240, 234, 175, 0.5)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(240, 234, 175, 0.4)';
+                  }}
+                >
+                  {language === 'en' ? 'Submit Application' : 'আবেদন জমা দিন'}
+                </button>
+              </form>
+
+              <p className="text-center mt-4 small" style={{ color: '#F0EAAF', opacity: 0.8 }}>
+                {language === 'en' 
+                  ? 'Our team will contact you within 24 hours' 
+                  : 'আমাদের টিম ২৪ ঘন্টার মধ্যে আপনার সাথে যোগাযোগ করবে'}
+              </p>
+            </>
+          ) : (
+            <div className="text-center py-5">
+              <div 
+                className="rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  backgroundColor: '#10B981'
+                }}
+              >
+                <Check style={{ width: '48px', height: '48px', color: 'white' }} />
+              </div>
+              <h3 className="h3 fw-bold mb-3" style={{ color: '#F0EAAF' }}>
+                {language === 'en' ? 'Application Submitted!' : 'আবেদন সফল হয়েছে!'}
+              </h3>
+              <p style={{ color: '#F0EAAF', opacity: 0.9 }}>
+                {language === 'en' 
+                  ? 'Thank you for your interest. We will be in touch soon.' 
+                  : 'আপনার আগ্রহের জন্য ধন্যবাদ। আমরা শীঘ্রই যোগাযোগ করব।'}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+
+const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoinModal }) => {
   const [logoError, setLogoError] = useState(false);
   const [isHeroVisible, setIsHeroVisible] = useState(true);
 
@@ -407,7 +643,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t }) => {
           </span>
         </a>
 
-        {/* Fixed Toggle Button */}
+        {/* Toggle Button */}
         <button 
           className="navbar-toggler border-0"
           type="button" 
@@ -456,7 +692,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t }) => {
           }} />
         </button>
 
-        {/* Fixed Navbar Menu */}
+        {/* Navbar Menu */}
         <div 
           className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}
           style={{
@@ -504,26 +740,6 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t }) => {
                 {t.nav.asset}
               </a>
             </li>
-            {/* <li className="nav-item mx-2">
-              <a 
-                href="#portfolio" 
-                className="nav-link" 
-                style={{ 
-                  color: navTextColor,
-                  fontWeight: '500',
-                  padding: '12px 24px',
-                  borderRadius: '8px',
-                  transition: 'all 0.3s ease',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
-                  fontSize: '1.1rem'
-                }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(240, 234, 175, 0.1)'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                onClick={toggleMenu}
-              >
-                {t.nav.projects}
-              </a>
-            </li> */}
             <li className="nav-item mx-2">
               <a 
                 href="#tiers" 
@@ -616,7 +832,10 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t }) => {
                   e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.boxShadow = '0 8px 20px rgba(240, 234, 175, 0.4)';
                 }}
-                onClick={toggleMenu}
+                onClick={() => {
+                  if (isMenuOpen) toggleMenu();
+                  openJoinModal();
+                }}
               >
                 {t.nav.join}
               </button>
@@ -1732,11 +1951,12 @@ const CTABar = ({ t }) => (
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [language, setLanguage] = useState('en');
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
 
   const t = TRANSLATIONS[language];
 
   useEffect(() => {
-    if (isMenuOpen) {
+    if (isMenuOpen || isJoinModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -1744,7 +1964,7 @@ function App() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, isJoinModalOpen]);
 
   return (
     <>
@@ -1758,18 +1978,17 @@ function App() {
         }
         
         html {
-          scrollbar-width: none; /* Firefox */
-          -ms-overflow-style: none; /* IE and Edge */
+          scrollbar-width: none;
+          -ms-overflow-style: none;
         }
         
         body {
           font-family: 'Outfit', sans-serif;
           background-color: #F6F6F7;
           scroll-behavior: smooth;
-          overflow-y: scroll; /* Ensure scroll functionality */
+          overflow-y: scroll;
         }
         
-        /* Hide scrollbar for Chrome, Safari and Opera */
         body::-webkit-scrollbar {
           display: none;
           width: 0;
@@ -1777,17 +1996,14 @@ function App() {
           background: transparent;
         }
         
-        /* Hide scrollbar track */
         ::-webkit-scrollbar-track {
           background: transparent;
         }
         
-        /* Hide scrollbar thumb */
         ::-webkit-scrollbar-thumb {
           background: transparent;
         }
         
-        /* Hide scrollbar corner */
         ::-webkit-scrollbar-corner {
           background: transparent;
         }
@@ -1819,7 +2035,6 @@ function App() {
           background: linear-gradient(180deg, #F6F6F7 0%, #FFFFFF 100%);
         }
         
-        /* Smooth menu transitions */
         .navbar-collapse {
           transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
                      opacity 0.3s ease,
@@ -1834,6 +2049,13 @@ function App() {
           language={language}
           setLanguage={setLanguage}
           t={t}
+          openJoinModal={() => setIsJoinModalOpen(true)}
+        />
+        
+        <JoinPilotModal 
+          isOpen={isJoinModalOpen}
+          onClose={() => setIsJoinModalOpen(false)}
+          language={language}
         />
         
         <Hero t={t} />
@@ -1850,3 +2072,4 @@ function App() {
 }
 
 export default App;
+
