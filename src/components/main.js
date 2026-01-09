@@ -350,7 +350,8 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
   });
   const [submitted, setSubmitted] = useState(false);
   const [imageError, setImageError] = useState(false);
-
+  const [submissionMessage, setSubmissionMessage] = useState({ type: '', text: '' });
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -362,23 +363,41 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
       });
       
       if (response.data.success) {
+        setSubmissionMessage({ 
+          type: 'success', 
+          text: language === 'en' ? 'Application submitted successfully!' : 'আবেদন সফলভাবে জমা দেওয়া হয়েছে!' 
+        });
         setSubmitted(true);
-        setTimeout(() => {
-          setSubmitted(false);
-          setFormData({ name: '', mobile: '', email: '' });
-          onClose();
-        }, 2000);
       }
     } catch (error) {
       console.error('Error submitting form:', error.response || error.message || error);
+      let errorMessage = '';
       if (error.response) {
-        alert(`Error submitting form: ${error.response.status} - ${error.response.statusText || 'Server Error'}`);
+        errorMessage = language === 'en' ? 
+          `Error: ${error.response.status} - ${error.response.statusText || 'Server Error'}` :
+          `ত্রুটি: ${error.response.status} - ${error.response.statusText || 'সার্ভার ত্রুটি'}`;
       } else if (error.request) {
-        alert('Network error: Unable to reach the server. Please check if the backend is running on http://localhost:8000');
+        errorMessage = language === 'en' ?
+          'Network error: Unable to reach the server. Please check if the backend is running on http://localhost:8000' :
+          'নেটওয়ার্ক ত্রুটি: সার্ভারে যোগাযোগ করতে অক্ষম। অনুগ্রহ করে নিশ্চিত করুন যে ব্যাকএন্ড http://localhost:8000 এ চলছে';
       } else {
-        alert(`Error submitting form: ${error.message || 'Unknown error'}`);
+        errorMessage = language === 'en' ?
+          `Error: ${error.message || 'Unknown error'}` :
+          `ত্রুটি: ${error.message || 'অজানা ত্রুটি'}`;
       }
+      setSubmissionMessage({ 
+        type: 'error', 
+        text: errorMessage 
+      });
+      setSubmitted(true);
     }
+  };
+  
+  const closeSubmissionMessage = () => {
+    setSubmitted(false);
+    setSubmissionMessage({ type: '', text: '' });
+    setFormData({ name: '', mobile: '', email: '' });
+    onClose();
   };
 
   const handleChange = (e) => {
@@ -430,7 +449,7 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
         </div>
 
         {/* Close Button */}
-        <button
+        {/* <button
           onClick={onClose}
           className="position-absolute top-0 end-0 m-3 btn btn-link text-white p-2"
           style={{
@@ -442,7 +461,7 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
           onMouseLeave={(e) => e.currentTarget.style.opacity = 0.8}
         >
           <X style={{ width: '24px', height: '24px' }} />
-        </button>
+        </button> */}
 
         {/* Form Content */}
         <div className="position-relative p-4 p-md-5" style={{ zIndex: 1 }}>
@@ -551,25 +570,61 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
               </p>
             </>
           ) : (
-            <div className="text-center py-5">
-              <div 
-                className="rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
+            <div className="position-relative" style={{ zIndex: 1 }}>
+              {/* Close Button for Submission Message */}
+              <button
+                onClick={closeSubmissionMessage}
+                className="position-absolute top-0 end-0 m-2 rounded-circle d-flex align-items-center justify-content-center"
                 style={{
-                  width: '80px',
-                  height: '80px',
-                  backgroundColor: '#10B981'
+                  zIndex: 10,
+                  width: '30px',
+                  height: '30px',
+                  backgroundColor: '#FF4444',
+                  border: '2px solid #FFFFFF',
+                  color: '#FFFFFF',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
                 }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#FF0000';
+                  e.target.style.transform = 'scale(1.1)';
+                  e.target.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = '#FF4444';
+                  e.target.style.transform = 'scale(1)';
+                  e.target.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+                }}
+                aria-label="Close message"
               >
-                <Check style={{ width: '48px', height: '48px', color: 'white' }} />
+                <X style={{ width: '16px', height: '16px', strokeWidth: '3' }} />
+              </button>
+              
+              <div className="text-center py-5">
+                <div 
+                  className="rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                    backgroundColor: submissionMessage.type === 'success' ? '#10B981' : '#EF4444'
+                  }}
+                >
+                  {submissionMessage.type === 'success' ? (
+                    <Check style={{ width: '48px', height: '48px', color: 'white' }} />
+                  ) : (
+                    <X style={{ width: '48px', height: '48px', color: 'white' }} />
+                  )}
+                </div>
+                <h3 className="h3 fw-bold mb-3" style={{ color: '#F0EAAF' }}>
+                  {submissionMessage.type === 'success' ? 
+                    (language === 'en' ? 'Application Submitted!' : 'আবেদন সফল হয়েছে!') : 
+                    (language === 'en' ? 'Submission Failed' : 'জমা দেওয়া ব্যর্থ হয়েছে')}
+                </h3>
+                <p style={{ color: '#F0EAAF', opacity: 0.9 }}>
+                  {submissionMessage.text}
+                </p>
               </div>
-              <h3 className="h3 fw-bold mb-3" style={{ color: '#F0EAAF' }}>
-                {language === 'en' ? 'Application Submitted!' : 'আবেদন সফল হয়েছে!'}
-              </h3>
-              <p style={{ color: '#F0EAAF', opacity: 0.9 }}>
-                {language === 'en' 
-                  ? 'Thank you for your interest. We will be in touch soon.' 
-                  : 'আপনার আগ্রহের জন্য ধন্যবাদ। আমরা শীঘ্রই যোগাযোগ করব।'}
-              </p>
             </div>
           )}
         </div>
@@ -1415,6 +1470,19 @@ const TiersSection = ({ t, language }) => {
   const TIERS = useMemo(() => getTiersData(language), [language]);
   const [activeTab, setActiveTab] = useState('all');
 
+  // Filter tiers based on active tab
+  const filteredTiers = useMemo(() => {
+    switch (activeTab) {
+      case 'mostPopular':
+        return TIERS.filter(tier => tier.tag === 'mostPopular');
+      case 'bestValue':
+        return TIERS.filter(tier => tier.tag === 'bestValue');
+      case 'all':
+      default:
+        return TIERS;
+    }
+  }, [activeTab, TIERS]);
+
   return (
     <section id="tiers" className="py-5 py-md-8" style={{
       background: 'linear-gradient(to bottom, #FFFFFF, #F6F6F7)'
@@ -1434,11 +1502,13 @@ const TiersSection = ({ t, language }) => {
                   onClick={() => setActiveTab(tab)}
                   className={`nav-link ${activeTab === tab ? 'active' : ''}`}
                   style={{
-                    color: activeTab === tab ? '#193C26' : '#6c757d',
-                    backgroundColor: activeTab === tab ? '#193C26' : 'transparent',
+                    color: activeTab === tab ? '#FFFFFF' : '#6c757d',
+                    backgroundColor: activeTab === tab ? '#193C26' : '#e9ecef',
                     transition: 'all 0.3s ease',
                     borderRadius: '0.375rem',
-                    padding: '0.5rem 1.5rem'
+                    padding: '0.5rem 1.5rem',
+                    border: 'none',
+                    fontWeight: activeTab === tab ? 'bold' : 'normal'
                   }}
                 >
                   {tab === 'all' ? 'All Tiers' :
@@ -1451,7 +1521,7 @@ const TiersSection = ({ t, language }) => {
         </div>
 
         <div className="row g-4 g-md-5">
-          {TIERS.map((tier) => (
+          {filteredTiers.map((tier) => (
             <div
               key={tier.id}
               className="col-12 col-md-6 col-lg-3"
@@ -1470,14 +1540,22 @@ const TiersSection = ({ t, language }) => {
               >
                 {/* Tags */}
                 {tier.id === 'platinum' && (
-                  <div className="position-absolute top-0 start-50 translate-middle-x bg-gradient bg-primary text-white text-xs fw-bold px-3 px-md-4 py-1 rounded-pill mt-n3">
+                  <div className="position-absolute top-0 start-50 translate-middle-x bg-gradient bg-primary text-white text-xs fw-bold px-3 px-md-4 py-1 rounded-pill mt-n3" style={{
+                    zIndex: 2,
+                    transform: 'translateX(-50%)',
+                    whiteSpace: 'nowrap'
+                  }}>
                     <Award className="me-1" style={{width: '12px', height: '12px'}} />
                     {t.tiers.boardroom}
                   </div>
                 )}
                 
                 {tier.tag && (
-                  <div className="position-absolute top-0 start-50 translate-middle-x bg-gradient bg-warning text-success text-xs fw-bold px-3 px-md-4 py-1 rounded-pill mt-n3">
+                  <div className="position-absolute top-0 start-50 translate-middle-x bg-gradient bg-warning text-success text-xs fw-bold px-3 px-md-4 py-1 rounded-pill mt-n3" style={{
+                    zIndex: 2,
+                    transform: 'translateX(-50%)',
+                    whiteSpace: 'nowrap'
+                  }}>
                     <Star className="me-1" style={{width: '12px', height: '12px'}} />
                     {tier.tag === 'mostPopular' ? t.tiers.mostPopular : t.tiers.bestValue}
                   </div>
