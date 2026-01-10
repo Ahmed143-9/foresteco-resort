@@ -1702,7 +1702,8 @@ const FAQSection = ({ t }) => {
                       width: '20px',
                       height: '20px',
                       transition: 'transform 0.3s ease',
-                      transform: openIndex === index ? 'rotate(90deg)' : 'rotate(0deg)'
+                      transform: openIndex === index ? 'rotate(90deg)' : 'rotate(0deg)',
+                      color: '#193C26'
                     }}
                   />
                 </button>
