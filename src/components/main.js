@@ -8,6 +8,14 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import heroImage from '../images/hero.jpg';
+import reverseLogo from '../images/Forest Eco Resort_Reverse Color Logo.png';
+import website1 from '../images/Website (1).jpg';
+import website2 from '../images/Website 1.jpeg';
+import website3 from '../images/Website 2.jpeg';
+import website4 from '../images/Website 3.jpg';
+import website5 from '../images/Website .jpg';
+import website6 from '../images/Website.JPG';
+import website7 from '../images/Website.jpeg';
 
 // API Configuration
 const API_BASE_URL = 'http://localhost:8000/api';
@@ -695,18 +703,18 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
         <a href="#hero" className="navbar-brand d-flex align-items-center">
           {!logoError ? (
             <img
-              src="/Forest Eco Resort_Base Color Logo.png"
+              src={reverseLogo}
               alt="Forest Eco Resort"
               className="img-fluid"
               style={{ 
                 height: '40px', 
                 transition: 'transform 0.2s',
-                filter: 'brightness(0) invert(1)'
+                marginRight: '10px'
               }}
               onError={() => setLogoError(true)}
             />
           ) : (
-            <Leaf className="me-2" style={{ 
+            <Leaf className="me-3" style={{ 
               color: navTextColor,
               filter: 'drop-shadow(0 0 2px rgba(240, 234, 175, 0.5))'
             }} />
@@ -717,7 +725,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
             fontSize: '1.5rem',
             textShadow: '0 2px 4px rgba(0,0,0,0.3)'
           }}>
-            FOREST ECO <span style={{ fontWeight: 'normal' }}>RESORT</span>
+          FOREST ECO <span style={{ fontWeight: 'normal' }}>RESORT</span>
           </span>
         </a>
 
@@ -1125,17 +1133,20 @@ const ValueProp = ({ t }) => (
 const PortfolioGallery = ({ t }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const images = [
-    "WhatsApp Image 2025-12-15 at 11.36.15 (2).jpeg",
-    "WhatsApp Image 2025-12-15 at 11.36.04 (1).jpeg",
-    "WhatsApp Image 2025-12-15 at 11.36.05.jpeg",
-    "WhatsApp Image 2025-12-15 at 11.36.15 (1).jpeg"
+    website1,
+    website2,
+    website3,
+    website4,
+    website5,
+    website6,
+    website7
   ];
 
   const fallbackImages = [
-    "https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    website5,
+    website6,
+    website7,
+    website1
   ];
 
   const handleImageError = (index, e) => {
@@ -1213,7 +1224,7 @@ const PortfolioGallery = ({ t }) => {
               >
                 <img
                   src={img}
-                  alt={`Thumbnail ${idx + 1}`}
+                  alt={`Project ${idx + 1}`}
                   className="position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
                   onError={(e) => handleImageError(idx, e)}
                 />
@@ -1534,10 +1545,7 @@ const TiersSection = ({ t, language }) => {
                              tier.border.includes('#193C26') ? '#193C26' : '#dee2e6',
                 transition: 'all 0.3s ease',
                 boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)'
-              }}
-              onMouseEnter={(e) => e.target.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)'}
-              onMouseLeave={(e) => e.target.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1)'}
-              >
+              }}>
                 {/* Tags */}
                 {tier.id === 'platinum' && (
                   <div className="position-absolute top-0 start-50 translate-middle-x bg-gradient bg-primary text-white text-xs fw-bold px-3 px-md-4 py-1 rounded-pill mt-n3" style={{
@@ -1609,11 +1617,8 @@ const TiersSection = ({ t, language }) => {
                         'linear-gradient(90deg, #193C26, #2a5238)',
                       color: tier.id === 'platinum' ? '#FFFFFF' : '#F0EAAF',
                       border: 'none',
-                      transition: 'all 0.3s ease',
-                      transform: 'translateY(0)'
+                      transition: 'all 0.3s ease'
                     }}
-                    onMouseEnter={(e) => e.target.style.transform = 'translateY(-3px)'}
-                    onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
                   >
                     {t.tiers.reqAccess}
                   </button>
