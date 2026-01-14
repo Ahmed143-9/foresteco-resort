@@ -43,7 +43,7 @@ const TRANSLATIONS = {
     },
     hero: { 
       subtitle: "Whisper of the Forest", 
-      title: "OWN A PIECE\nOF THE EARTH", 
+      title: "OWN A PIECE OF THE EARTH", 
       desc: "A fractional ownership model secured by land, engineered for yield, and designed for legacy.", 
       cta1: "View The Tiers", 
       cta2: "How It Works",
@@ -161,7 +161,7 @@ const TRANSLATIONS = {
     },
     hero: { 
       subtitle: "অরণ্যের স্নিগ্ধ স্পন্দন", 
-      title: "গড়ে তুলুন নিজের\nএক টুকরো পৃথিবী", 
+      title: "গড়ে তুলুন নিজের এক টুকরো পৃথিবী", 
       desc: "সাফ কবলা দলিলে জমির মালিকানা ও নিশ্চিত আয়ের এক যুগান্তকারী মডেল, যা আপনার এবং আপনার পরবর্তী প্রজন্মের জন্য এক গর্বিত উত্তরাধিকার।", 
       cta1: "মালিকানা ধরণ দেখুন", 
       cta2: "কার্যপদ্ধতি জানুন",
@@ -933,21 +933,81 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
   );
 };
 
-const Hero = ({ t }) => {
+const Hero = ({ t, language }) => {
+  const [heroData, setHeroData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    const fetchHeroData = async () => {
+      try {
+        setLoading(true);
+        setError(null); // Reset error when fetching new data
+        const response = await axios.get(`${API_BASE_URL}/hero?lang=${language}`);
+        if (response.data.success) {
+          setHeroData(response.data.data);
+        } else {
+          // Fallback to default translation if API fails
+          setHeroData(null);
+        }
+      } catch (err) {
+        console.error('Error fetching hero data:', err);
+        // Fallback to default translation if API fails
+        setHeroData(null);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchHeroData();
+  }, [language]);
+  
+  // Use API data if available, otherwise fallback to translations
+  const subtitle = heroData?.subtitle || t.hero.subtitle;
+  const title = heroData?.title || t.hero.title;
+  const description = heroData?.description || t.hero.desc;
+  const backgroundImage = heroData?.background_image;
+  
+  if (loading) {
+    return (
+      <section id="hero" className="position-relative min-vh-100 w-100 overflow-hidden d-flex align-items-center justify-content-center" style={{
+        background: 'linear-gradient(to bottom, #F6F6F7, #FFFFFF)'
+      }}>
+        <div className="position-relative z-10 text-center container px-4">
+          <div className="spinner-border text-success" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </section>
+    );
+  }
+  
   return (
     <section id="hero" className="position-relative min-vh-100 w-100 overflow-hidden d-flex align-items-center justify-content-center" style={{
       background: 'linear-gradient(to bottom, #F6F6F7, #FFFFFF)'
     }}>
       {/* Background Image */}
       <div className="position-absolute top-0 start-0 w-100 h-100 z-0">
-        <img
-          src={heroImage}
-          alt="Forest Background"
-          className="w-100 h-100 object-fit-cover opacity-10"
-          onError={(e) => {
-            e.target.style.display = 'none';
-          }}
-        />
+        {backgroundImage ? (
+          <img
+            src={`http://localhost:8000/storage/${backgroundImage.replace('public/', '')}`}
+            alt="Hero Background"
+            className="w-100 h-100 object-fit-cover opacity-10"
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
+          />
+        ) : (
+          <img
+            src={heroImage}
+            alt="Forest Background"
+            className="w-100 h-100 object-fit-cover opacity-10"
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
+          />
+        )}
       </div>
 
       {/* Animated background elements */}
@@ -962,14 +1022,14 @@ const Hero = ({ t }) => {
           opacity: 0.8,
           fontSize: '1.125rem'
         }}>
-          {t.hero.subtitle}
+          {subtitle}
         </p>
         
         <h1 className="display-1 display-md-2 display-lg-1 fw-bold text-success mb-4 mb-md-6" style={{
           lineHeight: 1,
           whiteSpace: 'pre-line'
         }}>
-          {t.hero.title}
+          {title}
         </h1>
         
         <p className="text-white text-xl mb-6 mb-md-8" style={{
@@ -978,7 +1038,7 @@ const Hero = ({ t }) => {
           fontSize: '1.5rem',
           fontWeight: 300
         }}>
-          {t.hero.desc}
+          {description}
         </p>
 
         {/* REMOVED Scroll Indicator */}
