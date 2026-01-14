@@ -18,7 +18,7 @@ import website6 from '../images/Website.JPG';
 import website7 from '../images/Website.jpeg';
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
 // --- BRAND CONSTANTS (Strictly from PDF) ---
 const COLORS = {
@@ -42,8 +42,8 @@ const TRANSLATIONS = {
       join: "Join Pilot"
     },
     hero: { 
-      subtitle: "Whisper of the Forest", 
-      title: "OWN A PIECE OF THE EARTH", 
+      subtitle: "Eco-Luxury for the Modern Elite", 
+      title: "Shorifa", 
       desc: "A fractional ownership model secured by land, engineered for yield, and designed for legacy.", 
       cta1: "View The Tiers", 
       cta2: "How It Works",
@@ -939,19 +939,38 @@ const Hero = ({ t, language }) => {
   const [error, setError] = useState(null);
   
   useEffect(() => {
+    const normalizeLanguage = (lang) => {
+      if (!lang) return 'en'; // Default to 'en' if language is undefined/null
+      if (typeof lang !== 'string') return 'en'; // Ensure lang is a string
+      if (lang.startsWith('en')) return 'en';
+      if (lang.startsWith('bn')) return 'bn';
+      return lang;
+    };
+    
+    const apiLang = normalizeLanguage(language);
+    console.log("Normalized language:", apiLang);
+    
     const fetchHeroData = async () => {
       try {
         setLoading(true);
         setError(null); // Reset error when fetching new data
-        const response = await axios.get(`${API_BASE_URL}/hero?lang=${language}`);
+        console.log(`Fetching hero data for language: ${apiLang}`);
+        console.log(`API URL: ${API_BASE_URL}/hero?lang=${apiLang}`);
+        const response = await axios.get(`${API_BASE_URL}/hero?lang=${apiLang}`);
+        console.log("Hero API response:", response.data);
+        
         if (response.data.success) {
+          console.log("Hero data in state:", response.data.data);
           setHeroData(response.data.data);
         } else {
+          console.log('No hero data found for language, using defaults');
           // Fallback to default translation if API fails
           setHeroData(null);
         }
       } catch (err) {
         console.error('Error fetching hero data:', err);
+        console.error('Error details:', err.response || err.message || err);
+        console.error('Request URL:', `${API_BASE_URL}/hero?lang=${apiLang}`);
         // Fallback to default translation if API fails
         setHeroData(null);
         setError(err);
@@ -963,11 +982,15 @@ const Hero = ({ t, language }) => {
     fetchHeroData();
   }, [language]);
   
-  // Use API data if available, otherwise fallback to translations
-  const subtitle = heroData?.subtitle || t.hero.subtitle;
-  const title = heroData?.title || t.hero.title;
-  const description = heroData?.description || t.hero.desc;
+  // Rendering Priority: 1. Backend API data (heroData) 2. Frontend translation fallback (t.hero)
+  const subtitle = heroData?.subtitle ?? t.hero.subtitle;
+  const title = heroData?.title ?? t.hero.title;
+  const description = heroData?.description ?? t.hero.desc;
   const backgroundImage = heroData?.background_image;
+  
+  // Log the values being used for debugging
+  console.log('Current values being used:', { subtitle, title, description, backgroundImage, heroData, t });
+  console.log('Has API data?', !!heroData, 'Language:', language);
   
   if (loading) {
     return (
@@ -991,7 +1014,7 @@ const Hero = ({ t, language }) => {
       <div className="position-absolute top-0 start-0 w-100 h-100 z-0">
         {backgroundImage ? (
           <img
-            src={`http://localhost:8000/storage/${backgroundImage.replace('public/', '')}`}
+            src={`${API_BASE_URL.replace('/api', '')}/storage/${backgroundImage}`}
             alt="Hero Background"
             className="w-100 h-100 object-fit-cover opacity-10"
             onError={(e) => {
@@ -2241,7 +2264,7 @@ function App() {
           language={language}
         />
         
-        <Hero t={t} />
+        <Hero t={t} language={language} />
         <ValueProp t={t} />
         <PortfolioGallery t={t} />
         <ROICalculator t={t} language={language} />
