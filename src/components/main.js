@@ -9,6 +9,8 @@ import {
 import axios from 'axios';
 import heroImage from '../images/hero.jpg';
 import reverseLogo from '../images/Forest Eco Resort_Reverse Color Logo.png';
+import aboutBanner from '../images/aboutUSResort.png';
+import aboutImage from '../images/aboutusFinal.jpg';
 import website1 from '../images/Website (1).jpg';
 import website2 from '../images/Website 1.jpeg';
 import website3 from '../images/Website 2.jpeg';
@@ -149,6 +151,9 @@ const TRANSLATIONS = {
       title: "Pilot Phase Closing Soon",
       desc: "Only 50 shares available at discounted Executive rates.",
       btn: "Download Investment Dossier"
+    },
+    about: {
+      desc: "Discover our commitment to sustainable luxury and exceptional hospitality. We blend eco-friendly practices with world-class amenities to create memorable experiences for our valued guests."
     }
   },
   bn: {
@@ -1068,6 +1073,175 @@ const Hero = ({ t, language }) => {
         {/* <div className="position-absolute bottom-0 start-50 translate-middle-x animate-bounce mb-4">
           <ChevronRight className="text-success" style={{width: '1.5rem', height: '1.5rem', transform: 'rotate(90deg)'}} />
         </div> */}
+      </div>
+    </section>
+  );
+};
+
+const AboutUs = ({ t, language }) => {
+  const [aboutData, setAboutData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    const normalizedLang = language?.startsWith('bn') ? 'bn' : 'en';
+    console.log("Language:", language);
+    console.log("Normalized:", normalizedLang);
+    
+    const fetchAboutData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        console.log(`Fetching about data for language: ${normalizedLang}`);
+        console.log(`About API URL: ${API_BASE_URL}/about-us?lang=${normalizedLang}`);
+        const response = await axios.get(`${API_BASE_URL}/about-us?lang=${normalizedLang}`);
+        console.log("About API data:", response.data);
+        
+        if (response.data.success) {
+          setAboutData(response.data.data);
+        } else {
+          setAboutData(null);
+        }
+      } catch (err) {
+        console.error('Error fetching about data:', err);
+        setAboutData(null);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchAboutData();
+  }, [language]);
+  
+  const normalizedLang = language?.startsWith('bn') ? 'bn' : 'en';
+  const aboutContent = aboutData?.content ?? t.about.desc;
+  
+  if (loading) {
+    return (
+      <section id="about" className="position-relative w-100 overflow-hidden" style={{
+        background: 'linear-gradient(to bottom, #FFFFFF, #F6F6F7)'
+      }}>
+        <div className="container py-5">
+          <div className="text-center">
+            <div className="spinner-border text-success" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+  
+  return (
+    <section id="about" className={`position-relative w-100 overflow-hidden ${normalizedLang === 'bn' ? 'font-bn' : ''}`} style={{
+      background: 'linear-gradient(to bottom, #FFFFFF, #F6F6F7)'
+    }}>
+      <div className="container py-5">
+        {/* Two Column Layout: Images on Left, Content on Right */}
+        <div className="row g-4 g-lg-5 align-items-start">
+          {/* Left Column - Logo and Image */}
+          <div className="col-12 col-lg-5">
+            <div className="position-relative" style={{ minHeight: '300px' }}>
+              {/* About Image - Mobile with extra margin to prevent overlap */}
+              <div className="position-relative d-block d-lg-none" style={{ marginTop: '30px' }}>
+                <img 
+                  src={aboutImage} 
+                  alt="Forest Eco Resort" 
+                  className="img-fluid w-100"
+                  style={{ 
+                    maxHeight: '400px',
+                    objectFit: 'cover',
+                    borderRadius: '20%',
+                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)'
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+              
+              {/* About Image - Desktop (unchanged) */}
+              <div className="position-relative d-none d-lg-block" style={{ marginTop: '65px' }}>
+                <img 
+                  src={aboutImage} 
+                  alt="Forest Eco Resort" 
+                  className="img-fluid w-100"
+                  style={{ 
+                    maxHeight: '400px',
+                    objectFit: 'cover',
+                    borderRadius: '20%',
+                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)'
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+              
+              {/* Circular Logo - positioned at the top center of the image (Desktop only) */}
+              <div className="position-absolute d-none d-lg-block" style={{ 
+                top: '0', 
+                left: '50%', 
+                transform: 'translate(-50%, -50%)',
+                zIndex: 10
+              }}>
+                <img 
+                  src={reverseLogo} 
+                  alt="Forest Eco Resort Logo" 
+                  className="img-fluid rounded-circle"
+                  style={{ 
+                    width: '130px', 
+                    height: '130px', 
+                    objectFit: 'cover',
+                    border: '3px solid #193C26',
+                    boxShadow: '0 8px 20px rgba(25, 60, 38, 0.2)'
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+              
+              {/* Circular Logo for Mobile - positioned above the image */}
+              <div className="d-lg-none text-center mb-4">
+                <img 
+                  src={reverseLogo} 
+                  alt="Forest Eco Resort Logo" 
+                  className="img-fluid rounded-circle"
+                  style={{ 
+                    width: '130px', 
+                    height: '130px', 
+                    objectFit: 'cover',
+                    border: '3px solid #193C26',
+                    boxShadow: '0 8px 20px rgba(25, 60, 38, 0.2)'
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          
+          {/* Right Column - Content aligned with image midpoint */}
+          <div className="col-12 col-lg-7 d-flex d-lg-flex align-items-start align-items-lg-center">
+            <div className="pt-0 pt-lg-0">
+              {aboutContent && (
+                <div 
+                  className="lead fs-5"
+                  style={{
+                    lineHeight: 1.7,
+                    color: '#333',
+                    whiteSpace: 'pre-line'
+                  }}
+                >
+                  {aboutContent}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -2265,7 +2439,7 @@ function App() {
         />
         
         <Hero t={t} language={language} />
-        <ValueProp t={t} />
+        <AboutUs t={t} language={language} />
         <PortfolioGallery t={t} />
         <ROICalculator t={t} language={language} />
         <TiersSection t={t} language={language} />
