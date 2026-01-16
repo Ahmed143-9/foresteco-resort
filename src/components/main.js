@@ -23,6 +23,7 @@ import website7 from '../images/Website.jpeg';
 const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
 // --- BRAND CONSTANTS (Strictly from PDF) ---
+
 const COLORS = {
   phthaloGreen: '#193C26',
   paleGoldenrod: '#F0EAAF',
@@ -45,7 +46,7 @@ const TRANSLATIONS = {
     },
     hero: { 
       subtitle: "Eco-Luxury for the Modern Elite", 
-      title: "Shorifa", 
+      title: "Relax, recharge, and reconnect with nature.", 
       desc: "A fractional ownership model secured by land, engineered for yield, and designed for legacy.", 
       cta1: "View The Tiers", 
       cta2: "How It Works",
@@ -153,7 +154,7 @@ const TRANSLATIONS = {
       btn: "Download Investment Dossier"
     },
     about: {
-      desc: "Discover our commitment to sustainable luxury and exceptional hospitality. We blend eco-friendly practices with world-class amenities to create memorable experiences for our valued guests."
+      desc: "Forest Eco Resort is an agro-tourism project located in Bhabanipur, Gazipur, Bangladesh. Established under the joint management of YESS Cooperative Society and NEXCENT, the resort offers a unique blend of eco-luxury and sustainable living. Our mission is to provide an exclusive retreat for nature enthusiasts while promoting environmental conservation and community development. With a focus on organic farming, adventure tourism, and luxurious accommodations, Forest Eco Resort aims to set a new standard for eco-friendly tourism in the region. Join us in our journey to create a harmonious balance between nature and modern living. Experience the tranquility of the forest, indulge in farm-to-table dining, and explore a variety of outdoor activities designed to connect you with the natural world."
     }
   },
   bn: {
