@@ -154,7 +154,7 @@ const TRANSLATIONS = {
       btn: "Download Investment Dossier"
     },
     about: {
-      desc: "Forest Eco Resort is an agro-tourism project located in Bhabanipur, Gazipur, Bangladesh. Established under the joint management of YESS Cooperative Society and NEXCENT, the resort offers a unique blend of eco-luxury and sustainable living. Our mission is to provide an exclusive retreat for nature enthusiasts while promoting environmental conservation and community development. With a focus on organic farming, adventure tourism, and luxurious accommodations, Forest Eco Resort aims to set a new standard for eco-friendly tourism in the region. Join us in our journey to create a harmonious balance between nature and modern living. Experience the tranquility of the forest, indulge in farm-to-table dining, and explore a variety of outdoor activities designed to connect you with the natural world."
+      desc: "Forest Eco Resort is an agro-tourism destination in Bhabanipur, Gazipur, Bangladesh, jointly managed by YESS Cooperative Society and NEXCENT. The resort blends eco-luxury with sustainable living, offering a peaceful retreat for nature lovers. With organic farming, adventure activities, and comfortable accommodations, we promote environmental conservation and community development while redefining eco-friendly tourism. Experience forest tranquility, farm-to-table dining, and outdoor activities that reconnect you with nature."
     }
   },
   bn: {
@@ -941,54 +941,68 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
 
 const Hero = ({ t, language }) => {
   const [heroData, setHeroData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Only for API fetch, not initial render
   
   useEffect(() => {
-    const normalizeLanguage = (lang) => {
-      if (!lang) return 'en'; // Default to 'en' if language is undefined/null
-      if (typeof lang !== 'string') return 'en'; // Ensure lang is a string
-      if (lang.startsWith('en')) return 'en';
-      if (lang.startsWith('bn')) return 'bn';
-      return lang;
-    };
-    
-    const apiLang = normalizeLanguage(language);
-    console.log("Normalized language:", apiLang);
+    // Create AbortController for timeout management
+    const abortController = new AbortController();
     
     const fetchHeroData = async () => {
+      // Don't show loading for initial render
+      setIsLoading(true);
+      
       try {
-        setLoading(true);
-        setError(null); // Reset error when fetching new data
-        console.log(`Fetching hero data for language: ${apiLang}`);
-        console.log(`API URL: ${API_BASE_URL}/hero?lang=${apiLang}`);
-        const response = await axios.get(`${API_BASE_URL}/hero?lang=${apiLang}`);
+        const normalizeLanguage = (lang) => {
+          if (!lang) return 'en'; // Default to 'en' if language is undefined/null
+          if (typeof lang !== 'string') return 'en'; // Ensure lang is a string
+          if (lang.startsWith('en')) return 'en';
+          if (lang.startsWith('bn')) return 'bn';
+          return lang;
+        };
+        
+        const apiLang = normalizeLanguage(language);
+        console.log("Normalized language:", apiLang);
+        
+        // Fast-fail API call with timeout
+        const response = await axios.get(`${API_BASE_URL}/hero?lang=${apiLang}`, {
+          signal: abortController.signal,
+          timeout: 3000, // 3 second timeout
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+          }
+        });
+        
         console.log("Hero API response:", response.data);
         
         if (response.data.success) {
-          console.log("Hero data in state:", response.data.data);
           setHeroData(response.data.data);
-        } else {
-          console.log('No hero data found for language, using defaults');
-          // Fallback to default translation if API fails
-          setHeroData(null);
         }
       } catch (err) {
-        console.error('Error fetching hero data:', err);
-        console.error('Error details:', err.response || err.message || err);
-        console.error('Request URL:', `${API_BASE_URL}/hero?lang=${apiLang}`);
-        // Fallback to default translation if API fails
-        setHeroData(null);
-        setError(err);
+        // Silently handle API errors - fallback content remains visible
+        if (err.code !== 'ABORT_ERR') {
+          console.warn('Hero API call failed, using fallback content:', err.message);
+        }
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     
-    fetchHeroData();
+    // Debounce API calls to prevent rapid requests
+    const timer = setTimeout(() => {
+      if (!abortController.signal.aborted) {
+        fetchHeroData();
+      }
+    }, 100); // Small delay to ensure component is mounted
+    
+    // Cleanup
+    return () => {
+      clearTimeout(timer);
+      abortController.abort();
+    };
   }, [language]);
   
-  // Rendering Priority: 1. Backend API data (heroData) 2. Frontend translation fallback (t.hero)
+  // Optimistic UI: Always render with fallback first, then update if API succeeds
   const subtitle = heroData?.subtitle ?? t.hero.subtitle;
   const title = heroData?.title ?? t.hero.title;
   const description = heroData?.description ?? t.hero.desc;
@@ -998,20 +1012,7 @@ const Hero = ({ t, language }) => {
   console.log('Current values being used:', { subtitle, title, description, backgroundImage, heroData, t });
   console.log('Has API data?', !!heroData, 'Language:', language);
   
-  if (loading) {
-    return (
-      <section id="hero" className="position-relative min-vh-100 w-100 overflow-hidden d-flex align-items-center justify-content-center" style={{
-        background: 'linear-gradient(to bottom, #F6F6F7, #FFFFFF)'
-      }}>
-        <div className="position-relative z-10 text-center container px-4">
-          <div className="spinner-border text-success" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      </section>
-    );
-  }
-  
+  // Render immediately with fallback content - no loading state blocking
   return (
     <section id="hero" className="position-relative min-vh-100 w-100 overflow-hidden d-flex align-items-center justify-content-center" style={{
       background: 'linear-gradient(to bottom, #F6F6F7, #FFFFFF)'
@@ -1069,7 +1070,16 @@ const Hero = ({ t, language }) => {
         }}>
           {description}
         </p>
-
+        
+        {/* Loading indicator for background API fetch only */}
+        {isLoading && (
+          <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-black bg-opacity-50" style={{ borderRadius: '0.5rem' }}>
+            <div className="spinner-border text-light" style={{ width: '1.5rem', height: '1.5rem' }} role="status">
+              <span className="visually-hidden">Updating content...</span>
+            </div>
+          </div>
+        )}
+        
         {/* REMOVED Scroll Indicator */}
         {/* <div className="position-absolute bottom-0 start-50 translate-middle-x animate-bounce mb-4">
           <ChevronRight className="text-success" style={{width: '1.5rem', height: '1.5rem', transform: 'rotate(90deg)'}} />
@@ -1081,165 +1091,182 @@ const Hero = ({ t, language }) => {
 
 const AboutUs = ({ t, language }) => {
   const [aboutData, setAboutData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Only for API fetch, not initial render
   
   useEffect(() => {
-    const normalizedLang = language?.startsWith('bn') ? 'bn' : 'en';
-    console.log("Language:", language);
-    console.log("Normalized:", normalizedLang);
+    // Create AbortController for timeout management
+    const abortController = new AbortController();
     
     const fetchAboutData = async () => {
+      // Don't show loading for initial render
+      setIsLoading(true);
+      
       try {
-        setLoading(true);
-        setError(null);
-        console.log(`Fetching about data for language: ${normalizedLang}`);
-        console.log(`About API URL: ${API_BASE_URL}/about-us?lang=${normalizedLang}`);
-        const response = await axios.get(`${API_BASE_URL}/about-us?lang=${normalizedLang}`);
+        const normalizedLang = language?.startsWith('bn') ? 'bn' : 'en';
+        console.log("Language:", language);
+        console.log("Normalized:", normalizedLang);
+        
+        // Fast-fail API call with timeout
+        const response = await axios.get(`${API_BASE_URL}/about-us?lang=${normalizedLang}`, {
+          signal: abortController.signal,
+          timeout: 3000, // 3 second timeout
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+          }
+        });
+        
         console.log("About API data:", response.data);
         
         if (response.data.success) {
           setAboutData(response.data.data);
-        } else {
-          setAboutData(null);
         }
       } catch (err) {
-        console.error('Error fetching about data:', err);
-        setAboutData(null);
-        setError(err);
+        // Silently handle API errors - fallback content remains visible
+        if (err.code !== 'ABORT_ERR') {
+          console.warn('API call failed, using fallback content:', err.message);
+        }
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     
-    fetchAboutData();
+    // Debounce API calls to prevent rapid requests
+    const timer = setTimeout(() => {
+      if (!abortController.signal.aborted) {
+        fetchAboutData();
+      }
+    }, 100); // Small delay to ensure component is mounted
+    
+    // Cleanup
+    return () => {
+      clearTimeout(timer);
+      abortController.abort();
+    };
   }, [language]);
   
   const normalizedLang = language?.startsWith('bn') ? 'bn' : 'en';
-  const aboutContent = aboutData?.content ?? t.about.desc;
+  // Optimistic UI: Always render with fallback first, then update if API succeeds
+  const aboutContent = aboutData?.content ?? (t && t.about && t.about.desc ? t.about.desc : 'Forest Eco Resort is an agro-tourism destination in Bhabanipur, Gazipur, Bangladesh, jointly managed by YESS Cooperative Society and NEXCENT. The resort blends eco-luxury with sustainable living, offering a peaceful retreat for nature lovers. With organic farming, adventure activities, and comfortable accommodations, we promote environmental conservation and community development while redefining eco-friendly tourism. Experience forest tranquility, farm-to-table dining, and outdoor activities that reconnect you with nature.');
   
-  if (loading) {
-    return (
-      <section id="about" className="position-relative w-100 overflow-hidden" style={{
-        background: 'linear-gradient(to bottom, #FFFFFF, #F6F6F7)'
-      }}>
-        <div className="container py-5">
-          <div className="text-center">
-            <div className="spinner-border text-success" role="status">
-              <span className="visually-hidden">Loading...</span>
+  // Render immediately with fallback content - no loading state blocking
+  return (
+    <section id="about" className={`position-relative w-100 overflow-hidden ${normalizedLang === 'bn' ? 'font-bn' : ''}`} style={{
+      background: 'linear-gradient(135deg, #FFFFFF 0%, #f0f9f4 100%)',
+      marginTop: '2rem'
+    }}>
+      <div className="container py-7 py-lg-8">
+        {/* Professional Header */}
+        <div className="row justify-content-center mb-6 mb-lg-7">
+          <div className="col-12 text-center">
+            <div className="position-relative d-inline-block">
+              <h2 className="display-4 fw-bold text-success mb-4" style={{
+                fontFamily: 'serif',
+                letterSpacing: '1px',
+                textTransform: 'uppercase',
+                fontWeight: '600'
+              }}>
+                About Us
+              </h2>
+              <div className="position-absolute start-0 end-0 bottom-0">
+                <div className="mx-auto" style={{
+                  width: '100px',
+                  height: '4px',
+                  background: 'linear-gradient(to right, #193C26, #F0EAAF, #193C26)',
+                  borderRadius: '2px'
+                }}></div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
-    );
-  }
-  
-  return (
-    <section id="about" className={`position-relative w-100 overflow-hidden ${normalizedLang === 'bn' ? 'font-bn' : ''}`} style={{
-      background: 'linear-gradient(to bottom, #FFFFFF, #F6F6F7)'
-    }}>
-      <div className="container py-5">
-        {/* Two Column Layout: Images on Left, Content on Right */}
-        <div className="row g-4 g-lg-5 align-items-start">
-          {/* Left Column - Logo and Image */}
-          <div className="col-12 col-lg-5">
-            <div className="position-relative" style={{ minHeight: '300px' }}>
-              {/* About Image - Mobile with extra margin to prevent overlap */}
-              <div className="position-relative d-block d-lg-none" style={{ marginTop: '30px' }}>
-                <img 
-                  src={aboutImage} 
-                  alt="Forest Eco Resort" 
-                  className="img-fluid w-100"
-                  style={{ 
-                    maxHeight: '400px',
-                    objectFit: 'cover',
-                    borderRadius: '20%',
-                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)'
-                  }}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-              
-              {/* About Image - Desktop (unchanged) */}
-              <div className="position-relative d-none d-lg-block" style={{ marginTop: '65px' }}>
-                <img 
-                  src={aboutImage} 
-                  alt="Forest Eco Resort" 
-                  className="img-fluid w-100"
-                  style={{ 
-                    maxHeight: '400px',
-                    objectFit: 'cover',
-                    borderRadius: '20%',
-                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)'
-                  }}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-              
-              {/* Circular Logo - positioned at the top center of the image (Desktop only) */}
-              <div className="position-absolute d-none d-lg-block" style={{ 
-                top: '0', 
-                left: '50%', 
-                transform: 'translate(-50%, -50%)',
-                zIndex: 10
-              }}>
-                <img 
-                  src={reverseLogo} 
-                  alt="Forest Eco Resort Logo" 
-                  className="img-fluid rounded-circle"
-                  style={{ 
-                    width: '130px', 
-                    height: '130px', 
-                    objectFit: 'cover',
-                    border: '3px solid #193C26',
-                    boxShadow: '0 8px 20px rgba(25, 60, 38, 0.2)'
-                  }}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-              
-              {/* Circular Logo for Mobile - positioned above the image */}
-              <div className="d-lg-none text-center mb-4">
-                <img 
-                  src={reverseLogo} 
-                  alt="Forest Eco Resort Logo" 
-                  className="img-fluid rounded-circle"
-                  style={{ 
-                    width: '130px', 
-                    height: '130px', 
-                    objectFit: 'cover',
-                    border: '3px solid #193C26',
-                    boxShadow: '0 8px 20px rgba(25, 60, 38, 0.2)'
-                  }}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-            </div>
-          </div>
           
-          {/* Right Column - Content aligned with image midpoint */}
-          <div className="col-12 col-lg-7 d-flex d-lg-flex align-items-start align-items-lg-center">
-            <div className="pt-0 pt-lg-0">
-              {aboutContent && (
-                <div 
-                  className="lead fs-5"
-                  style={{
-                    lineHeight: 1.7,
-                    color: '#333',
-                    whiteSpace: 'pre-line'
-                  }}
-                >
-                  {aboutContent}
+        {/* Professional Content Section */}
+        <div className="row justify-content-center">
+          <div className="col-12 col-lg-10 col-xl-8">
+            <div className="bg-white rounded-4 p-5 p-lg-6" style={{
+              border: '1px solid rgba(25, 60, 38, 0.08)'
+            }}>
+              {/* Content Header */}
+              <div className="mb-5 text-center">
+                <div className="d-inline-flex align-items-center justify-content-center mb-4" style={{
+                  width: '60px',
+                  height: '60px',
+                  background: 'linear-gradient(135deg, #193C26, #2a5238)',
+                  borderRadius: '50%'
+                }}>
+                  <span className="text-white" style={{ fontSize: '1.5rem' }}>♣</span>
                 </div>
-              )}
+                <p className="text-muted mb-0" style={{
+                  fontSize: '1.1rem',
+                  fontStyle: 'italic',
+                  fontWeight: '500'
+                }}>
+                  Our Story, Our Commitment
+                </p>
+              </div>
+                            
+              {/* Main Content - Always renders immediately with fallback */}
+              <div className="position-relative">
+                {aboutContent && (
+                  <div 
+                    className="fs-5 lh-base"
+                    style={{
+                      color: '#2d3748',
+                      whiteSpace: 'pre-line',
+                      fontWeight: '400',
+                      textAlign: 'justify',
+                      lineHeight: '1.8',
+                      fontSize: '1.1rem'
+                    }}
+                  >
+                    {aboutContent}
+                  </div>
+                )}
+                
+                {/* Loading indicator for background API fetch only */}
+                {isLoading && (
+                  <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75" style={{ borderRadius: '0.5rem' }}>
+                    <div className="spinner-border text-success" style={{ width: '1.5rem', height: '1.5rem' }} role="status">
+                      <span className="visually-hidden">Updating content...</span>
+                    </div>
+                  </div>
+                )}
+                  
+
+              </div>
+                            
+              {/* Professional Footer */}
+              <div className="mt-6 pt-4 border-top" style={{ borderColor: 'rgba(25, 60, 38, 0.1)' }}>
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                  <div className="text-center text-md-start">
+                    <div className="d-flex align-items-center justify-content-center justify-content-md-start mb-2">
+                      <div className="me-3" style={{
+                        width: '16px',
+                        height: '16px',
+                        background: 'linear-gradient(135deg, #193C26, #2a5238)',
+                        borderRadius: '50%'
+                      }}></div>
+                      <span className="text-success fw-bold fs-5">Forest Eco Resort</span>
+                    </div>
+                    <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>
+                      Setting new standards in eco-friendly tourism
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <div className="d-inline-flex align-items-center justify-content-center" style={{
+                      width: '40px',
+                      height: '40px',
+                      background: 'linear-gradient(135deg, #193C26, #2a5238)',
+                      borderRadius: '50%'
+                    }}>
+                      <span className="text-white fw-bold">2026</span>
+                    </div>
+                    <p className="text-muted mt-2 mb-0" style={{ fontSize: '0.9rem' }}>
+                      Est. Since
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
