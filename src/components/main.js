@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { 
   Leaf, Shield, TrendingUp, Users, ArrowRight, 
   Menu, X, Check, Calculator, Lock, Phone, 
@@ -20,7 +20,8 @@ import website6 from '../images/Website.JPG';
 import website7 from '../images/Website.jpeg';
 
 // API Configuration
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+const API_BASE_URL = 'https://backend.foresteco-resort.com/api';
+const IMAGE_BASE_URL = 'https://backend.foresteco-resort.com/storage/app/public/';
 
 // --- BRAND CONSTANTS (Strictly from PDF) ---
 
@@ -42,7 +43,7 @@ const TRANSLATIONS = {
       asset: "The Asset", 
       membership: "Membership", 
       yield: "Yield", 
-      join: "Join Pilot"
+      join: "Apply for membership"
     },
     hero: { 
       subtitle: "Eco-Luxury for the Modern Elite", 
@@ -67,14 +68,14 @@ const TRANSLATIONS = {
     },
     portfolio: {
       title: "Legacy of Delivery",
-      subtitle: "Completed Project: Lifeline Lodge and Resort",
-      desc: "We don't just promise; we build. Explore our flagship completed project that set the standard for eco-luxury.",
+      subtitle: "Legacy Created by Consistency, Built on Delivery",
+      desc: "The Forest Eco Resort is the result of a powerhouse collaboration designed to ensure your investment is safe and the construction is world-class. From land acquisition to phased development, every milestone follows a disciplined roadmap,capital readiness, and operational clarity.",
       viewGallery: "View Gallery",
       viewProject: "View Project Details"
     },
     calc: {
       title: "Wealth Engine",
-      desc: "The 600 Club model is designed for dual-velocity returns: annual operating dividends plus historical land appreciation.",
+      desc: "Why settle for a standard bank deposit when you can own a piece of a high-yield eco-system? The Forest Eco Resort, designed as a long-term wealth engine, generates revenue from two powerful engines: Premium Hospitality and Commercial Agriculture.",
       selectTier: "Select Your Tier",
       holdingPeriod: "Holding Period",
       years: "Years",
@@ -89,8 +90,8 @@ const TRANSLATIONS = {
       conservative: "Conservative Scenario"
     },
     tiers: {
-      title: "The Collection",
-      desc: "Limited to 600 shares lifetime. Choose your level of access and ownership.",
+      title: "Tiers To Heaven",
+      desc: " 600 Shares to The Ownership of Heaven, simultaneously an investment golden goose. Your choice will decide your security towards the bright future.",
       reqAccess: "Request Access",
       shares: "Shares",
       boardroom: "Boardroom",
@@ -482,7 +483,7 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
           {!submitted ? (
             <>
               <h2 className="h2 fw-bold mb-2 text-center" style={{ color: '#F0EAAF' }}>
-                {language === 'en' ? 'Join the 600 Club' : '৬০০ ক্লাবে যোগ দিন'}
+                {language === 'en' ? 'Youth Entrepreneur Sponsor Saviour Ltd' : 'Youth Entrepreneur Sponsor Saviour Ltd'}
               </h2>
               <p className="text-center mb-4 mb-md-5" style={{ color: '#F0EAAF', opacity: 0.9 }}>
                 {language === 'en' 
@@ -903,7 +904,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
             </li>
 
             {/* Join Button */}
-            <li className="nav-item ms-2">
+            <li className="nav-item ms-2 mt-2 mt-lg-0">
               <button 
                 className="btn rounded-pill"
                 style={{
@@ -1007,6 +1008,7 @@ const Hero = ({ t, language }) => {
   const title = heroData?.title ?? t.hero.title;
   const description = heroData?.description ?? t.hero.desc;
   const backgroundImage = heroData?.background_image;
+  console.log("Background cudir vai",backgroundImage);
   
   // Log the values being used for debugging
   console.log('Current values being used:', { subtitle, title, description, backgroundImage, heroData, t });
@@ -1019,25 +1021,25 @@ const Hero = ({ t, language }) => {
     }}>
       {/* Background Image */}
       <div className="position-absolute top-0 start-0 w-100 h-100 z-0">
-        {backgroundImage ? (
-          <img
-            src={`${API_BASE_URL.replace('/api', '')}/storage/${backgroundImage}`}
-            alt="Hero Background"
-            className="w-100 h-100 object-fit-cover opacity-10"
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
-          />
-        ) : (
-          <img
-            src={heroImage}
-            alt="Forest Background"
-            className="w-100 h-100 object-fit-cover opacity-10"
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
-          />
-        )}
+     {backgroundImage ? (
+  <img
+    src={`${IMAGE_BASE_URL}${backgroundImage}`}
+    alt="Hero Background"
+    className="w-100 h-100 object-fit-cover opacity-10"
+    onError={(e) => {
+      e.currentTarget.style.display = 'none';
+    }}
+  />
+) : (
+  <img
+    src={heroImage}
+    alt="Forest Background"
+    className="w-100 h-100 object-fit-cover opacity-10"
+    onError={(e) => {
+      e.currentTarget.style.display = 'none';
+    }}
+  />
+)}
       </div>
 
       {/* Animated background elements */}
@@ -1415,6 +1417,80 @@ const ValueProp = ({ t }) => (
   </section>
 );
 
+const VideoSection = ({ t }) => {
+  const [videoLink, setVideoLink] = useState('https://www.youtube.com/embed/cEHP_LeBeyQ?list=PLGoWuvyH709vpTCVrjaJtaaFfite9U6u8&autoplay=1&mute=1');
+  const [isLoading, setIsLoading] = useState(false);
+  
+  useEffect(() => {
+    const abortController = new AbortController();
+    
+    const fetchVideoLink = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`${API_BASE_URL}/video-setting`, {
+          signal: abortController.signal,
+          timeout: 3000,
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+          }
+        });
+        
+        if (response.data.success && response.data.data?.video_link) {
+          setVideoLink(response.data.data.video_link);
+        }
+      } catch (err) {
+        if (err.code !== 'ABORT_ERR') {
+          console.warn('Video API call failed, using fallback:', err.message);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    const timer = setTimeout(() => {
+      if (!abortController.signal.aborted) {
+        fetchVideoLink();
+      }
+    }, 100);
+    
+    return () => {
+      clearTimeout(timer);
+      abortController.abort();
+    };
+  }, []);
+  
+  return (
+    <div className="mb-4 mb-md-5">
+      <div className="position-relative rounded-4 overflow-hidden shadow-lg" style={{
+        paddingBottom: '56.25%' /* 16:9 aspect ratio */
+      }}>
+        <div className="position-absolute top-0 start-0 w-100 h-100">
+          <iframe
+            src={videoLink}
+            title="Legacy of Delivery Video"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="position-absolute top-0 start-0 w-100 h-100"
+            style={{
+              border: 'none',
+              background: '#000'
+            }}
+          />
+        </div>
+        {isLoading && (
+          <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-black bg-opacity-50" style={{ borderRadius: '0.5rem' }}>
+            <div className="spinner-border text-light" style={{ width: '2rem', height: '2rem' }} role="status">
+              <span className="visually-hidden">Loading video...</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const PortfolioGallery = ({ t }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const images = [
@@ -1465,7 +1541,10 @@ const PortfolioGallery = ({ t }) => {
           </div>
         </div>
 
-        {/* Main Image */}
+        {/* Video Player */}
+        <VideoSection t={t} />
+
+        {/* Main Image - Now below the video */}
         <div className="mb-4 mb-md-5">
           <div className="position-relative rounded-4 overflow-hidden shadow-lg" style={{
             paddingBottom: '56.25%' /* 16:9 aspect ratio */
@@ -1560,6 +1639,9 @@ const ROICalculator = ({ t, language }) => {
           {/* Left Column */}
           <div className="col-12 col-lg-6">
             <h2 className="h1 fw-bold text-success mb-4 mb-md-5">{t.calc.title}</h2>
+            <p className="text-muted mb-2 mb-md-3 lead fst-italic" style={{ color: '#6c757d', fontSize: '1.1rem' }}>
+              "Rooted in land, strengthened by time, protected by structure."
+            </p>
             <p className="text-muted mb-5 mb-md-6 lead">{t.calc.desc}</p>
             
             <div className="mb-4">
@@ -1762,6 +1844,232 @@ const ROICalculator = ({ t, language }) => {
   );
 };
 
+// Centered Looping Slider Component for Investment Process
+const CenteredLoopingSlider = ({ steps }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const intervalRef = useRef(null);
+
+  // Auto-advance the slider
+  useEffect(() => {
+    if (!isHovered) {
+      intervalRef.current = setInterval(() => {
+        setCurrentIndex(prevIndex => (prevIndex + 1) % steps.length);
+      }, 4000); // Change slide every 4 seconds
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isHovered, steps.length]);
+
+  const goToPrev = () => {
+    const isFirstSlide = currentIndex === 0;
+    const newIndex = isFirstSlide ? steps.length - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
+  };
+
+  const goToNext = () => {
+    const isLastSlide = currentIndex === steps.length - 1;
+    const newIndex = isLastSlide ? 0 : currentIndex + 1;
+    setCurrentIndex(newIndex);
+  };
+
+  const goToSlide = (index) => {
+    setCurrentIndex(index);
+  };
+
+  return (
+    <div 
+      className="position-relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        height: '400px',
+        perspective: '1000px'
+      }}
+    >
+      {/* Slider Container */}
+      <div 
+        className="position-relative w-100 h-100 overflow-hidden"
+        style={{
+          borderRadius: '16px'
+        }}
+      >
+        {/* Slides */}
+        <div 
+          className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+          style={{
+            transition: 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          }}
+        >
+          {steps.map((step, index) => {
+            const isActive = index === currentIndex;
+            const isPrev = index === (currentIndex === 0 ? steps.length - 1 : currentIndex - 1);
+            const isNext = index === (currentIndex === steps.length - 1 ? 0 : currentIndex + 1);
+            
+            let positionClass = '';
+            let scale = 1;
+            let opacity = 1;
+            let translateX = 0;
+            
+            if (isActive) {
+              positionClass = 'position-relative';
+              scale = 1;
+              opacity = 1;
+              translateX = 0;
+            } else if (isPrev) {
+              positionClass = 'position-absolute';
+              scale = 0.7;
+              opacity = 0.3;
+              translateX = '-80%';
+            } else if (isNext) {
+              positionClass = 'position-absolute';
+              scale = 0.7;
+              opacity = 0.3;
+              translateX = '80%';
+            } else {
+              positionClass = 'd-none';
+            }
+
+            return (
+              <div
+                key={index}
+                className={`${positionClass} d-flex flex-column align-items-center justify-content-center text-center`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  transform: `translateX(${translateX}) scale(${scale})`,
+                  opacity: opacity,
+                  transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                  zIndex: isActive ? 3 : 1,
+                  pointerEvents: isActive ? 'auto' : 'none'
+                }}
+              >
+                {/* Step Number */}
+                <div 
+                  className="rounded-circle d-flex align-items-center justify-content-center mb-4"
+                  style={{
+                    width: '64px',
+                    height: '64px',
+                    backgroundColor: '#193C26',
+                    color: '#FFFFFF',
+                    fontSize: '1.5rem',
+                    fontWeight: 'bold',
+                    boxShadow: isActive ? '0 10px 25px rgba(25, 60, 38, 0.3)' : 'none',
+                    transform: isActive ? 'scale(1.1)' : 'scale(1)'
+                  }}
+                >
+                  {(index + 1).toString().padStart(2, '0')}
+                </div>
+                
+                {/* Title */}
+                <h3 
+                  className="fw-bold mb-3"
+                  style={{
+                    color: '#193C26',
+                    fontSize: isActive ? '1.5rem' : '1.2rem',
+                    transform: isActive ? 'scale(1)' : 'scale(0.9)'
+                  }}
+                >
+                  {step.title}
+                </h3>
+                
+                {/* Description */}
+                <p 
+                  className="text-muted px-3"
+                  style={{
+                    fontSize: isActive ? '1rem' : '0.9rem',
+                    lineHeight: '1.6',
+                    maxWidth: '300px',
+                    opacity: isActive ? 1 : 0
+                  }}
+                >
+                  {step.desc}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+        
+        {/* Navigation Arrows */}
+        <button
+          onClick={goToPrev}
+          className="position-absolute top-50 start-0 translate-middle-y btn btn-link p-0 border-0"
+          style={{
+            zIndex: 10,
+            width: '40px',
+            height: '40px',
+            backgroundColor: 'rgba(25, 60, 38, 0.8)',
+            color: '#FFFFFF',
+            borderRadius: '50%',
+            marginLeft: '10px',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = 'rgba(25, 60, 38, 1)';
+            e.target.style.transform = 'scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = 'rgba(25, 60, 38, 0.8)';
+            e.target.style.transform = 'scale(1)';
+          }}
+          aria-label="Previous step"
+        >
+          <ChevronRight style={{width: '20px', height: '20px', transform: 'rotate(180deg)'}} />
+        </button>
+        
+        <button
+          onClick={goToNext}
+          className="position-absolute top-50 end-0 translate-middle-y btn btn-link p-0 border-0"
+          style={{
+            zIndex: 10,
+            width: '40px',
+            height: '40px',
+            backgroundColor: 'rgba(25, 60, 38, 0.8)',
+            color: '#FFFFFF',
+            borderRadius: '50%',
+            marginRight: '10px',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = 'rgba(25, 60, 38, 1)';
+            e.target.style.transform = 'scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = 'rgba(25, 60, 38, 0.8)';
+            e.target.style.transform = 'scale(1)';
+          }}
+          aria-label="Next step"
+        >
+          <ChevronRight style={{width: '20px', height: '20px'}} />
+        </button>
+        
+        {/* Position Indicators */}
+        <div className="position-absolute bottom-0 start-50 translate-middle-x d-flex gap-2 mb-3">
+          {steps.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className="rounded-circle border-0 p-0"
+              style={{
+                width: '12px',
+                height: '12px',
+                backgroundColor: index === currentIndex ? '#193C26' : 'rgba(25, 60, 38, 0.3)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}
+              aria-label={`Go to step ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const TiersSection = ({ t, language }) => {
   const TIERS = useMemo(() => getTiersData(language), [language]);
   const [activeTab, setActiveTab] = useState('all');
@@ -1791,29 +2099,30 @@ const TiersSection = ({ t, language }) => {
             margin: '0 auto'
           }}>{t.tiers.desc}</p>
           
-          <ul className="nav nav-pills d-inline-flex bg-light rounded p-1" style={{maxWidth: 'fit-content', margin: '0 auto'}}>
+          <div className="d-flex flex-wrap justify-content-center gap-2" style={{maxWidth: 'fit-content', margin: '0 auto'}}>
             {['all', 'mostPopular', 'bestValue'].map((tab) => (
-              <li key={tab} className="nav-item">
-                <button
-                  onClick={() => setActiveTab(tab)}
-                  className={`nav-link ${activeTab === tab ? 'active' : ''}`}
-                  style={{
-                    color: activeTab === tab ? '#FFFFFF' : '#6c757d',
-                    backgroundColor: activeTab === tab ? '#193C26' : '#e9ecef',
-                    transition: 'all 0.3s ease',
-                    borderRadius: '0.375rem',
-                    padding: '0.5rem 1.5rem',
-                    border: 'none',
-                    fontWeight: activeTab === tab ? 'bold' : 'normal'
-                  }}
-                >
-                  {tab === 'all' ? 'All Tiers' :
-                   tab === 'mostPopular' ? t.tiers.mostPopular :
-                   t.tiers.bestValue}
-                </button>
-              </li>
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`btn ${activeTab === tab ? 'btn-success' : 'btn-outline-success'}`}
+                style={{
+                  color: activeTab === tab ? '#FFFFFF' : '#193C26',
+                  backgroundColor: activeTab === tab ? '#193C26' : 'transparent',
+                  borderColor: activeTab === tab ? '#193C26' : '#193C26',
+                  transition: 'all 0.3s ease',
+                  borderRadius: '0.375rem',
+                  padding: '0.5rem 1rem',
+                  border: '1px solid',
+                  fontWeight: activeTab === tab ? 'bold' : 'normal',
+                  fontSize: '0.9rem'
+                }}
+              >
+                {tab === 'all' ? 'All Tiers' :
+                 tab === 'mostPopular' ? t.tiers.mostPopular :
+                 t.tiers.bestValue}
+              </button>
             ))}
-          </ul>
+          </div>
         </div>
 
         <div className="row g-4 g-md-5">
@@ -1916,30 +2225,39 @@ const TiersSection = ({ t, language }) => {
         {/* Investment Process */}
         <div className="mt-5 mt-md-8">
           <h3 className="h2 fw-bold text-success text-center mb-4 mb-md-5">{t.process.title}</h3>
-          <div className="row g-4 g-md-5">
-            {t.process.steps.map((step, index) => (
-              <div key={index} className="col">
-                <div className="card h-100 text-center border shadow-sm">
-                  <div className="card-body d-flex flex-column">
-                    <div className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style={{
-                      width: '48px',
-                      height: '48px',
-                      backgroundColor: '#193C26',
-                      color: '#FFFFFF'
-                    }}>
-                      {index + 1}
+          
+          {/* Desktop Version - Grid Layout */}
+          <div className="d-none d-md-block">
+            <div className="row g-4 g-md-5">
+              {t.process.steps.map((step, index) => (
+                <div key={index} className="col">
+                  <div className="card h-100 text-center border shadow-sm">
+                    <div className="card-body d-flex flex-column">
+                      <div className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style={{
+                        width: '48px',
+                        height: '48px',
+                        backgroundColor: '#193C26',
+                        color: '#FFFFFF'
+                      }}>
+                        {index + 1}
+                      </div>
+                      <h4 className="fw-bold text-success mb-3">{step.title}</h4>
+                      <p className="text-muted mb-0">{step.desc}</p>
                     </div>
-                    <h4 className="fw-bold text-success mb-3">{step.title}</h4>
-                    <p className="text-muted mb-0">{step.desc}</p>
                   </div>
+                  {index < t.process.steps.length - 1 && (
+                    <div className="d-none d-md-block position-absolute top-50 end-0 translate-middle-y">
+                      <ChevronRight className="text-muted" style={{width: '24px', height: '24px'}} />
+                    </div>
+                  )}
                 </div>
-                {index < t.process.steps.length - 1 && (
-                  <div className="d-none d-md-block position-absolute top-50 end-0 translate-middle-y">
-                    <ChevronRight className="text-muted" style={{width: '24px', height: '24px'}} />
-                  </div>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+          
+          {/* Mobile Version - Centered Looping Slider */}
+          <div className="d-md-none">
+            <CenteredLoopingSlider steps={t.process.steps} />
           </div>
         </div>
       </div>
