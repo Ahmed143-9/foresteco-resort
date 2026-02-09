@@ -4,7 +4,7 @@ import {
   Menu, X, Check, Calculator, Lock, Phone, 
   Mail, MapPin, Globe, Download, ChevronRight,
   Star, Award, Home, Clock, Calendar, Building,
-  FileText, Share2, Target, PieChart
+  FileText, Share2, Target, PieChart, Plus
 } from 'lucide-react';
 import axios from 'axios';
 import heroImage from '../images/hero.jpg';
@@ -279,14 +279,15 @@ const TRANSLATIONS = {
 };
 
 // --- Enhanced DATA GENERATOR ---
-const getTiersData = (lang) => [
-  {
-    id: 'executive',
-    name: lang === 'en' ? 'Executive' : 'এক্সিকিউটিভ',
-    shares: 1,
-    price: 637500,
-    officialPrice: 750000,
-    land: lang === 'en' ? '1 Decimal' : '১ শতাংশ',
+const getTiersData = (lang) => {
+  const tiers = [
+    {
+      id: 'executive',
+      name: lang === 'en' ? 'Executive' : 'এক্সিকিউটিভ',
+      shares: 1,
+      offerPrice: 750000,
+      mrpPrice: 750000,
+      land: lang === 'en' ? '1 Decimal' : '১ শতাংশ',
     benefits: lang === 'en'
       ? ['One-time Domestic Tour', 'Lifetime 20% Resort Discount', 'Voting Weight: 1', 'Annual Dividend']
       : ['এককালীন ডোমেস্টিক ট্যুর', 'আজীবন ২০% রিসোর্ট ডিসকাউন্ট', 'ভোটিং ওয়েট: ১', 'বাৎসরিক লভ্যাংশ'],
@@ -299,8 +300,8 @@ const getTiersData = (lang) => [
     id: 'silver',
     name: lang === 'en' ? 'Silver' : 'সিলভার',
     shares: 5,
-    price: 3187500,
-    officialPrice: 3750000,
+    offerPrice: 3550000,
+    mrpPrice: 3750000,
     land: lang === 'en' ? '5 Decimals' : '৫ শতাংশ',
     benefits: lang === 'en'
       ? ['One-time International Tour', 'Extended Resort Access', 'Voting Weight: 5', 'Higher Dividend Share', 'Priority Booking']
@@ -314,8 +315,8 @@ const getTiersData = (lang) => [
     id: 'golden',
     name: lang === 'en' ? 'Golden' : 'গোল্ডেন',
     shares: 10,
-    price: 6375000,
-    officialPrice: 7500000,
+    offerPrice: 6750000,
+    mrpPrice: 7500000,
     land: lang === 'en' ? '10 Decimals' : '১০ শতাংশ',
     benefits: lang === 'en'
       ? ['Founder Privilege', 'Premium Villa Access', 'Name on Founder Wall', 'Voting Weight: 10', 'VIP Events']
@@ -329,8 +330,8 @@ const getTiersData = (lang) => [
     id: 'platinum',
     name: lang === 'en' ? 'Platinum' : 'প্লাটিনাম',
     shares: 50,
-    price: 30000000,
-    officialPrice: 37500000,
+    offerPrice: 30000000,
+    mrpPrice: 37500000,
     land: lang === 'en' ? '50 Decimals' : '৫০ শতাংশ',
     benefits: lang === 'en'
       ? ['Director Eligibility', 'Board Advisory Seat', 'Veto Rights', 'Voting Weight: 50', 'Revenue Sharing+']
@@ -342,17 +343,47 @@ const getTiersData = (lang) => [
   }
 ];
 
+  // Add discount information to each tier
+  return tiers.map(tier => {
+    const discountInfo = calculateDiscount(tier.offerPrice, tier.mrpPrice);
+    return {
+      ...tier,
+      ...discountInfo,
+      initialInvestment: tier.offerPrice  // For calculator use
+    };
+  });
+};
+
 // --- UTILITY FUNCTIONS ---
 const formatCurrency = (amount, language = 'en') => {
+  const lakh = amount / 100000;
+  const crore = amount / 10000000;
+  
   if (language === 'bn') {
-    const lakh = amount / 100000;
+    if (amount >= 10000000) {
+      return `৳ ${crore.toFixed(2)} কোটি`;
+    }
     return `৳ ${lakh.toFixed(2)} লাখ`;
   }
-  return `BDT ${(amount / 100000).toFixed(2)} Lakh`;
+  
+  if (amount >= 10000000) {
+    return `BDT ${crore.toFixed(2)} Crore`;
+  }
+  return `BDT ${lakh.toFixed(2)} Lakh`;
 };
 
 const formatNumber = (num) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+// Calculate discount information for a tier
+const calculateDiscount = (offerPrice, mrpPrice) => {
+  const discountAmount = mrpPrice - offerPrice;
+  const discountPercent = (discountAmount / mrpPrice) * 100;
+  return {
+    discountAmount: Math.round(discountAmount),
+    discountPercent: parseFloat(discountPercent.toFixed(2))
+  };
 };
 
 // --- ENHANCED COMPONENTS ---
@@ -808,7 +839,16 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                 }}
                 onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(240, 234, 175, 0.1)'}
                 onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                onClick={toggleMenu}
+                onClick={(e) => {
+                  // For anchor links, close the menu after a small delay to allow navigation to complete
+                  setTimeout(() => {
+                    toggleMenu();
+                    // Ensure scrolling is enabled after menu closes
+                    setTimeout(() => {
+                      document.body.style.overflow = 'visible';
+                    }, 50);
+                  }, 100);
+                }}
               >
                 {t.nav.vision}
               </a>
@@ -828,7 +868,16 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                 }}
                 onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(240, 234, 175, 0.1)'}
                 onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                onClick={toggleMenu}
+                onClick={(e) => {
+                  // For anchor links, close the menu after a small delay to allow navigation to complete
+                  setTimeout(() => {
+                    toggleMenu();
+                    // Ensure scrolling is enabled after menu closes
+                    setTimeout(() => {
+                      document.body.style.overflow = 'visible';
+                    }, 50);
+                  }, 100);
+                }}
               >
                 {t.nav.asset}
               </a>
@@ -848,7 +897,16 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                 }}
                 onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(240, 234, 175, 0.1)'}
                 onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                onClick={toggleMenu}
+                onClick={(e) => {
+                  // For anchor links, close the menu after a small delay to allow navigation to complete
+                  setTimeout(() => {
+                    toggleMenu();
+                    // Ensure scrolling is enabled after menu closes
+                    setTimeout(() => {
+                      document.body.style.overflow = 'visible';
+                    }, 50);
+                  }, 100);
+                }}
               >
                 {t.nav.membership}
               </a>
@@ -868,7 +926,16 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                 }}
                 onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(240, 234, 175, 0.1)'}
                 onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                onClick={toggleMenu}
+                onClick={(e) => {
+                  // For anchor links, close the menu after a small delay to allow navigation to complete
+                  setTimeout(() => {
+                    toggleMenu();
+                    // Ensure scrolling is enabled after menu closes
+                    setTimeout(() => {
+                      document.body.style.overflow = 'visible';
+                    }, 50);
+                  }, 100);
+                }}
               >
                 {t.nav.yield}
               </a>
@@ -1277,6 +1344,84 @@ const AboutUs = ({ t, language }) => {
   );
 };
 
+const VisionSection = ({ t }) => (
+  <section id="vision" className="py-5 py-md-8" style={{
+    background: 'linear-gradient(to bottom, #F6F6F7, #FFFFFF)'
+  }}>
+    <div className="container">
+      <div className="text-center mb-5 mb-md-6">
+        <h2 className="h1 fw-bold text-success mb-3 mb-md-4">{t.nav.vision}</h2>
+        <p className="text-muted mx-auto" style={{
+          maxWidth: '700px',
+          fontSize: '1.25rem'
+        }}>
+          {t.vision ? t.vision.description || "Our vision is to create a sustainable ecosystem where luxury meets nature, providing a sanctuary for those who seek peace, prosperity, and environmental harmony." : "Our vision is to create a sustainable ecosystem where luxury meets nature, providing a sanctuary for those who seek peace, prosperity, and environmental harmony."}
+        </p>
+      </div>
+
+      <div className="row justify-content-center">
+        <div className="col-12 col-lg-10">
+          <div className="row g-4 g-md-5">
+            <div className="col-12 col-md-6">
+              <div className="card h-100 border-0 shadow-sm p-4 rounded-3" 
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  transition: 'all 0.3s ease',
+                  borderLeft: '4px solid #193C26'
+                }}
+              >
+                <div className="d-flex align-items-center mb-3">
+                  <div className="rounded-circle d-flex align-items-center justify-content-center me-3" style={{
+                    width: '48px',
+                    height: '48px',
+                    background: 'linear-gradient(to bottom right, #193C26, #2a5238)',
+                    color: 'white'
+                  }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                    </svg>
+                  </div>
+                  <h3 className="h5 fw-bold text-success mb-0">Sustainability</h3>
+                </div>
+                <p className="text-muted mb-0" style={{ lineHeight: '1.7' }}>
+                  {t.vision ? t.vision.sustainability || "Creating a model where business success aligns with environmental stewardship, ensuring our planet thrives for generations to come." : "Creating a model where business success aligns with environmental stewardship, ensuring our planet thrives for generations to come."}
+                </p>
+              </div>
+            </div>
+            
+            <div className="col-12 col-md-6">
+              <div className="card h-100 border-0 shadow-sm p-4 rounded-3" 
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  transition: 'all 0.3s ease',
+                  borderLeft: '4px solid #F0EAAF'
+                }}
+              >
+                <div className="d-flex align-items-center mb-3">
+                  <div className="rounded-circle d-flex align-items-center justify-content-center me-3" style={{
+                    width: '48px',
+                    height: '48px',
+                    background: 'linear-gradient(to bottom right, #F0EAAF, #f8f4d0)',
+                    color: '#193C26'
+                  }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                    </svg>
+                  </div>
+                  <h3 className="h5 fw-bold text-success mb-0">Legacy</h3>
+                </div>
+                <p className="text-muted mb-0" style={{ lineHeight: '1.7' }}>
+                  {t.vision ? t.vision.legacy || "Building assets that provide lasting value for families, creating a legacy of environmental consciousness and financial security." : "Building assets that provide lasting value for families, creating a legacy of environmental consciousness and financial security."}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 const ValueProp = ({ t }) => (
   <section id="asset" className="py-5 py-md-8" style={{
     background: 'linear-gradient(to bottom, #FFFFFF, #F6F6F7)'
@@ -1334,7 +1479,7 @@ const ValueProp = ({ t }) => (
         </div>
 
         <div className="col-12 col-md-4">
-          <div className="card h-100 border-0 shadow p-4 p-md-5 rounded-3" 
+          <div id="yield" className="card h-100 border-0 shadow p-4 p-md-5 rounded-3" 
             style={{
               backgroundColor: '#FFFFFF',
               transition: 'all 0.3s ease',
@@ -1625,7 +1770,7 @@ const ROICalculator = ({ t, language }) => {
 
   const currentScenario = scenarios[scenario];
   const totalDividend = currentScenario.dividend * selectedTier.shares * years;
-  const initialLandValue = selectedTier.price;
+  const initialLandValue = selectedTier.initialInvestment || selectedTier.offerPrice;
   const futureLandValue = initialLandValue * Math.pow((1 + currentScenario.appreciation), years);
   const totalValue = totalDividend + futureLandValue;
   const roiPercentage = ((totalValue - initialLandValue) / initialLandValue) * 100;
@@ -1669,7 +1814,7 @@ const ROICalculator = ({ t, language }) => {
                         }}
                       >
                         <div className="fw-bold">{tier.name}</div>
-                        <div className="small mt-1">{formatCurrency(tier.price, language)}</div>
+                        <div className="small mt-1">{formatCurrency(tier.offerPrice, language)}</div>
                       </button>
                     </div>
                   ))}
@@ -2114,7 +2259,20 @@ const TiersSection = ({ t, language }) => {
                   padding: '0.5rem 1rem',
                   border: '1px solid',
                   fontWeight: activeTab === tab ? 'bold' : 'normal',
-                  fontSize: '0.9rem'
+                  fontSize: '0.9rem',
+                  transform: 'translateY(0)'
+                }}
+                onMouseEnter={(e) => {
+                  if (activeTab !== tab) {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(25, 60, 38, 0.2)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeTab !== tab) {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }
                 }}
               >
                 {tab === 'all' ? 'All Tiers' :
@@ -2125,93 +2283,133 @@ const TiersSection = ({ t, language }) => {
           </div>
         </div>
 
-        <div className="row g-4 g-md-5">
+        <div className="row g-3 g-md-4">
           {filteredTiers.map((tier) => (
             <div
               key={tier.id}
               className="col-12 col-md-6 col-lg-3"
             >
-              <div className="card h-100 border-2 position-relative" style={{
-                backgroundColor: tier.color.includes('#F0EAAF') ? '#F0EAAF' : 
-                                tier.color.includes('#193C26') ? '#193C26' : '#FFFFFF',
-                color: tier.text.includes('#F0EAAF') ? '#F0EAAF' : '#193C26',
-                borderColor: tier.border.includes('#F0EAAF') ? '#F0EAAF' : 
-                             tier.border.includes('#193C26') ? '#193C26' : '#dee2e6',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)'
-              }}>
+              <div 
+                className="card h-100 border-2 position-relative" 
+                style={{
+                  backgroundColor: tier.color.includes('#F0EAAF') ? '#F0EAAF' : 
+                                  tier.color.includes('#193C26') ? '#193C26' : '#FFFFFF',
+                  color: tier.text.includes('#F0EAAF') ? '#F0EAAF' : '#193C26',
+                  borderColor: tier.border.includes('#F0EAAF') ? '#F0EAAF' : 
+                               tier.border.includes('#193C26') ? '#193C26' : '#dee2e6',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 8px 20px -4px rgba(0, 0, 0, 0.1)',
+                  cursor: 'pointer',
+                  transform: 'translateY(0)',
+                  minHeight: '380px',
+                  maxHeight: '420px',
+                  overflow: 'hidden'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.boxShadow = '0 16px 32px -6px rgba(0, 0, 0, 0.2)';
+                  e.currentTarget.style.borderColor = tier.border.includes('#F0EAAF') ? '#F0EAAF' : 
+                                                       tier.border.includes('#193C26') ? '#193C26' : '#193C26';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 8px 20px -4px rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.borderColor = tier.border.includes('#F0EAAF') ? '#F0EAAF' : 
+                                                       tier.border.includes('#193C26') ? '#193C26' : '#dee2e6';
+                }}
+              >
                 {/* Tags */}
                 {tier.id === 'platinum' && (
-                  <div className="position-absolute top-0 start-50 translate-middle-x bg-gradient bg-primary text-white text-xs fw-bold px-3 px-md-4 py-1 rounded-pill mt-n3" style={{
+                  <div className="position-absolute top-0 start-50 translate-middle-x bg-gradient bg-primary text-white xsmall fw-bold px-2 py-1 rounded-pill mt-n5" style={{
                     zIndex: 2,
                     transform: 'translateX(-50%)',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    fontSize: '0.7rem'
                   }}>
-                    <Award className="me-1" style={{width: '12px', height: '12px'}} />
+                    <Award className="me-1" style={{width: '10px', height: '10px'}} />
                     {t.tiers.boardroom}
                   </div>
                 )}
                 
                 {tier.tag && (
-                  <div className="position-absolute top-0 start-50 translate-middle-x bg-gradient bg-warning text-success text-xs fw-bold px-3 px-md-4 py-1 rounded-pill mt-n3" style={{
+                  <div className="position-absolute top-0 start-50 translate-middle-x bg-gradient bg-warning text-success xsmall fw-bold px-2 py-1 rounded-pill mt-n5" style={{
                     zIndex: 2,
                     transform: 'translateX(-50%)',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    fontSize: '0.7rem'
                   }}>
-                    <Star className="me-1" style={{width: '12px', height: '12px'}} />
+                    <Star className="me-1" style={{width: '10px', height: '10px'}} />
                     {tier.tag === 'mostPopular' ? t.tiers.mostPopular : t.tiers.bestValue}
                   </div>
                 )}
 
                 {/* Header */}
-                <div className="card-body text-center pt-5 pb-4">
-                  <h3 className="h3 fw-bold mb-2">{tier.name}</h3>
-                  <div className="text-uppercase small opacity-75">
+                <div className="card-body text-center pt-4 pb-3">
+                  <h3 className="h4 fw-bold mb-1">{tier.name}</h3>
+                  <div className="text-uppercase xsmall opacity-75">
                     {tier.shares} {t.tiers.shares} • {tier.land}
                   </div>
                 </div>
 
                 {/* Price */}
-                <div className="px-4 px-md-5 pb-4 pb-md-5 text-center">
-                  <span className="display-5 fw-bold">
-                    {formatCurrency(tier.price, language)}
+                <div className="px-3 px-md-4 pb-3 pb-md-4 text-center">
+                  <span className="h3 fw-bold">
+                    {formatCurrency(tier.offerPrice, language)}
                   </span>
-                  {tier.price < tier.officialPrice && (
-                    <div className="mt-2">
+                  {tier.offerPrice < tier.mrpPrice && (
+                    <div className="mt-1">
                       <span className="small text-decoration-line-through opacity-75 me-2">
-                        {formatCurrency(tier.officialPrice, language)}
+                        {formatCurrency(tier.mrpPrice, language)}
                       </span>
-                      <span className="small badge bg-danger">
-                        Save {((1 - tier.price/tier.officialPrice)*100).toFixed(0)}%
-                      </span>
+                      {tier.discountPercent > 0 && (
+                        <span className="xsmall badge bg-danger">
+                          Save {tier.discountPercent}%
+                        </span>
+                      )}
                     </div>
                   )}
                 </div>
 
                 {/* Features */}
-                <div className="px-4 px-md-5 pb-4 flex-grow-1">
-                  <h4 className="fw-bold mb-3 opacity-80">{t.tiers.features}</h4>
-                  <ul className="list-unstyled">
-                    {tier.benefits.map((benefit, idx) => (
-                      <li key={idx} className="d-flex align-items-start mb-2">
-                        <Check className="me-2 mt-1 flex-shrink-0 opacity-70" style={{width: '20px', height: '20px'}} />
-                        <span style={{lineHeight: '1.5'}}>{benefit}</span>
+                <div className="px-3 px-md-4 pb-3 flex-grow-1">
+                  <h4 className="fw-bold xsmall mb-2 opacity-80">{t.tiers.features}</h4>
+                  <ul className="list-unstyled mb-0">
+                    {tier.benefits.slice(0, 3).map((benefit, idx) => (
+                      <li key={idx} className="d-flex align-items-start mb-1">
+                        <Check className="me-1 mt-1 flex-shrink-0 opacity-70" style={{width: '14px', height: '14px'}} />
+                        <span className="xsmall" style={{lineHeight: '1.3'}}>{benefit}</span>
                       </li>
                     ))}
+                    {tier.benefits.length > 3 && (
+                      <li className="d-flex align-items-start">
+                        <Plus className="me-1 mt-1 flex-shrink-0 opacity-70" style={{width: '14px', height: '14px'}} />
+                        <span className="xsmall" style={{lineHeight: '1.3'}}>+{tier.benefits.length - 3} more</span>
+                      </li>
+                    )}
                   </ul>
                 </div>
 
                 {/* CTA Button */}
-                <div className="px-4 px-md-5 pb-4">
+                <div className="px-3 px-md-4 pb-3">
                   <button
-                    className="btn w-100 fw-bold py-3 rounded"
+                    className="btn w-100 fw-bold py-2 rounded"
                     style={{
                       background: tier.id === 'platinum' ? 
                         'linear-gradient(90deg, #9c27b0, #673ab7)' : 
                         'linear-gradient(90deg, #193C26, #2a5238)',
                       color: tier.id === 'platinum' ? '#FFFFFF' : '#F0EAAF',
                       border: 'none',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
+                      transform: 'translateY(0)',
+                      fontSize: '0.9rem'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.2)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
                     {t.tiers.reqAccess}
@@ -2685,10 +2883,13 @@ function App() {
     if (isMenuOpen || isJoinModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'unset';
+      // Reset overflow to visible/scroll when menu/modal is closed
+      document.body.style.overflow = 'visible';
     }
+    
+    // Clean up function
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = 'visible'; // Changed from 'unset' to 'visible'
     };
   }, [isMenuOpen, isJoinModalOpen]);
 
@@ -2712,7 +2913,7 @@ function App() {
           font-family: 'Outfit', sans-serif;
           background-color: #F6F6F7;
           scroll-behavior: smooth;
-          overflow-y: scroll;
+          overflow-y: auto;
         }
         
         body::-webkit-scrollbar {
