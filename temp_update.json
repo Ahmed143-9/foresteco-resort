@@ -1,0 +1,9 @@
+{
+  "file_path": "c:\\Users\\dell\\Desktop\\newTotal\\foresteco-resort\\src\\components\\main.js",
+  "replacements": [
+    {
+      "original_text": "    mrpPrice: 37500000,",
+      "new_text": "    mrpPrice: 35294118,"
+    }
+  ]
+}

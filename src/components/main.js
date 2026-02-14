@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import InvestmentDashboard from './investment-dashboard';
+import AssetSection from './AssetSection';
 import { 
   Leaf, Shield, TrendingUp, Users, ArrowRight, 
   Menu, X, Check, Calculator, Lock, Phone, 
   Mail, MapPin, Globe, Download, ChevronRight,
   Star, Award, Home, Clock, Calendar, Building,
-  FileText, Share2, Target, PieChart, Plus
+  FileText, Share2, Target, PieChart, Plus,
+  Landmark, Hotel, Sprout, ShieldCheck, Map, Tent, Trees, Sparkles
 } from 'lucide-react';
 import axios from 'axios';
 import heroImage from '../images/hero.jpg';
@@ -39,8 +42,8 @@ const COLORS = {
 const TRANSLATIONS = {
   en: {
     nav: { 
-      vision: "The Vision", 
-      asset: "The Asset", 
+      vision: "Vision", 
+      asset: "Investment Portfolio",
       membership: "Membership", 
       yield: "Yield", 
       join: "Apply for membership"
@@ -161,7 +164,7 @@ const TRANSLATIONS = {
   bn: {
     nav: { 
       vision: "রূপকল্প", 
-      asset: "সম্পদ বিবরণী", 
+      asset: "বিনিয়োগ ড্যাশবোর্ড", 
       membership: "সদস্যপদ", 
       yield: "বিনিয়োগ ও মুনাফা", 
       join: "সদস্য হন"
@@ -330,7 +333,7 @@ const getTiersData = (lang) => {
     id: 'platinum',
     name: lang === 'en' ? 'Platinum' : 'প্লাটিনাম',
     shares: 50,
-    offerPrice: 30000000,
+    offerPrice: 32000000,
     mrpPrice: 37500000,
     land: lang === 'en' ? '50 Decimals' : '৫০ শতাংশ',
     benefits: lang === 'en'
@@ -514,7 +517,7 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
           {!submitted ? (
             <>
               <h2 className="h2 fw-bold mb-2 text-center" style={{ color: '#F0EAAF' }}>
-                {language === 'en' ? 'Youth Entrepreneur Sponsor Saviour Ltd' : 'Youth Entrepreneur Sponsor Saviour Ltd'}
+                {language === 'en' ? 'FOREST ECO RESORT' : 'FOREST ECO RESORT'}
               </h2>
               <p className="text-center mb-4 mb-md-5" style={{ color: '#F0EAAF', opacity: 0.9 }}>
                 {language === 'en' 
@@ -737,7 +740,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
       boxShadow: isHeroVisible ? 'none' : '0 4px 20px rgba(0,0,0,0.1)',
       borderBottom: isHeroVisible ? 'none' : '1px solid rgba(240, 234, 175, 0.1)'
     }}>
-      <div className="container">
+      <div className="container-fluid px-4 px-lg-5">
         <a href="#hero" className="navbar-brand d-flex align-items-center">
           {!logoError ? (
             <img
@@ -824,14 +827,26 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
           }}
         >
           <ul className="navbar-nav ms-auto align-items-lg-center">
-            <li className="nav-item mx-2">
+            <style>{`
+              @media (min-width: 992px) {
+                .navbar-nav .nav-item {
+                  margin-left: 0.5rem;
+                  margin-right: 0.5rem;
+                }
+                .navbar-nav .nav-link {
+                  padding-left: 1rem;
+                  padding-right: 1rem;
+                }
+              }
+            `}</style>
+            <li className="nav-item mx-2 mx-lg-1">
               <a 
-                href="#vision" 
+                href="#the-asset" 
                 className="nav-link" 
                 style={{ 
                   color: navTextColor,
                   fontWeight: '500',
-                  padding: '12px 24px',
+                  padding: '12px 20px',
                   borderRadius: '8px',
                   transition: 'all 0.3s ease',
                   textShadow: '0 1px 2px rgba(0,0,0,0.3)',
@@ -840,6 +855,43 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                 onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(240, 234, 175, 0.1)'}
                 onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                 onClick={(e) => {
+                  e.preventDefault();
+                  // Scroll to the asset section smoothly
+                  const element = document.getElementById('the-asset');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                  // Close the menu after a small delay
+                  setTimeout(() => {
+                    toggleMenu();
+                    setTimeout(() => {
+                      document.body.style.overflow = 'visible';
+                    }, 50);
+                  }, 100);
+                }}
+              >
+                The Asset
+              </a>
+            </li>
+            <li className="nav-item mx-2 mx-lg-1">
+              <a 
+                href="#investment-portfolio" 
+                className="nav-link" 
+                style={{ 
+                  color: navTextColor,
+                  fontWeight: '500',
+                  padding: '12px 20px',
+                  borderRadius: '8px',
+                  transition: 'all 0.3s ease',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  fontSize: '1.1rem'
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(240, 234, 175, 0.1)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  // Set hash to trigger file loading
+                  window.location.hash = 'investment-portfolio';
                   // For anchor links, close the menu after a small delay to allow navigation to complete
                   setTimeout(() => {
                     toggleMenu();
@@ -850,46 +902,17 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                   }, 100);
                 }}
               >
-                {t.nav.vision}
+                Investment Portfolio
               </a>
             </li>
-            <li className="nav-item mx-2">
-              <a 
-                href="#asset" 
-                className="nav-link" 
-                style={{ 
-                  color: navTextColor,
-                  fontWeight: '500',
-                  padding: '12px 24px',
-                  borderRadius: '8px',
-                  transition: 'all 0.3s ease',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
-                  fontSize: '1.1rem'
-                }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(240, 234, 175, 0.1)'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                onClick={(e) => {
-                  // For anchor links, close the menu after a small delay to allow navigation to complete
-                  setTimeout(() => {
-                    toggleMenu();
-                    // Ensure scrolling is enabled after menu closes
-                    setTimeout(() => {
-                      document.body.style.overflow = 'visible';
-                    }, 50);
-                  }, 100);
-                }}
-              >
-                {t.nav.asset}
-              </a>
-            </li>
-            <li className="nav-item mx-2">
+            <li className="nav-item mx-2 mx-lg-1">
               <a 
                 href="#tiers" 
                 className="nav-link" 
                 style={{ 
                   color: navTextColor,
                   fontWeight: '500',
-                  padding: '12px 24px',
+                  padding: '12px 20px',
                   borderRadius: '8px',
                   transition: 'all 0.3s ease',
                   textShadow: '0 1px 2px rgba(0,0,0,0.3)',
@@ -911,14 +934,14 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                 {t.nav.membership}
               </a>
             </li>
-            <li className="nav-item mx-2">
+            <li className="nav-item mx-2 mx-lg-1">
               <a 
                 href="#calculator" 
                 className="nav-link" 
                 style={{ 
                   color: navTextColor,
                   fontWeight: '500',
-                  padding: '12px 24px',
+                  padding: '12px 20px',
                   borderRadius: '8px',
                   transition: 'all 0.3s ease',
                   textShadow: '0 1px 2px rgba(0,0,0,0.3)',
@@ -942,7 +965,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
             </li>
 
             {/* Language Toggle */}
-            <li className="nav-item mx-2">
+            <li className="nav-item mx-2 mx-lg-1">
               <button
                 onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
                 className="btn btn-sm border-0 rounded-pill"
@@ -1321,7 +1344,7 @@ const AboutUs = ({ t, language }) => {
                       Setting new standards in eco-friendly tourism
                     </p>
                   </div>
-                  <div className="text-center">
+                  {/* <div className="text-center">
                     <div className="d-inline-flex align-items-center justify-content-center" style={{
                       width: '40px',
                       height: '40px',
@@ -1333,7 +1356,7 @@ const AboutUs = ({ t, language }) => {
                     <p className="text-muted mt-2 mb-0" style={{ fontSize: '0.9rem' }}>
                       Est. Since
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -2584,11 +2607,11 @@ const Footer = ({ t }) => {
                 Allocation is on a first-come, first-served basis.
               </p>
             </div>
-            <div className="col-12 col-md-4 text-md-end">
+            {/* <div className="col-12 col-md-4 text-md-end">
               <button className="btn btn-warning text-dark fw-bold px-4 py-3">
                 Secure Your Share Now
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -2849,7 +2872,7 @@ const CTABar = ({ t }) => (
             <Download className="" style={{width: '20px', height: '20px'}} />
             {t.ctaBar.btn}
           </button>
-          <button className="btn btn-outline-light fw-bold px-4 px-md-5 py-3" style={{
+          {/* <button className="btn btn-outline-light fw-bold px-4 px-md-5 py-3" style={{
             transition: 'all 0.3s ease',
             border: '2px solid #FFFFFF',
             color: '#FFFFFF'
@@ -2864,7 +2887,7 @@ const CTABar = ({ t }) => (
           }}
           >
             Schedule Consultation
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
@@ -2876,8 +2899,87 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [language, setLanguage] = useState('en');
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState('home'); // 'home' or 'dashboard'
+  const [fileViewMode, setFileViewMode] = useState(null); // null, 'asset', or 'portfolio'
+  const [fileContent, setFileContent] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showAssetSection, setShowAssetSection] = useState(false); // New state for AssetSection view
 
   const t = TRANSLATIONS[language];
+
+  // Handle file viewing
+  const loadFileContent = async (fileName) => {
+    setIsLoading(true);
+    setError('');
+    setFileContent('');
+    
+    try {
+      const response = await fetch(`/${fileName}`);
+      if (!response.ok) {
+        throw new Error(`Failed to load ${fileName}`);
+      }
+      const text = await response.text();
+      setFileContent(text);
+      setFileViewMode(fileName.replace('.txt', ''));
+    } catch (err) {
+      setError(`Error loading ${fileName}: ${err.message}`);
+      setFileViewMode(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Close file view and return to normal layout
+  const closeFileView = () => {
+    setFileViewMode(null);
+    setFileContent('');
+    setError('');
+    setShowAssetSection(false);
+    // Reset URL hash to home
+    window.location.hash = '';
+  };
+
+  // Handle URL hash changes for routing
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1); // Remove #
+      
+      if (hash === 'investment-dashboard') {
+        setCurrentPage('dashboard');
+        setFileViewMode(null);
+        setShowAssetSection(false);
+      } else if (hash === 'the-asset') {
+        // Scroll to the asset section instead of showing separate view
+        setShowAssetSection(false);
+        setFileViewMode(null);
+        setCurrentPage('home');
+        // Scroll to the asset section after render
+        setTimeout(() => {
+          const element = document.getElementById('the-asset');
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
+      } else if (hash === 'investment-portfolio') {
+        loadFileContent('portfolio.txt');
+        setShowAssetSection(false);
+      } else {
+        setCurrentPage('home');
+        setFileViewMode(null);
+        setShowAssetSection(false);
+      }
+    };
+
+    // Initial check
+    handleHashChange();
+    
+    window.addEventListener('hashchange', handleHashChange);
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (isMenuOpen || isJoinModalOpen) {
@@ -2970,33 +3072,171 @@ function App() {
       `}</style>
       
       <div className={`min-h-screen ${language === 'bn' ? 'font-bengali' : ''}`}>
-        <Navigation
-          toggleMenu={() => setIsMenuOpen(!isMenuOpen)}
-          isMenuOpen={isMenuOpen}
-          language={language}
-          setLanguage={setLanguage}
-          t={t}
-          openJoinModal={() => setIsJoinModalOpen(true)}
+        {/* File Viewer Overlay - Show when in file view mode */}
+        <FileViewer 
+          content={fileContent}
+          fileName={fileViewMode}
+          isLoading={isLoading}
+          error={error}
+          onClose={closeFileView}
         />
-        
-        <JoinPilotModal 
-          isOpen={isJoinModalOpen}
-          onClose={() => setIsJoinModalOpen(false)}
-          language={language}
-        />
-        
-        <Hero t={t} language={language} />
-        <AboutUs t={t} language={language} />
-        <PortfolioGallery t={t} />
-        <ROICalculator t={t} language={language} />
-        <TiersSection t={t} language={language} />
-        <FAQSection t={t} />
-        <CTABar t={t} />
-        <Footer t={t} />
+
+        {/* Normal layout - Hide when in file view mode */}
+        {fileViewMode === null && (
+          <>
+            {currentPage === 'home' ? (
+              <>
+                <Navigation
+                  toggleMenu={() => setIsMenuOpen(!isMenuOpen)}
+                  isMenuOpen={isMenuOpen}
+                  language={language}
+                  setLanguage={setLanguage}
+                  t={t}
+                  openJoinModal={() => setIsJoinModalOpen(true)}
+                />
+                
+                <JoinPilotModal 
+                  isOpen={isJoinModalOpen}
+                  onClose={() => setIsJoinModalOpen(false)}
+                  language={language}
+                />
+                
+                <Hero t={t} language={language} />
+                <div id="the-asset">
+                  <AssetSection />
+                </div>
+                <PortfolioGallery t={t} />
+                <ROICalculator t={t} language={language} />
+                <TiersSection t={t} language={language} />
+                <FAQSection t={t} />
+                <CTABar t={t} />
+                <Footer t={t} />
+              </>
+            ) : (
+              <InvestmentDashboard language={language} t={t} />
+            )}
+          </>
+        )}
       </div>
     </>
   );
 }
 
 export default App;
+
+// File Viewer Component for SPA-style text file display
+const FileViewer = ({ content, fileName, isLoading, error, onClose }) => {
+  if (!content && !isLoading && !error) return null;
+
+  return (
+    <div 
+      id="file-view"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: '#ffffff',
+        zIndex: 10000,
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '20px',
+        boxSizing: 'border-box'
+      }}
+    >
+      {/* Header with close button */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '20px',
+        paddingBottom: '15px',
+        borderBottom: '1px solid #e0e0e0'
+      }}>
+        <h2 style={{
+          margin: 0,
+          color: '#193C26',
+          fontSize: '1.5rem',
+          fontWeight: '600'
+        }}>
+          {fileName === 'asset' ? 'Asset.txt' : 'portfolio.txt'}
+        </h2>
+        <button
+          onClick={onClose}
+          style={{
+            background: '#193C26',
+            color: 'white',
+            border: 'none',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '0.9rem',
+            fontWeight: '500',
+            transition: 'background-color 0.2s ease'
+          }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#2a5238'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#193C26'}
+        >
+          Close (Home)
+        </button>
+      </div>
+
+      {/* Loading state */}
+      {isLoading && (
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#666'
+        }}>
+          <div>Loading file content...</div>
+        </div>
+      )}
+
+      {/* Error state */}
+      {error && (
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#e74c3c',
+          textAlign: 'center'
+        }}>
+          <div>
+            <div style={{ fontSize: '1.2rem', marginBottom: '10px' }}>⚠️</div>
+            <div>{error}</div>
+          </div>
+        </div>
+      )}
+
+      {/* File content */}
+      {!isLoading && !error && content && (
+        <div style={{
+          flex: 1,
+          overflow: 'auto',
+          backgroundColor: '#f8f8f8',
+          border: '1px solid #ddd',
+          borderRadius: '4px'
+        }}>
+          <pre style={{
+            margin: 0,
+            padding: '20px',
+            fontFamily: 'Consolas, Monaco, "Courier New", monospace',
+            fontSize: '14px',
+            lineHeight: '1.5',
+            color: '#333',
+            whiteSpace: 'pre-wrap',
+            wordWrap: 'break-word',
+            backgroundColor: 'transparent'
+          }}>
+            {content}
+          </pre>
+        </div>
+      )}
+    </div>
+  );
+};
 
