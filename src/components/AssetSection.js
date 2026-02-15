@@ -173,7 +173,6 @@ const AssetSection = ({ language = 'en' }) => {
           font-size: clamp(2.5rem, 5vw, 4.5rem);
           font-weight: 700;
           color: #f5f3ed;
-          margin: 2rem 0;
           line-height: 1.1;
         }
 
@@ -553,16 +552,16 @@ const AssetSection = ({ language = 'en' }) => {
         <div className="max-w-7xl mx-auto">
           
           {/* 1️⃣ Asset Structure Intro Area */}
-          <div className={`text-center mb-20 fade-in ${isVisible ? 'visible' : ''}`}>
-            <p className="luxury-top-label mb-6">
+          <div className={`text-center mb-20 fade-in ${isVisible ? 'visible' : ''} mt-12`}>
+            <p className="luxury-top-label mb-4">
               {current.topLabel}
             </p>
             
-            <h2 className="luxury-main-heading luxury-serif">
+            <h2 className="luxury-main-heading luxury-serif mb-6">
               {current.mainHeading}
             </h2>
             
-            <p className="luxury-description">
+            <p className="luxury-description mt-4">
               {current.description}
             </p>
           </div>
