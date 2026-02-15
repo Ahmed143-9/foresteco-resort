@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Landmark, Hotel, Sprout, ShieldCheck, Map, ArrowRight, Globe, Tent, Trees, Sparkles, Award, Gem, Crown } from 'lucide-react';
+import { Landmark, Hotel, Sprout, ShieldCheck, Map, ArrowRight, Globe } from 'lucide-react';
 
 const AssetSection = () => {
   const [language, setLanguage] = useState('en');
   const [isVisible, setIsVisible] = useState(false);
-  const [activeCard, setActiveCard] = useState(null);
   const sectionRef = useRef(null);
 
   useEffect(() => {
@@ -18,133 +17,128 @@ const AssetSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const colors = {
-    phthaloGreen: "#193C26",
-    paleGoldenrod: "#F0EAAF",
-    eerieBlack: "#191819",
-    angoraWhite: "#F6F6F7"
-  };
-
   const content = {
     en: {
-      sectionTitle: "The Asset Structure",
-      sectionSubtitle: "Tangible. Secured. Productive.",
-      desc: "Our asset model is built on physical security. Your investment is backed by registered land and revenue-generating infrastructure that hedges against inflation and market volatility.",
-      visualHeading: "The Triple-Engine Asset Base",
+      topLabel: "TANGIBLE. SECURED. PRODUCTIVE.",
+      mainHeading: "The Asset Structure",
+      description: "Your investment is backed by registered land and revenue-generating infrastructure that hedges against inflation and market volatility.",
+      
       assets: [
         {
-          title: "The Land",
+          label: "THE LAND",
           stat: "32.84 Bighas",
-          detail: "Registered Saf Kabla land in the high-growth Bhabanipur-Gazipur corridor. A tangible 'Capital Floor'.",
+          description: "Registered Saf Kabla land in the high-growth Bhabanipur-Gazipur corridor.",
           icon: <Map className="w-8 h-8" />
         },
         {
-          title: "Hospitality Infra",
+          label: "HOSPITALITY INFRA",
           stat: "36 Rooms + 400 Pax",
-          detail: "A 6-story guest house and a multipurpose hall designed for the premium corporate market.",
+          description: "A 6-story guest house and multipurpose hall for the premium corporate market.",
           icon: <Hotel className="w-8 h-8" />
         },
         {
-          title: "The Revenue Engine",
+          label: "THE REVENUE ENGINE",
           stat: "10 Bigha Agro-Zone",
-          detail: "High-density intercropping of BARI Malta-1 and Dragon Fruit, projected for long-term operational yield.",
+          description: "High-density intercropping of BARI Malta-1 and Dragon Fruit.",
           icon: <Sprout className="w-8 h-8" />
         },
         {
-          title: "The Legal Shield",
+          label: "THE LEGAL SHIELD",
           stat: "99-Year Waiver",
-          detail: "Indivisibility of Utility structure prevents land fragmentation, protecting commercial value.",
+          description: "Indivisibility structure prevents land fragmentation.",
           icon: <ShieldCheck className="w-8 h-8" />
         }
       ],
+
+      tripleEngineHeading: "The Triple-Engine Asset Base",
+
       showcase: [
         {
-          label: "Lifestyle Focus",
+          category: "LIFESTYLE FOCUS",
+          badge: "Hospitality Pillar",
           title: "The Forest Lodge",
-          desc: "A signature 6-story sanctuary featuring 36 premium rooms, blending modern luxury with forest serenity.",
-          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1200",
-          tag: "Hospitality Pillar"
+          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1200"
         },
         {
-          label: "Event Focus",
+          category: "EVENT FOCUS",
+          badge: "MICE & Recreation",
           title: "The Gathering Grounds",
-          desc: "400-pax Multipurpose Complex and an iconic Ferris Wheel offering panoramic views of the Gazipur canopy.",
-          image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200",
-          tag: "MICE & Recreation"
+          image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200"
         },
         {
-          label: "Yield Focus",
+          category: "YIELD FOCUS",
+          badge: "Revenue Driver",
           title: "The Auspicious Zone",
-          desc: "Our high-yield agro-engine: home to 1,100 BARI Malta-1 trees and 2,200 Dragon Fruit pillars.",
-          image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1200",
-          tag: "The Revenue Driver"
+          image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1200"
         }
       ],
-      masterPlanHeading: "Sustainable Prosperity",
-      masterPlanDesc: "We believe in gradual, phased development. Every Taka of your investment is secured within the embrace of the soil—completely free from the shadow of bank debt.",
-      masterPlanStat1: "100% Equity Funded",
-      masterPlanStat2: "Zero Debt Liability",
-      legalNote: "All assets are debt-free and equity-funded for absolute security."
+
+      ctaHeading: "Sustainable Prosperity",
+      ctaDescription: "We believe in gradual, phased development. Every Taka of your investment is secured within the embrace of the soil—completely free from the shadow of bank debt.",
+      badge1: "100% Equity Funded",
+      badge2: "Zero Debt Liability",
+      ctaButton: "VIEW INFRASTRUCTURE ROADMAP"
     },
     bn: {
-      sectionTitle: "বিনিয়োগের নিষ্কণ্টক সুরক্ষা",
-      sectionSubtitle: "আপনার আমানত। আমাদের দায়বদ্ধতা।",
-      desc: "আমাদের সম্পদ মডেলটি আপনার বিনিয়োগের নিরাপত্তার কথা মাথায় রেখেই তৈরি। এখানে প্রতিটি শেয়ারের বিপরীতে রয়েছে নিষ্কণ্টক জমি এবং লাভজনক অবকাঠামো, যা আপনার পুঁজিকে রাখে সম্পূর্ণ ঝুঁকিমুক্ত।",
-      visualHeading: "বিনিয়োগের বহুমুখী সমৃদ্ধি",
+      topLabel: "বাস্তব। সুরক্ষিত। উৎপাদনশীল।",
+      mainHeading: "সম্পদের কাঠামো",
+      description: "আপনার বিনিয়োগ রেজিস্টার্ড জমি এবং রাজস্ব-উৎপাদনকারী অবকাঠামো দ্বারা সমর্থিত।",
+      
       assets: [
         {
-          title: "জমির স্থায়ী নিশ্চয়তা",
-          stat: "৩২.৮৪ বিঘা জমি",
-          detail: "গাজীপুরের বুকে আপনার এক টুকরো নিজস্ব ঠিকানা; যা সাফ কবলা দলিলে সুরক্ষিত এবং সময়ের সাথে ক্রমবর্ধমান।",
+          label: "জমি",
+          stat: "৩২.৮৪ বিঘা",
+          description: "উচ্চ-বৃদ্ধি ভবানীপুর-গাজীপুর করিডোরে রেজিস্টার্ড সাফ কবলা জমি।",
           icon: <Map className="w-8 h-8" />
         },
         {
-          title: "আভিজাত্য ও আতিথেয়তা",
-          stat: "৩৬ রুম + ৪০০ আসন",
-          detail: "আধুনিক ফিটিংস সমৃদ্ধ গেস্ট হাউস এবং বিশাল কনভেনশন হল, যা প্রিমিয়াম ইভেন্ট থেকে আয়ের স্থায়ী উৎস।",
+          label: "আতিথেয়তা অবকাঠামো",
+          stat: "৩৬ রুম + ৪০০ জন",
+          description: "প্রিমিয়াম কর্পোরেট বাজারের জন্য ৬-তলা গেস্ট হাউস।",
           icon: <Hotel className="w-8 h-8" />
         },
         {
-          title: "মাটির মায়া ও ফলন",
-          stat: "১০ বিঘা অ্যাগ্রো-জোন",
-          detail: "উচ্চ ফলনশীল বারি মাল্টা-১ এবং ড্রাগন ফলের বাগান, যা আপনাকে দেবে বছরজুড়ে নিশ্চিত 'অপারেশনাল ইল্ড'।",
+          label: "রাজস্ব ইঞ্জিন",
+          stat: "১০ বিঘা এগ্রো-জোন",
+          description: "বারি মাল্টা-১ এবং ড্রাগন ফলের উচ্চ-ঘনত্ব ইন্টারক্রপিং।",
           icon: <Sprout className="w-8 h-8" />
         },
         {
-          title: "মালিকানার অখণ্ডতা",
-          stat: "৯৯ বছরের নিশ্চয়তা",
-          detail: "জমির বিভাজন রোধকারী আইনি সুরক্ষা, যা আপনার এই সম্পদের বাণিজ্যিক মূল্য প্রজন্মের পর প্রজন্ম অক্ষুণ্ণ রাখবে।",
+          label: "আইনি ঢাল",
+          stat: "৯৯-বছর মওকুফ",
+          description: "অবিভাজ্যতা কাঠামো জমির বিভাজন প্রতিরোধ করে।",
           icon: <ShieldCheck className="w-8 h-8" />
         }
       ],
+
+      tripleEngineHeading: "তিন-ইঞ্জিন সম্পদ ভিত্তি",
+
       showcase: [
         {
-          label: "আভিজাত্য ও জীবনধারা",
+          category: "জীবনযাত্রার ফোকাস",
+          badge: "আতিথেয়তা স্তম্ভ",
           title: "দ্য ফরেস্ট লজ",
-          desc: "বনের নিস্তব্ধতায় আধুনিকতার ছোঁয়া—৩৬টি প্রিমিয়াম রুম নিয়ে আমাদের এই সিগনেচার গেস্ট হাউস।",
-          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1200",
-          tag: "হসপিটালিটি পিলার"
+          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1200"
         },
         {
-          label: "উৎসব ও ইভেন্ট",
+          category: "ইভেন্ট ফোকাস",
+          badge: "MICE এবং বিনোদন",
           title: "দ্য গ্যাদারিং গ্রাউন্ডস",
-          desc: "৪০০ আসনের বিশাল কমপ্লেক্স এবং দৃষ্টিনন্দন নাগরদোলা, যা পর্যটকদের জন্য এক অনন্য আকর্ষণ।",
-          image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200",
-          tag: "ইভেন্ট ও বিনোদন"
+          image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200"
         },
         {
-          label: "নিশ্চিত মুনাফা",
+          category: "ফলন ফোকাস",
+          badge: "রাজস্ব চালক",
           title: "দ্য অসপিশাস জোন",
-          desc: "আমাদের অর্থনীতির মূল চালিকাশক্তি: ১,১০০টি মাল্টা গাছ এবং ২,২০০টি ড্রাগন ফলের পিলারে সাজানো বাগান।",
-          image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1200",
-          tag: "আয়ের মূল উৎস"
+          image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1200"
         }
       ],
-      masterPlanHeading: "টেকসই সমৃদ্ধি",
-      masterPlanDesc: "আমরা ধাপে ধাপে উন্নয়নে বিশ্বাসী। আপনার বিনিয়োগের প্রতিটি টাকা এখানে মাটির মায়ায় নিরাপদ—যেখানে ব্যাংক ঋণের কোনো ছায়া নেই।",
-      masterPlanStat1: "১০০% নিজস্ব অর্থায়ন",
-      masterPlanStat2: "ঋণমুক্ত প্রজেক্টের নিশ্চয়তা",
-      legalNote: "আমাদের প্রতিটি সম্পদ নিজস্ব পুঁজি দিয়ে গড়া, যেখানে ব্যাংক ঋণের কোনো ঝুঁকি বা দায়বদ্ধতা নেই।"
+
+      ctaHeading: "টেকসই সমৃদ্ধি",
+      ctaDescription: "আমরা ক্রমান্বয়ে, পর্যায়ক্রমিক উন্নয়নে বিশ্বাস করি। আপনার বিনিয়োগের প্রতিটি টাকা মাটির আলিঙ্গনের মধ্যে সুরক্ষিত।",
+      badge1: "১০০% ইক্যুইটি অর্থায়িত",
+      badge2: "শূন্য ঋণ দায়",
+      ctaButton: "অবকাঠামো রোডম্যাপ দেখুন"
     }
   };
 
@@ -155,511 +149,550 @@ const AssetSection = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
         
-        .asset-section {
+        .luxury-asset-section {
           font-family: ${language === 'bn' ? "'Hind Siliguri', sans-serif" : "'Inter', sans-serif"};
-          background: ${colors.phthaloGreen};
-          color: ${colors.angoraWhite};
+          background: linear-gradient(180deg, #0f2f1f 0%, #143d29 50%, #0c2619 100%);
           position: relative;
           overflow: hidden;
+          color: #f5f3ed;
         }
 
-        /* Premium Ambient Effects */
-        .premium-glow {
-          position: absolute;
-          width: 80vw;
-          height: 80vw;
-          background: radial-gradient(circle at center, ${colors.paleGoldenrod}08 0%, transparent 70%);
-          border-radius: 50%;
-          filter: blur(100px);
-          animation: premiumFloat 25s infinite alternate ease-in-out;
-          pointer-events: none;
-          z-index: 0;
-        }
-
-        @keyframes premiumFloat {
-          0% { transform: translate(-15%, -15%) scale(1); opacity: 0.3; }
-          100% { transform: translate(15%, 15%) scale(1.3); opacity: 0.5; }
-        }
-
-        .gold-dust {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          background-image: radial-gradient(${colors.paleGoldenrod}15 1px, transparent 1px);
-          background-size: 50px 50px;
-          pointer-events: none;
-          opacity: 0.3;
-          animation: dustFloat 60s linear infinite;
-        }
-
-        @keyframes dustFloat {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(30px, 30px); }
-        }
-
-        /* Premium Reveal Animation */
-        .premium-reveal {
-          opacity: 0;
-          transform: translateY(40px) scale(0.98);
-          transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .premium-reveal.active {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
-        .delay-3 { transition-delay: 0.3s; }
-        .delay-4 { transition-delay: 0.4s; }
-
-        /* Premium Typography */
-        .premium-serif {
+        .luxury-serif {
           font-family: 'Playfair Display', serif;
-          font-weight: 700;
-          letter-spacing: -0.02em;
         }
 
-        .premium-gold-text {
-          background: linear-gradient(135deg, ${colors.paleGoldenrod} 0%, #FFFFFF 50%, ${colors.paleGoldenrod} 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-size: 200% auto;
-          animation: premiumShine 4s linear infinite;
-        }
-
-        @keyframes premiumShine {
-          0% { background-position: 0% 0; }
-          100% { background-position: 200% 0; }
-        }
-
-        /* Premium Cards */
-        .premium-card {
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(240, 234, 175, 0.1);
-          backdrop-filter: blur(12px);
-          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .premium-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(240, 234, 175, 0.1), transparent);
-          transition: left 0.8s ease;
-        }
-
-        .premium-card:hover::before {
-          left: 100%;
-        }
-
-        .premium-card:hover {
-          border-color: ${colors.paleGoldenrod};
-          transform: translateY(-10px) scale(1.02);
-          box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(240, 234, 175, 0.2);
-        }
-
-        .premium-icon-wrapper {
-          background: linear-gradient(135deg, ${colors.paleGoldenrod}20, ${colors.paleGoldenrod}05);
-          border: 1px solid ${colors.paleGoldenrod}30;
-          color: ${colors.paleGoldenrod};
-          transition: all 0.5s ease;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .premium-icon-wrapper::after {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          background: radial-gradient(circle, ${colors.paleGoldenrod}40, transparent 70%);
-          opacity: 0;
-          transition: opacity 0.5s ease;
-        }
-
-        .premium-card:hover .premium-icon-wrapper::after {
-          opacity: 1;
-        }
-
-        .premium-card:hover .premium-icon-wrapper {
-          transform: rotateY(180deg) scale(1.1);
-          background: ${colors.paleGoldenrod};
-          color: ${colors.phthaloGreen};
-        }
-
-        .premium-stat {
-          color: ${colors.paleGoldenrod};
-          font-family: 'Playfair Display', serif;
-          font-size: 1.5rem;
-          font-weight: 700;
-          position: relative;
-          display: inline-block;
-        }
-
-        .premium-stat::after {
-          content: '';
-          position: absolute;
-          bottom: -4px;
-          left: 0;
-          width: 0;
-          height: 2px;
-          background: linear-gradient(90deg, ${colors.paleGoldenrod}, transparent);
-          transition: width 0.4s ease;
-        }
-
-        .premium-card:hover .premium-stat::after {
-          width: 100%;
-        }
-
-        /* Premium Divider */
-        .premium-divider {
-          height: 1px;
-          background: linear-gradient(90deg, transparent, ${colors.paleGoldenrod}80, ${colors.paleGoldenrod}, ${colors.paleGoldenrod}80, transparent);
-          width: 200px;
-          margin: 1.5rem auto;
-          transition: width 1s ease;
-        }
-
-        /* Premium Panels */
-        .premium-panel {
-          border-radius: 48px;
-          overflow: hidden;
-          position: relative;
-          height: 550px;
-          border: 1px solid rgba(240, 234, 175, 0.1);
-          transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: pointer;
-        }
-
-        .premium-panel:hover {
-          border-color: ${colors.paleGoldenrod}60;
-          box-shadow: 0 40px 70px -20px rgba(0, 0, 0, 0.6);
-        }
-
-        .premium-panel img {
-          transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .premium-panel:hover img {
-          transform: scale(1.1);
-        }
-
-        .premium-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, ${colors.phthaloGreen}F2 0%, ${colors.phthaloGreen}80 40%, transparent 100%);
-          transition: all 0.5s ease;
-        }
-
-        .premium-panel:hover .premium-overlay {
-          background: linear-gradient(to top, ${colors.phthaloGreen} 0%, ${colors.phthaloGreen}CC 40%, transparent 100%);
-        }
-
-        .premium-tag {
-          background: ${colors.paleGoldenrod};
-          color: ${colors.phthaloGreen};
-          font-size: 0.625rem;
-          font-weight: 700;
-          padding: 0.375rem 1rem;
-          border-radius: 30px;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
-          display: inline-flex;
-          align-items: center;
-          gap: 0.25rem;
-        }
-
-        /* Premium Button */
-        .premium-button {
-          background: linear-gradient(135deg, ${colors.paleGoldenrod}, #FFFFFF);
-          color: ${colors.phthaloGreen};
-          padding: 1.25rem 2.5rem;
-          border-radius: 50px;
-          font-weight: 700;
+        .luxury-top-label {
           font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.2em;
           text-transform: uppercase;
-          letter-spacing: 0.15em;
-          transition: all 0.4s ease;
-          border: none;
-          cursor: pointer;
-          position: relative;
-          overflow: hidden;
-          box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.4);
+          color: #d8c98f;
+          opacity: 0.9;
         }
 
-        .premium-button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-          transition: left 0.6s ease;
+        .luxury-main-heading {
+          font-size: clamp(2.5rem, 5vw, 4.5rem);
+          font-weight: 700;
+          color: #f5f3ed;
+          margin: 2rem 0;
+          line-height: 1.1;
         }
 
-        .premium-button:hover::before {
-          left: 100%;
+        .luxury-description {
+          font-size: 1.125rem;
+          color: #c9c5b8;
+          max-width: 800px;
+          margin: 0 auto;
+          line-height: 1.7;
         }
 
-        .premium-button:hover {
-          transform: translateY(-3px) scale(1.02);
-          box-shadow: 0 30px 40px -10px rgba(0, 0, 0, 0.5);
+        /* HORIZONTAL SCROLLING CONTAINER FOR BOXES */
+        .horizontal-scroll-container {
+          overflow-x: auto;
+          overflow-y: hidden;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: thin;
+          scrollbar-color: #d8c98f #143d29;
+          padding-bottom: 1rem;
         }
 
-        /* Premium Footer */
-        .premium-footer-badge {
-          background: rgba(240, 234, 175, 0.05);
-          border: 1px solid rgba(240, 234, 175, 0.1);
-          transition: all 0.3s ease;
+        .horizontal-scroll-container::-webkit-scrollbar {
+          height: 8px;
         }
 
-        .premium-footer-badge:hover {
-          background: rgba(240, 234, 175, 0.1);
-          border-color: ${colors.paleGoldenrod}40;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-          width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: ${colors.phthaloGreen};
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: ${colors.paleGoldenrod}40;
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+          background: rgba(20, 61, 41, 0.5);
           border-radius: 10px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-          background: ${colors.paleGoldenrod}60;
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+          background: #d8c98f;
+          border-radius: 10px;
+        }
+
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+          background: #c4b67f;
+        }
+
+        /* Asset Cards - Single Line */
+        .asset-cards-row {
+          display: flex;
+          gap: 1.5rem;
+          min-width: min-content;
+        }
+
+        .luxury-asset-card {
+          background: rgba(20, 61, 41, 0.6);
+          border: 1px solid rgba(216, 201, 143, 0.15);
+          border-radius: 28px;
+          padding: 3rem 2rem;
+          text-align: center;
+          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+          flex: 0 0 280px;
+          min-width: 280px;
+        }
+
+        .luxury-asset-card:hover {
+          transform: translateY(-12px);
+          border-color: rgba(216, 201, 143, 0.4);
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(216, 201, 143, 0.1);
+          background: rgba(20, 61, 41, 0.8);
+        }
+
+        .luxury-icon-container {
+          width: 80px;
+          height: 80px;
+          background: linear-gradient(135deg, #d8c98f, #c4b67f);
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 2rem;
+          color: #0f2f1f;
+          transition: all 0.5s ease;
+        }
+
+        .luxury-asset-card:hover .luxury-icon-container {
+          transform: rotateY(180deg) scale(1.1);
+        }
+
+        .luxury-asset-label {
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #d8c98f;
+          margin-bottom: 1rem;
+        }
+
+        .luxury-asset-stat {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #d8c98f;
+          margin-bottom: 1rem;
+          font-family: 'Playfair Display', serif;
+        }
+
+        .luxury-asset-desc {
+          font-size: 0.9rem;
+          color: #b5b1a3;
+          line-height: 1.6;
+        }
+
+        /* Triple Engine Cards - Single Line */
+        .showcase-cards-row {
+          display: flex;
+          gap: 2rem;
+          min-width: min-content;
+        }
+
+        .luxury-divider-heading {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 2rem;
+          margin: 5rem 0 3rem;
+        }
+
+        .luxury-divider-line {
+          flex: 1;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(216, 201, 143, 0.3), transparent);
+        }
+
+        .luxury-divider-text {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #f5f3ed;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          font-family: 'Playfair Display', serif;
+          white-space: nowrap;
+        }
+
+        .luxury-showcase-card {
+          position: relative;
+          border-radius: 32px;
+          overflow: hidden;
+          height: 550px;
+          cursor: pointer;
+          transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+          flex: 0 0 400px;
+          min-width: 400px;
+        }
+
+        .luxury-showcase-card:hover {
+          transform: translateY(-15px);
+          box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .luxury-showcase-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .luxury-showcase-card:hover .luxury-showcase-image {
+          transform: scale(1.15);
+        }
+
+        .luxury-showcase-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(15, 47, 31, 0.95) 0%, rgba(15, 47, 31, 0.6) 40%, transparent 100%);
+          padding: 2.5rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+        }
+
+        .luxury-showcase-category {
+          font-size: 0.65rem;
+          font-weight: 700;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: #d8c98f;
+          margin-bottom: 0.75rem;
+        }
+
+        .luxury-showcase-badge {
+          display: inline-block;
+          background: #d8c98f;
+          color: #0f2f1f;
+          padding: 0.5rem 1.25rem;
+          border-radius: 20px;
+          font-size: 0.7rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 1.5rem;
+          width: fit-content;
+        }
+
+        .luxury-showcase-title {
+          font-size: 2.25rem;
+          font-weight: 700;
+          color: #f5f3ed;
+          margin-bottom: 1.5rem;
+          font-family: 'Playfair Display', serif;
+        }
+
+        .luxury-showcase-link {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #d8c98f;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          transition: gap 0.3s ease;
+        }
+
+        .luxury-showcase-card:hover .luxury-showcase-link {
+          gap: 1rem;
+        }
+
+        /* CTA Box */
+        .luxury-cta-box {
+          background: rgba(20, 61, 41, 0.5);
+          border: 1px solid rgba(216, 201, 143, 0.2);
+          border-radius: 40px;
+          padding: 4rem;
+          margin-top: 5rem;
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(216, 201, 143, 0.05);
+        }
+
+        .luxury-cta-heading {
+          font-size: 3rem;
+          font-weight: 700;
+          color: #f5f3ed;
+          margin-bottom: 1.5rem;
+          font-family: 'Playfair Display', serif;
+        }
+
+        .luxury-cta-description {
+          font-size: 1.125rem;
+          color: #c9c5b8;
+          line-height: 1.8;
+          margin-bottom: 2.5rem;
+        }
+
+        .luxury-badge-container {
+          display: flex;
+          gap: 1.5rem;
+          margin-bottom: 2rem;
+          flex-wrap: wrap;
+        }
+
+        .luxury-badge {
+          background: rgba(216, 201, 143, 0.1);
+          border: 1px solid rgba(216, 201, 143, 0.3);
+          padding: 1.25rem 2rem;
+          border-radius: 20px;
+          flex: 1;
+          min-width: 200px;
+        }
+
+        .luxury-badge-label {
+          font-size: 0.7rem;
+          font-weight: 600;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: #b5b1a3;
+          margin-bottom: 0.5rem;
+        }
+
+        .luxury-badge-value {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #d8c98f;
+          font-family: 'Playfair Display', serif;
+        }
+
+        .luxury-cta-button {
+          background: linear-gradient(135deg, #d8c98f, #c4b67f);
+          color: #0f2f1f;
+          padding: 1.5rem 3rem;
+          border-radius: 50px;
+          font-size: 0.85rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          border: none;
+          cursor: pointer;
+          transition: all 0.4s ease;
+          box-shadow: 0 10px 30px rgba(216, 201, 143, 0.3);
+          display: inline-flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .luxury-cta-button:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 40px rgba(216, 201, 143, 0.4);
+          background: linear-gradient(135deg, #e6d9a3, #d8c98f);
+        }
+
+        .fade-in {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .fade-in.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (min-width: 1280px) {
+          .asset-cards-row {
+            justify-content: center;
+          }
+          
+          .showcase-cards-row {
+            justify-content: center;
+          }
+        }
+
+        @media (max-width: 1024px) {
+          .luxury-main-heading {
+            font-size: 3rem;
+          }
+          
+          .luxury-cta-heading {
+            font-size: 2.5rem;
+          }
+          
+          .luxury-cta-box {
+            padding: 3rem 2rem;
+          }
+
+          .luxury-showcase-card {
+            flex: 0 0 350px;
+            min-width: 350px;
+            height: 500px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .luxury-asset-card {
+            flex: 0 0 260px;
+            min-width: 260px;
+            padding: 2.5rem 1.5rem;
+          }
+
+          .luxury-showcase-card {
+            flex: 0 0 320px;
+            min-width: 320px;
+            height: 450px;
+          }
+          
+          .luxury-showcase-title {
+            font-size: 1.75rem;
+          }
+
+          .luxury-divider-text {
+            font-size: 1.5rem;
+          }
+
+          .luxury-cta-box {
+            padding: 2rem 1.5rem;
+          }
         }
       `}</style>
 
       <section 
-        id="asset" 
+        id="the-asset" 
         ref={sectionRef} 
-        className="asset-section py-28 lg:py-36 px-6"
+        className="luxury-asset-section py-20 lg:py-32 px-4 md:px-8"
       >
-        {/* Premium Ambient Background */}
-        <div className="premium-glow top-0 left-0"></div>
-        <div className="premium-glow bottom-0 right-0" style={{ animationDelay: '-12s' }}></div>
-        <div className="gold-dust"></div>
-
-        <div className="max-w-7xl mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto">
           
-          {/* Section Header with Premium Styling */}
-          <div className={`text-center mb-24 relative premium-reveal ${isVisible ? 'active' : ''}`}>
-            {/* Language Toggle - Premium Version */}
-            <div className="absolute -top-12 right-0">
+          {/* 1️⃣ Asset Structure Intro Area */}
+          <div className={`text-center mb-20 fade-in ${isVisible ? 'visible' : ''}`}>
+            {/* Language Toggle */}
+            <div className="flex justify-end mb-8">
               <button 
                 onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
-                className="flex items-center gap-3 bg-white/5 border border-[#F0EAAF]/20 px-6 py-3 rounded-full text-[11px] font-bold text-[#F0EAAF] hover:bg-white/10 transition-all duration-500 uppercase tracking-widest backdrop-blur-sm"
+                className="flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-white/10"
+                style={{ color: '#d8c98f' }}
               >
-                <Globe className="w-4 h-4" />
+                <Globe className="w-3.5 h-3.5" />
                 <span>{language === 'en' ? 'বাংলা' : 'English'}</span>
-                <Crown className="w-3.5 h-3.5 opacity-50" />
               </button>
             </div>
 
-            <div className="inline-flex items-center gap-3 mb-6">
-              <Award className="w-5 h-5 text-[#F0EAAF]" />
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#F0EAAF]/80">
-                {current.sectionSubtitle}
-              </span>
-              <Award className="w-5 h-5 text-[#F0EAAF]" />
-            </div>
-
-            <h2 className="premium-serif text-5xl md:text-6xl lg:text-7xl font-bold mb-6 premium-gold-text">
-              {current.sectionTitle}
+            <p className="luxury-top-label mb-6">
+              {current.topLabel}
+            </p>
+            
+            <h2 className="luxury-main-heading luxury-serif">
+              {current.mainHeading}
             </h2>
             
-            <div className={`premium-divider ${isVisible ? '!w-[400px]' : ''}`}></div>
-            
-            <p className="text-lg text-[#F0EAAF]/70 max-w-3xl mx-auto leading-relaxed font-light">
-              {current.desc}
+            <p className="luxury-description">
+              {current.description}
             </p>
           </div>
 
-          {/* Premium Asset Cards Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-32">
-            {current.assets.map((asset, idx) => (
-              <div 
-                key={idx} 
-                className={`premium-card p-8 rounded-[48px] flex flex-col items-center text-center premium-reveal ${isVisible ? 'active' : ''} delay-${idx + 1}`}
-                onMouseEnter={() => setActiveCard(idx)}
-                onMouseLeave={() => setActiveCard(null)}
-              >
-                <div className="premium-icon-wrapper w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-xl">
-                  {asset.icon}
-                </div>
-                
-                <h3 className="text-sm font-bold mb-2 uppercase tracking-wider text-white/90">
-                  {asset.title}
-                </h3>
-                
-                <div className="premium-stat mb-4">
-                  {asset.stat}
-                </div>
-                
-                <p className="text-xs text-white/40 leading-relaxed font-light">
-                  {asset.detail}
-                </p>
-
-                {activeCard === idx && (
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                    <Gem className="w-4 h-4 text-[#F0EAAF] animate-pulse" />
+          {/* 2️⃣ Four Asset Feature Cards - SINGLE LINE */}
+          <div className={`mb-20 fade-in ${isVisible ? 'visible' : ''}`}>
+            <div className="horizontal-scroll-container">
+              <div className="asset-cards-row">
+                {current.assets.map((asset, idx) => (
+                  <div 
+                    key={idx} 
+                    className="luxury-asset-card"
+                    style={{ transitionDelay: `${idx * 100}ms` }}
+                  >
+                    <div className="luxury-icon-container">
+                      {asset.icon}
+                    </div>
+                    
+                    <p className="luxury-asset-label">
+                      {asset.label}
+                    </p>
+                    
+                    <div className="luxury-asset-stat">
+                      {asset.stat}
+                    </div>
+                    
+                    <p className="luxury-asset-desc">
+                      {asset.description}
+                    </p>
                   </div>
-                )}
+                ))}
               </div>
-            ))}
+            </div>
           </div>
 
-          {/* Premium Visual Showcase */}
-          <div className="mb-24">
-            <div className={`flex items-center gap-4 mb-16 premium-reveal ${isVisible ? 'active' : ''}`}>
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10"></div>
-              <div className="flex items-center gap-3">
-                <Sparkles className="w-5 h-5 text-[#F0EAAF]" />
-                <h3 className="premium-serif text-3xl font-bold tracking-wide premium-gold-text">
-                  {current.visualHeading}
-                </h3>
-                <Sparkles className="w-5 h-5 text-[#F0EAAF]" />
-              </div>
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10"></div>
+          {/* 3️⃣ Triple Engine Asset Base - SINGLE LINE */}
+          <div className={`fade-in ${isVisible ? 'visible' : ''}`}>
+            <div className="luxury-divider-heading">
+              <div className="luxury-divider-line"></div>
+              <h3 className="luxury-divider-text luxury-serif">
+                {current.tripleEngineHeading}
+              </h3>
+              <div className="luxury-divider-line"></div>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-8">
-              {current.showcase.map((item, idx) => (
-                <div 
-                  key={idx} 
-                  className={`premium-panel group premium-reveal ${isVisible ? 'active' : ''} delay-${idx + 1}`}
-                >
-                  <img 
-                    src={item.image} 
-                    alt={item.title} 
-                    className="w-full h-full object-cover"
-                  />
-                  
-                  <div className="premium-overlay">
-                    <div className="absolute inset-0 flex flex-col justify-end p-8 lg:p-10">
-                      <div className="mb-4 transform group-hover:-translate-y-2 transition-transform duration-500">
-                        <div className="text-[10px] text-[#F0EAAF] uppercase font-bold tracking-[0.2em] mb-2 opacity-80">
-                          {item.label}
-                        </div>
-                        <span className="premium-tag">
-                          <Award className="w-3 h-3" />
-                          {item.tag}
-                        </span>
-                      </div>
+            <div className="horizontal-scroll-container">
+              <div className="showcase-cards-row">
+                {current.showcase.map((item, idx) => (
+                  <div 
+                    key={idx} 
+                    className="luxury-showcase-card"
+                    style={{ transitionDelay: `${idx * 150}ms` }}
+                  >
+                    <img 
+                      src={item.image} 
+                      alt={item.title}
+                      className="luxury-showcase-image"
+                    />
+                    
+                    <div className="luxury-showcase-overlay">
+                      <p className="luxury-showcase-category">
+                        {item.category}
+                      </p>
                       
-                      <h4 className="premium-serif text-2xl lg:text-3xl font-bold text-white mb-3 transform group-hover:-translate-y-2 transition-transform duration-500 delay-75">
+                      <span className="luxury-showcase-badge">
+                        {item.badge}
+                      </span>
+                      
+                      <h4 className="luxury-showcase-title luxury-serif">
                         {item.title}
                       </h4>
                       
-                      <p className="text-white/60 text-sm leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                        {item.desc}
-                      </p>
-                      
-                      <div className="flex items-center gap-2 text-[#F0EAAF] text-xs font-bold tracking-widest uppercase transform group-hover:-translate-y-1 transition-transform duration-500">
-                        <span>{language === 'en' ? 'View Details' : 'বিস্তারিত দেখুন'}</span>
-                        <ArrowRight className="w-3 h-3 group-hover:translate-x-2 transition-transform" />
+                      <div className="luxury-showcase-link">
+                        <span>View Details</span>
+                        <ArrowRight className="w-4 h-4" />
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Premium Master Plan Section */}
-          <div className={`mt-12 bg-white/5 backdrop-blur-xl p-12 lg:p-20 rounded-[80px] border border-white/10 relative overflow-hidden premium-reveal ${isVisible ? 'active' : ''}`}>
-            {/* Decorative Elements */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#F0EAAF]/5 to-transparent"></div>
-            
-            <div className="grid lg:grid-cols-2 gap-16 items-center relative z-10">
+          {/* 4️⃣ Sustainable Prosperity CTA Box */}
+          <div className={`luxury-cta-box fade-in ${isVisible ? 'visible' : ''}`}>
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <Crown className="w-5 h-5 text-[#F0EAAF]" />
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#F0EAAF]/70">
-                    {language === 'en' ? 'Legacy Built' : 'ঐতিহ্য গড়ার প্রতিশ্রুতি'}
-                  </span>
-                </div>
-                
-                <h3 className="premium-serif text-4xl lg:text-5xl font-bold mb-6 premium-gold-text">
-                  {current.masterPlanHeading}
+                <h3 className="luxury-cta-heading luxury-serif">
+                  {current.ctaHeading}
                 </h3>
                 
-                <p className="text-white/50 mb-10 leading-relaxed max-w-md text-lg">
-                  {current.masterPlanDesc}
+                <p className="luxury-cta-description">
+                  {current.ctaDescription}
                 </p>
                 
-                <div className="flex flex-wrap gap-6">
-                  <div className="bg-white/5 px-8 py-6 rounded-[40px] border border-white/10 hover:border-[#F0EAAF]/30 transition-all duration-500">
-                    <div className="text-[10px] uppercase tracking-widest text-[#F0EAAF]/70 mb-2">Financial Integrity</div>
-                    <div className="text-2xl font-bold premium-serif text-white">{current.masterPlanStat1}</div>
+                <div className="luxury-badge-container">
+                  <div className="luxury-badge">
+                    <p className="luxury-badge-label">Financial Integrity</p>
+                    <div className="luxury-badge-value">{current.badge1}</div>
                   </div>
                   
-                  <div className="bg-white/5 px-8 py-6 rounded-[40px] border border-white/10 hover:border-[#F0EAAF]/30 transition-all duration-500">
-                    <div className="text-[10px] uppercase tracking-widest text-[#F0EAAF]/70 mb-2">Risk Mitigation</div>
-                    <div className="text-2xl font-bold premium-serif text-white">{current.masterPlanStat2}</div>
+                  <div className="luxury-badge">
+                    <p className="luxury-badge-label">Risk Mitigation</p>
+                    <div className="luxury-badge-value">{current.badge2}</div>
                   </div>
                 </div>
               </div>
               
-              <div className="text-right">
-                <button className="premium-button group">
-                  <span className="relative z-10 flex items-center gap-3">
-                    {language === 'en' ? 'View Infrastructure Roadmap' : 'অবকাঠামো উন্নয়ন পরিকল্পনা'}
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
-                  </span>
+              <div className="text-center lg:text-right">
+                <button className="luxury-cta-button">
+                  <span>{current.ctaButton}</span>
+                  <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
             </div>
-            
-            {/* Premium Decorative Icon */}
-            <Tent className="absolute -bottom-16 -right-16 w-80 h-80 text-white/5 rotate-12 animate-[spin_50s_linear_infinite]" />
           </div>
 
-          {/* Premium Security Footer */}
-          <div className="mt-24 flex flex-col md:flex-row items-center justify-between gap-8 border-t border-white/10 pt-12">
-            <div className="flex items-center gap-4 premium-footer-badge px-6 py-3 rounded-full">
-              <div className="p-2 rounded-full bg-[#F0EAAF]/20">
-                <ShieldCheck className="w-5 h-5 text-[#F0EAAF]" />
-              </div>
-              <p className="text-sm text-[#F0EAAF]/80 font-medium">
-                {current.legalNote}
-              </p>
-            </div>
-            
-            <div className="flex items-center gap-8">
-              {[
-                { icon: <Gem className="w-3 h-3" />, text: 'Saf Kabla Secured' },
-                { icon: <Crown className="w-3 h-3" />, text: 'Equity Funded' },
-                { icon: <Award className="w-3 h-3" />, text: 'Agro-tourism Ready' }
-              ].map((item, idx) => (
-                <div 
-                  key={idx} 
-                  className="flex items-center gap-2 text-[9px] md:text-[10px] uppercase tracking-widest font-bold text-white/30 hover:text-[#F0EAAF]/70 transition-all duration-300 cursor-default group"
-                >
-                  <span className="group-hover:scale-110 transition-transform">{item.icon}</span>
-                  <span>{item.text}</span>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
     </>

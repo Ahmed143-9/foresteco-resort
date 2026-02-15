@@ -891,19 +891,15 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                 onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                 onClick={(e) => {
                   e.preventDefault();
-                  // Scroll to the investment portfolio section smoothly
-                  const element = document.getElementById('investment-portfolio');
-                  if (element) {
-                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
-                  // For anchor links, close the menu after a small delay to allow navigation to complete
+                  // Close mobile menu first
+                  toggleMenu();
+                  // Scroll to the investment portfolio section smoothly after a short delay
                   setTimeout(() => {
-                    toggleMenu();
-                    // Ensure scrolling is enabled after menu closes
-                    setTimeout(() => {
-                      document.body.style.overflow = 'visible';
-                    }, 50);
-                  }, 100);
+                    const element = document.getElementById('investment-portfolio');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }, 150);
                 }}
               >
                 Investment Portfolio
@@ -1946,7 +1942,7 @@ const ROICalculator = ({ t, language }) => {
                 </div>
                 <div className="d-inline-flex align-items-center gap-2 px-3 px-md-4 py-2 bg-success bg-opacity-10 text-success rounded-pill">
                   <TrendingUp className="" style={{width: '16px', height: '16px'}} />
-                  +{roiPercentage.toFixed(0)}% {t.calc.totalRoi}
+                  +{selectedTier.id === 'platinum' ? '15' : roiPercentage.toFixed(0)}% {t.calc.totalRoi}
                 </div>
               </div>
 
@@ -2390,7 +2386,7 @@ const TiersSection = ({ t, language }) => {
                       </span>
                       {tier.discountPercent > 0 && (
                         <span className="xsmall badge bg-danger">
-                          Save {tier.discountPercent}%
+                          Save {tier.id === 'platinum' ? '15' : tier.discountPercent}%
                         </span>
                       )}
                     </div>
@@ -3115,9 +3111,9 @@ function App() {
                 
                 <Hero t={t} language={language} />
                 <div id="the-asset">
-                  <AssetSection />
+                  <AssetSection language={language} />
                 </div>
-                <InvestmentPortfolio />
+                <InvestmentPortfolio language={language} />
                 <PortfolioGallery t={t} />
                 <ROICalculator t={t} language={language} />
                 <TiersSection t={t} language={language} />

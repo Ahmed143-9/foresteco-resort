@@ -1,135 +1,219 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Landmark, Hotel, Sprout, ShieldCheck, Map, ArrowRight, Globe, TreePine, Calculator, TrendingUp, Users, Award } from 'lucide-react';
+import { 
+  Map, Hotel, Users, TreePine, ArrowRight, Shield, 
+  TrendingUp, Award, Gem, Crown, Sparkles, ChevronRight,
+  Building, Sprout, Landmark, CheckCircle, Star
+} from 'lucide-react';
 
-const InvestmentPortfolio = () => {
-  const [language, setLanguage] = useState('en');
+const InvestmentPortfolio = ({ language = 'en' }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [activePillar, setActivePillar] = useState(null);
   const sectionRef = useRef(null);
+  const observerRef = useRef(null);
 
+  // Fixed: Simplified intersection observer
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    // Clean up previous observer
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    // Create new observer with optimal settings
+    observerRef.current = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
+        // Use requestAnimationFrame to prevent blocking
+        requestAnimationFrame(() => {
+          setIsVisible(entry.isIntersecting);
+        });
       },
-      { threshold: 0.1, rootMargin: '50px' }
+      { 
+        threshold: 0.1, 
+        rootMargin: '50px',
+        // Added to improve performance
+        passive: true 
+      }
     );
-    
+
     const currentRef = sectionRef.current;
-    if (currentRef) observer.observe(currentRef);
+    if (currentRef) {
+      observerRef.current.observe(currentRef);
+    }
     
     return () => {
-      if (currentRef) observer.unobserve(currentRef);
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
     };
-  }, []);
+  }, []); // Empty dependency array - only run once
 
-  const colors = {
-    phthaloGreen: "#193C26",
-    paleGoldenrod: "#F0EAAF",
-    eerieBlack: "#191819",
-    angoraWhite: "#F6F6F7"
-  };
-
+  // Fixed: Optimized content structure
   const content = {
     en: {
-      sectionTitle: "Investment Portfolio",
-      sectionSubtitle: "Secured by Land. Driven by Yield.",
-      desc: "Our investment model is built on physical security. Every share is backed by registered land and revenue-generating infrastructure that hedges against inflation and market volatility.",
+      topLabel: "INVESTMENT PORTFOLIO",
+      heading: "Secured by Land. Driven by Yield.",
+      description: "A disciplined approach to wealth creation. Every investment is backed by tangible assets—registered land and revenue-generating infrastructure—designed to deliver consistent returns while preserving capital.",
+      
       stats: [
-        { label: "Total Land", value: "32.84", unit: "Bighas", icon: <Map className="w-5 h-5" /> },
-        { label: "Premium Rooms", value: "36", unit: "Keys", icon: <Hotel className="w-5 h-5" /> },
-        { label: "Event Capacity", value: "400", unit: "Pax", icon: <Users className="w-5 h-5" /> },
-        { label: "Fruit Trees", value: "3,300+", unit: "Trees", icon: <TreePine className="w-5 h-5" /> }
+        { value: "32.84", unit: "Bighas", label: "Total Land Bank", icon: <Map className="w-5 h-5" /> },
+        { value: "36", unit: "Rooms", label: "Hospitality Keys", icon: <Hotel className="w-5 h-5" /> },
+        { value: "400", unit: "Pax", label: "Event Capacity", icon: <Users className="w-5 h-5" /> },
+        { value: "3,300+", unit: "Trees", label: "Fruit Plantation", icon: <TreePine className="w-5 h-5" /> }
       ],
+
+      pillarsHeading: "Asset Pillars",
+      
       pillars: [
         {
-          title: "Land Asset",
+          label: "LAND ASSET",
+          title: "Registered Land Bank",
           stat: "32.84 Bighas",
-          detail: "Registered Saf Kabla land in Gazipur's high-growth corridor. Provides intrinsic value floor with 15% projected annual appreciation.",
-          icon: <Landmark className="w-6 h-6" />,
+          desc: "Prime agricultural land in Gazipur's growth corridor. Registered Saf Kabla deeds provide legal ownership and intrinsic value floor.",
           highlight: "Deed Secured"
         },
         {
-          title: "Hospitality",
+          label: "HOSPITALITY",
+          title: "Premium Resort",
           stat: "36 Rooms + 400 Pax",
-          detail: "Six-story guest house and multipurpose hall designed for premium corporate and social events. 65% target occupancy.",
-          icon: <Hotel className="w-6 h-6" />,
+          desc: "Six-story guest house and multipurpose hall targeting premium corporate and social events with consistent occupancy.",
           highlight: "Operational"
         },
         {
-          title: "Agriculture",
-          stat: "10 Bigha Agro-Zone",
-          detail: "High-density intercropping with BARI Malta-1 and Dragon Fruit. Projected 22% operational margin with sustainable yield.",
-          icon: <Sprout className="w-6 h-6" />,
+          label: "AGRICULTURE",
+          title: "Revenue Orchards",
+          stat: "10 Bigha Zone",
+          desc: "High-density BARI Malta-1 and Dragon Fruit cultivation generating sustainable operational yields.",
           highlight: "Revenue Generator"
         },
         {
-          title: "Legal Structure",
-          stat: "99-Year Protection",
-          detail: "Indivisible utility structure prevents land fragmentation. Full regulatory compliance with 600 exclusive shares.",
-          icon: <ShieldCheck className="w-6 h-6" />,
-          highlight: "Protected"
+          label: "LEGAL STRUCTURE",
+          title: "Protected Structure",
+          stat: "99-Year Term",
+          desc: "Indivisible utility structure prevents fragmentation. Full regulatory compliance with 600 exclusive shares.",
+          highlight: "Compliant"
         }
       ],
-      metricsTitle: "Investment Metrics",
-      metrics: [
-        { label: "Projected ROI", value: "18-24%", desc: "Annual returns at maturity" },
-        { label: "Land Appreciation", value: "12-15%", desc: "Annual compound growth" },
-        { label: "Dividend Yield", value: "8-12%", desc: "From operations" },
-        { label: "Holding Period", value: "3-7", desc: "Years to peak value" }
-      ],
-      ctaTitle: "Secure Your Legacy",
-      ctaDesc: "Join 600 founding members building sustainable wealth through tangible assets.",
-      ctaButton: "View Investment Tiers"
-    },
-    bn: {
-      sectionTitle: "বিনিয়োগ পোর্টফোলিও",
-      sectionSubtitle: "জমির নিশ্চয়তা। মুনাফার চালিকাশক্তি।",
-      desc: "আমাদের বিনিয়োগ মডেলটি নিরাপত্তার উপর ভিত্তি করে তৈরি। প্রতিটি শেয়ার নিষ্কণ্টক জমি এবং রাজস্ব উৎপাদনকারী অবকাঠামো দ্বারা সুরক্ষিত।",
-      stats: [
-        { label: "মোট জমি", value: "32.84", unit: "বিঘা", icon: <Map className="w-5 h-5" /> },
-        { label: "প্রিমিয়াম রুম", value: "36", unit: "টি", icon: <Hotel className="w-5 h-5" /> },
-        { label: "ইভেন্ট ক্ষমতা", value: "400", unit: "জন", icon: <Users className="w-5 h-5" /> },
-        { label: "ফলের গাছ", value: "3,300+", unit: "টি", icon: <TreePine className="w-5 h-5" /> }
-      ],
-      pillars: [
+
+      showcaseHeading: "Asset Showcase",
+      
+      showcase: [
         {
-          title: "জমি সম্পদ",
-          stat: "32.84 বিঘা",
-          detail: "গাজীপুরের উচ্চ-বৃদ্ধি করিডোরে নিবন্ধিত সাফ কবলা জমি। ১৫% বার্ষিক প্রশংসা সহ অন্তর্নিহিত মূল্য প্রদান করে।",
-          icon: <Landmark className="w-6 h-6" />,
-          highlight: "দলিল নিশ্চিত"
+          category: "HOSPITALITY",
+          title: "The Forest Lodge",
+          desc: "36 premium rooms blending luxury with nature",
+          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1200",
+          tag: "Operational"
         },
         {
-          title: "আতিথেয়তা",
+          category: "EVENTS",
+          title: "The Gathering Grounds",
+          desc: "400-pax capacity for corporate and social events",
+          image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200",
+          tag: "MICE Venue"
+        },
+        {
+          category: "AGRICULTURE",
+          title: "The Auspicious Zone",
+          desc: "1,100 Malta trees & 2,200 Dragon Fruit pillars",
+          image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1200",
+          tag: "Revenue"
+        }
+      ],
+
+      metricsHeading: "Investment Metrics",
+      
+      metrics: [
+        { value: "18-24%", label: "Projected ROI", desc: "At maturity" },
+        { value: "12-15%", label: "Land Appreciation", desc: "Annual compound" },
+        { value: "8-12%", label: "Dividend Yield", desc: "From operations" },
+        { value: "3-7 Years", label: "Holding Period", desc: "To peak value" }
+      ],
+
+      ctaHeading: "Investment Thesis",
+      ctaDesc: "100% equity-funded. Zero debt liability. Your capital is secured within tangible assets—free from bank debt and financial leverage.",
+      ctaButton: "VIEW INVESTMENT TIERS"
+    },
+    bn: {
+      topLabel: "বিনিয়োগ পোর্টফোলিও",
+      heading: "জমি দ্বারা নিশ্চিত। মুনাফা দ্বারা চালিত।",
+      description: "সম্পদ সৃষ্টির একটি শৃঙ্খলাবদ্ধ পদ্ধতি। প্রতিটি বিনিয়োগ মূর্ত ভৌত সম্পদ—নিবন্ধিত জমি এবং রাজস্ব উৎপাদনকারী অবকাঠামো—দ্বারা সুরক্ষিত।",
+      
+      stats: [
+        { value: "৩২.৮৪", unit: "বিঘা", label: "মোট জমি ব্যাংক", icon: <Map className="w-5 h-5" /> },
+        { value: "৩৬", unit: "টি রুম", label: "আতিথেয়তা কী", icon: <Hotel className="w-5 h-5" /> },
+        { value: "৪০০", unit: "জন", label: "ইভেন্ট ক্ষমতা", icon: <Users className="w-5 h-5" /> },
+        { value: "৩,৩০০+", unit: "টি", label: "ফলের গাছ", icon: <TreePine className="w-5 h-5" /> }
+      ],
+
+      pillarsHeading: "সম্পদ স্তম্ভ",
+      
+      pillars: [
+        {
+          label: "জমি সম্পদ",
+          title: "নিবন্ধিত জমি ব্যাংক",
+          stat: "৩২.৮৪ বিঘা",
+          desc: "গাজীপুরের বৃদ্ধি করিডোরে প্রিমিয়াম কৃষি জমি। নিবন্ধিত সাফ কবলা দলিল আইনি মালিকানা প্রদান করে।",
+          highlight: "দলিল সুরক্ষিত"
+        },
+        {
+          label: "আতিথেয়তা",
+          title: "প্রিমিয়াম রিসোর্ট",
           stat: "৩৬ রুম + ৪০০ জন",
-          detail: "প্রিমিয়াম কর্পোরেট এবং সামাজিক ইভেন্টের জন্য ডিজাইন করা ছয় তলা গেস্ট হাউস এবং মাল্টিপারপাস হল।",
-          icon: <Hotel className="w-6 h-6" />,
+          desc: "ছয় তলা গেস্ট হাউস এবং মাল্টিপারপাস হল প্রিমিয়াম কর্পোরেট ও সামাজিক ইভেন্টের জন্য।",
           highlight: "পরিচালনাধীন"
         },
         {
-          title: "কৃষি",
-          stat: "১০ বিঘা এগ্রো-জোন",
-          detail: "বারি মাল্টা-১ এবং ড্রাগন ফ্রুটের সাথে উচ্চ-ঘনত্বের ইন্টারক্রপিং। টেকসই ফলন সহ ২২% অপারেশনাল মার্জিন প্রত্যাশিত।",
-          icon: <Sprout className="w-6 h-6" />,
+          label: "কৃষি",
+          title: "রাজস্ব বাগান",
+          stat: "১০ বিঘা জোন",
+          desc: "উচ্চ-ঘনত্বের বারি মাল্টা-১ এবং ড্রাগন ফ্রুট চাষ টেকসই রাজস্ব উৎপাদন করে।",
           highlight: "রাজস্ব উৎপাদক"
         },
         {
-          title: "আইনি কাঠামো",
-          stat: "৯৯ বছর সুরক্ষা",
-          detail: "বিভাজন রোধে অবিভাজ্য ইউটিলিটি কাঠামো। ৬০০ এক্সক্লুসিভ শেয়ার সহ সম্পূর্ণ নিয়ন্ত্রক সম্মতি।",
-          icon: <ShieldCheck className="w-6 h-6" />,
-          highlight: "সুরক্ষিত"
+          label: "আইনি কাঠামো",
+          title: "সুরক্ষিত কাঠামো",
+          stat: "৯৯ বছর মেয়াদ",
+          desc: "অবিভাজ্য ইউটিলিটি কাঠামো বিভাজন রোধ করে। ৬০০ এক্সক্লুসিভ শেয়ার সহ সম্পূর্ণ নিয়ন্ত্রক সম্মতি।",
+          highlight: "অনুমোদিত"
         }
       ],
-      metricsTitle: "বিনিয়োগ মেট্রিক্স",
-      metrics: [
-        { label: "প্রত্যাশিত ROI", value: "১৮-২৪%", desc: "পরিপক্কতায় বার্ষিক রিটার্ন" },
-        { label: "জমির প্রশংসা", value: "১২-১৫%", desc: "বার্ষিক কম্পাউন্ড গ্রোথ" },
-        { label: "লভ্যাংশ ইয়েল্ড", value: "৮-১২%", desc: "অপারেশন থেকে" },
-        { label: "ধরে রাখার সময়", value: "৩-৭", desc: "শীর্ষ মূল্যে পৌঁছাতে বছর" }
+
+      showcaseHeading: "সম্পদ প্রদর্শনী",
+      
+      showcase: [
+        {
+          category: "আতিথেয়তা",
+          title: "দ্য ফরেস্ট লজ",
+          desc: "৩৬টি প্রিমিয়াম রুম প্রকৃতির সাথে বিলাসিতার মিলন",
+          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1200",
+          tag: "পরিচালনাধীন"
+        },
+        {
+          category: "ইভেন্ট",
+          title: "দ্য গাদারিং গ্রাউন্ডস",
+          desc: "কর্পোরেট ও সামাজিক ইভেন্টের জন্য ৪০০ জন ক্ষমতা",
+          image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200",
+          tag: "MICE ভেন্যু"
+        },
+        {
+          category: "কৃষি",
+          title: "দ্য অশুভ জোন",
+          desc: "১,১০০ মাল্টা গাছ ও ২,২০০ ড্রাগন ফ্রুট পিলার",
+          image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1200",
+          tag: "রাজস্ব"
+        }
       ],
-      ctaTitle: "আপনার উত্তরাধিকার নিশ্চিত করুন",
-      ctaDesc: "নির্বচনীয় সম্পদের মাধ্যমে টেকসই সম্পদ তৈরি করে ৬০০ প্রতিষ্ঠাতা সদস্যে যোগ দিন।",
+
+      metricsHeading: "বিনিয়োগ মেট্রিক্স",
+      
+      metrics: [
+        { value: "১৮-২৪%", label: "প্রত্যাশিত ROI", desc: "পরিপক্কতায়" },
+        { value: "১২-১৫%", label: "জমির মূল্যবৃদ্ধি", desc: "বার্ষিক কম্পাউন্ড" },
+        { value: "৮-১২%", label: "লভ্যাংশ ইয়েল্ড", desc: "অপারেশন থেকে" },
+        { value: "৩-৭ বছর", label: "ধরে রাখার সময়", desc: "শীর্ষ মূল্যে" }
+      ],
+
+      ctaHeading: "বিনিয়োগ থিসিস",
+      ctaDesc: "১০০% ইক্যুইটি অর্থায়িত। শূন্য ঋণ দায়। আপনার পুঁজি মূর্ত সম্পদের মধ্যে নিরাপদ—ব্যাংক ঋণ এবং আর্থিক লিভারেজ থেকে মুক্ত।",
       ctaButton: "বিনিয়োগ স্তর দেখুন"
     }
   };
@@ -139,228 +223,405 @@ const InvestmentPortfolio = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
         
         .portfolio-section {
           font-family: ${language === 'bn' ? "'Hind Siliguri', sans-serif" : "'Inter', sans-serif"};
-          background: linear-gradient(180deg, ${colors.phthaloGreen} 0%, #0f2419 100%);
-          color: ${colors.angoraWhite};
+          background: linear-gradient(135deg, #0a1f17 0%, #0d2a20 50%, #0a1f17 100%);
+          color: #e8ebe4;
           position: relative;
           overflow: hidden;
+          /* Fixed: Ensure hardware acceleration doesn't block scrolling */
+          transform: translateZ(0);
+          will-change: transform;
         }
 
-        .portfolio-glow {
-          position: absolute;
-          width: 50vw;
-          height: 50vw;
-          background: radial-gradient(circle, rgba(240, 234, 175, 0.05) 0%, transparent 70%);
-          border-radius: 50%;
-          filter: blur(60px);
-          animation: pulse 15s infinite alternate ease-in-out;
-          pointer-events: none;
+        .font-serif-luxury {
+          font-family: ${language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif"};
         }
 
-        @keyframes pulse {
-          0% { transform: scale(1); opacity: 0.3; }
-          100% { transform: scale(1.2); opacity: 0.6; }
-        }
-
-        .stat-card {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          border-radius: 20px;
-          padding: 1.5rem;
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .stat-card:hover {
-          background: rgba(255, 255, 255, 0.06);
-          border-color: ${colors.paleGoldenrod}30;
-          transform: translateY(-4px);
-        }
-
-        .pillar-card {
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 24px;
-          padding: 2rem;
-          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .pillar-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 3px;
-          background: linear-gradient(90deg, transparent, ${colors.paleGoldenrod}, transparent);
-          opacity: 0;
-          transition: opacity 0.4s ease;
-        }
-
-        .pillar-card:hover::before {
-          opacity: 1;
-        }
-
-        .pillar-card:hover {
-          background: rgba(255, 255, 255, 0.04);
-          border-color: ${colors.paleGoldenrod}20;
-          transform: translateY(-8px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .metric-card {
-          background: linear-gradient(135deg, rgba(240, 234, 175, 0.08) 0%, rgba(240, 234, 175, 0.02) 100%);
-          border: 1px solid ${colors.paleGoldenrod}20;
-          border-radius: 16px;
-          padding: 1.5rem;
-          text-align: center;
-        }
-
-        .heading-serif {
-          font-family: 'Playfair Display', serif;
-        }
-
+        /* Fixed: Optimized animations - use transform only, no layout triggers */
         .fade-in {
           opacity: 0;
-          transform: translateY(30px);
-          transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+          transform: translateY(20px);
+          transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+          /* Fixed: Use will-change sparingly */
         }
 
         .fade-in.visible {
           opacity: 1;
           transform: translateY(0);
         }
+
+        /* Fixed: Reduced animation complexity */
+        .stat-card {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+          border: 1px solid rgba(212, 175, 55, 0.1);
+          border-radius: 24px;
+          padding: 1.75rem;
+          transition: transform 0.3s ease, border-color 0.3s ease;
+          min-width: 200px;
+          /* Fixed: Prevent layout shift during animation */
+          backface-visibility: hidden;
+        }
+
+        .stat-card:hover {
+          border-color: rgba(212, 175, 55, 0.3);
+          transform: translateY(-4px);
+        }
+
+        .stat-icon {
+          width: 48px;
+          height: 48px;
+          background: linear-gradient(135deg, #d4af37, #b38f2c);
+          border-radius: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #0a1f17;
+          margin-bottom: 1.25rem;
+        }
+
+        /* Fixed: Simplified pillar cards */
+        .pillar-card {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 28px;
+          padding: 2rem;
+          transition: transform 0.3s ease, border-color 0.3s ease;
+          min-width: 280px;
+          backface-visibility: hidden;
+        }
+
+        .pillar-card:hover {
+          border-color: rgba(212, 175, 55, 0.2);
+          transform: translateY(-4px);
+        }
+
+        .pillar-highlight {
+          background: rgba(212, 175, 55, 0.1);
+          color: #d4af37;
+          padding: 0.25rem 1rem;
+          border-radius: 50px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          display: inline-block;
+        }
+
+        /* Fixed: Optimized showcase cards */
+        .showcase-card {
+          border-radius: 28px;
+          overflow: hidden;
+          position: relative;
+          height: 450px;
+          min-width: 350px;
+          cursor: pointer;
+          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+          /* Fixed: Use transform for performance */
+          transform: translateZ(0);
+        }
+
+        .showcase-card img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .showcase-card:hover img {
+          transform: scale(1.05);
+        }
+
+        .showcase-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, 
+            rgba(10, 31, 23, 0.95) 0%, 
+            rgba(10, 31, 23, 0.7) 40%, 
+            transparent 100%
+          );
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          padding: 2rem;
+        }
+
+        .showcase-tag {
+          background: #d4af37;
+          color: #0a1f17;
+          padding: 0.4rem 1rem;
+          border-radius: 50px;
+          font-size: 0.7rem;
+          font-weight: 700;
+          display: inline-block;
+          width: fit-content;
+          margin-bottom: 1rem;
+        }
+
+        /* Fixed: Optimized metric cards */
+        .metric-card {
+          background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
+          border: 1px solid rgba(212, 175, 55, 0.15);
+          border-radius: 24px;
+          padding: 2rem 1.5rem;
+          text-align: center;
+          min-width: 200px;
+          transition: transform 0.3s ease;
+          backface-visibility: hidden;
+        }
+
+        .metric-card:hover {
+          transform: translateY(-4px);
+        }
+
+        /* Fixed: Simplified CTA section */
+        .cta-premium {
+          background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.03) 0%, 
+            rgba(212, 175, 55, 0.05) 100%
+          );
+          border: 1px solid rgba(212, 175, 55, 0.15);
+          border-radius: 32px;
+          padding: 3rem;
+        }
+
+        .cta-button {
+          background: linear-gradient(135deg, #d4af37, #b38f2c);
+          color: #0a1f17;
+          padding: 1.25rem 2.5rem;
+          border-radius: 60px;
+          font-weight: 700;
+          font-size: 0.85rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          border: none;
+          cursor: pointer;
+          transition: transform 0.3s ease;
+          box-shadow: 0 20px 30px -10px rgba(212, 175, 55, 0.3);
+        }
+
+        .cta-button:hover {
+          transform: translateY(-2px);
+        }
+
+        /* Fixed: Custom scrollbar - lighter weight */
+        .overflow-x-auto {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(212, 175, 55, 0.3) rgba(255, 255, 255, 0.05);
+          -webkit-overflow-scrolling: touch; /* Fixed: Smooth iOS scrolling */
+        }
+
+        .overflow-x-auto::-webkit-scrollbar {
+          height: 4px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+          background: rgba(212, 175, 55, 0.3);
+          border-radius: 10px;
+        }
+
+        /* Fixed: Prevent layout shift during loading */
+        .gold-divider {
+          width: 100px;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #d4af37, #d4af37, #d4af37, transparent);
+          margin: 2rem auto;
+          transition: width 0.5s ease;
+        }
+
+        .gold-divider.active {
+          width: 200px;
+        }
       `}</style>
 
       <section 
         id="investment-portfolio" 
         ref={sectionRef} 
-        className="portfolio-section py-20 lg:py-28 px-4 md:px-8"
+        className="portfolio-section py-24 lg:py-32 px-4 md:px-6"
       >
-        {/* Background Effects */}
-        <div className="portfolio-glow top-0 left-0" aria-hidden="true" />
-        <div className="portfolio-glow bottom-0 right-0" style={{ animationDelay: '-7.5s' }} aria-hidden="true" />
-
         <div className="max-w-7xl mx-auto relative z-10">
           
-          {/* Section Header */}
-          <div className={`text-center mb-16 md:mb-20 fade-in ${isVisible ? 'visible' : ''}`}>
-            {/* Language Toggle */}
-            <div className="flex justify-end mb-8">
-              <button 
-                onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
-                className="flex items-center gap-2 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-[10px] font-bold text-[#F0EAAF] hover:bg-white/10 transition-all duration-300 uppercase tracking-widest"
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span>{language === 'en' ? 'বাংলা' : 'English'}</span>
-              </button>
+          {/* === 1. Portfolio Intro === */}
+          <div className={`fade-in ${isVisible ? 'visible' : ''} text-center mb-16 lg:mb-20`}>
+            <div className="inline-flex items-center gap-3 mb-4">
+              <Sparkles className="w-4 h-4 text-[#d4af37]" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#d4af37]/70">
+                {current.topLabel}
+              </span>
+              <Sparkles className="w-4 h-4 text-[#d4af37]" />
             </div>
-
-            <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#F0EAAF]/70 mb-4 block">
-              {current.sectionSubtitle}
-            </span>
             
-            <h2 className="heading-serif text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
-              {current.sectionTitle}
+            <h2 className="font-serif-luxury text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+              {current.heading}
             </h2>
             
-            <div className="w-24 h-0.5 bg-[#F0EAAF] mx-auto mb-6"></div>
+            <div className={`gold-divider ${isVisible ? 'active' : ''}`} />
             
-            <p className="text-base md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
-              {current.desc}
+            <p className="text-base md:text-lg text-[#9ca8a0] max-w-3xl mx-auto leading-relaxed font-light">
+              {current.description}
             </p>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16">
+          {/* === 2. Stats Horizontal === */}
+          <div className="overflow-x-auto flex gap-6 mb-20 lg:mb-24 pb-6 justify-start lg:justify-center">
             {current.stats.map((stat, idx) => (
               <div 
-                key={idx} 
-                className={`stat-card fade-in ${isVisible ? 'visible' : ''}`}
+                key={idx}
+                className={`stat-card flex-shrink-0 fade-in ${isVisible ? 'visible' : ''}`}
                 style={{ transitionDelay: `${idx * 100}ms` }}
               >
-                <div className="text-[#F0EAAF] mb-3">{stat.icon}</div>
-                <div className="text-2xl md:text-3xl font-bold text-white mb-1">
-                  {stat.value}
+                <div className="stat-icon">
+                  {stat.icon}
                 </div>
-                <div className="text-xs text-white/50 uppercase tracking-wider">{stat.unit}</div>
-                <div className="text-xs text-white/40 mt-1">{stat.label}</div>
+                
+                <div className="flex items-end gap-2 mb-2">
+                  <span className="text-3xl md:text-4xl font-bold text-[#d4af37]">
+                    {stat.value}
+                  </span>
+                  <span className="text-xs text-[#9ca8a0] uppercase tracking-wider pb-1">
+                    {stat.unit}
+                  </span>
+                </div>
+                
+                <div className="text-sm font-medium text-white/90">{stat.label}</div>
               </div>
             ))}
           </div>
 
-          {/* Investment Pillars */}
-          <div className="mb-16">
-            <h3 className="heading-serif text-xl md:text-2xl font-bold text-center mb-10 text-[#F0EAAF]">
-              {language === 'en' ? 'Four Pillars of Value' : 'মূল্যের চারটি স্তম্ভ'}
-            </h3>
+          {/* === 3. Asset Pillars === */}
+          <div className="mb-20 lg:mb-24">
+            <div className={`fade-in ${isVisible ? 'visible' : ''} text-center mb-12`}>
+              <h3 className="font-serif-luxury text-3xl md:text-4xl font-bold text-white">
+                {current.pillarsHeading}
+              </h3>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="overflow-x-auto flex gap-6 pb-6 justify-start lg:justify-center">
               {current.pillars.map((pillar, idx) => (
                 <div 
-                  key={idx} 
-                  className={`pillar-card fade-in ${isVisible ? 'visible' : ''}`}
+                  key={idx}
+                  className={`pillar-card flex-shrink-0 fade-in ${isVisible ? 'visible' : ''}`}
+                  style={{ transitionDelay: `${idx * 100}ms` }}
+                  onMouseEnter={() => setActivePillar(idx)}
+                  onMouseLeave={() => setActivePillar(null)}
+                >
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d4af37]/60 block mb-3">
+                    {pillar.label}
+                  </span>
+                  
+                  <h4 className="text-xl font-bold text-white mb-3">{pillar.title}</h4>
+                  
+                  <div className="text-2xl font-bold text-[#d4af37] mb-4">{pillar.stat}</div>
+                  
+                  <p className="text-sm text-[#9ca8a0]/80 leading-relaxed mb-4">
+                    {pillar.desc}
+                  </p>
+                  
+                  <span className="pillar-highlight">
+                    <CheckCircle className="w-3 h-3 inline mr-1" />
+                    {pillar.highlight}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* === 4. Showcase Cards === */}
+          <div className="mb-20 lg:mb-24">
+            <div className={`fade-in ${isVisible ? 'visible' : ''} text-center mb-12`}>
+              <h3 className="font-serif-luxury text-3xl md:text-4xl font-bold text-white">
+                {current.showcaseHeading}
+              </h3>
+            </div>
+
+            <div className="overflow-x-auto flex gap-8 pb-6 justify-start lg:justify-center">
+              {current.showcase.map((item, idx) => (
+                <div 
+                  key={idx}
+                  className={`showcase-card flex-shrink-0 fade-in ${isVisible ? 'visible' : ''}`}
                   style={{ transitionDelay: `${idx * 100}ms` }}
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-[#F0EAAF]/10 flex items-center justify-center text-[#F0EAAF]">
-                      {pillar.icon}
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#F0EAAF] bg-[#F0EAAF]/10 px-3 py-1 rounded-full">
-                      {pillar.highlight}
+                  <img src={item.image} alt={item.title} loading="lazy" />
+                  
+                  <div className="showcase-overlay">
+                    <span className="showcase-tag">{item.tag}</span>
+                    
+                    <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#d4af37]/70 block mb-2">
+                      {item.category}
+                    </span>
+                    
+                    <h4 className="font-serif-luxury text-2xl font-bold text-white mb-2">
+                      {item.title}
+                    </h4>
+                    
+                    <p className="text-sm text-white/70">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* === 5. Investment Metrics === */}
+          <div className="mb-20 lg:mb-24">
+            <div className={`fade-in ${isVisible ? 'visible' : ''} text-center mb-12`}>
+              <h3 className="font-serif-luxury text-3xl md:text-4xl font-bold text-white">
+                {current.metricsHeading}
+              </h3>
+            </div>
+
+            <div className="overflow-x-auto flex gap-6 pb-6 justify-start lg:justify-center">
+              {current.metrics.map((metric, idx) => (
+                <div 
+                  key={idx}
+                  className={`metric-card flex-shrink-0 fade-in ${isVisible ? 'visible' : ''}`}
+                  style={{ transitionDelay: `${idx * 100}ms` }}
+                >
+                  <div className="text-3xl md:text-4xl font-bold text-[#d4af37] mb-2">
+                    {metric.value}
+                  </div>
+                  <div className="text-base font-semibold text-white mb-1">{metric.label}</div>
+                  <div className="text-xs text-[#9ca8a0]/60">{metric.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* === 6. CTA Section === */}
+          <div className={`fade-in ${isVisible ? 'visible' : ''}`}>
+            <div className="cta-premium">
+              <div className="grid lg:grid-cols-2 gap-8 items-center">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-[#d4af37]" />
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d4af37]/70">
+                      EXCLUSIVE OFFERING
                     </span>
                   </div>
                   
-                  <h4 className="text-lg font-bold mb-2">{pillar.title}</h4>
-                  <div className="text-xl font-bold text-[#F0EAAF] mb-3">{pillar.stat}</div>
-                  <p className="text-sm text-white/50 leading-relaxed">
-                    {pillar.detail}
+                  <h3 className="font-serif-luxury text-3xl md:text-4xl font-bold text-white">
+                    {current.ctaHeading}
+                  </h3>
+                  
+                  <p className="text-[#9ca8a0] leading-relaxed text-base">
+                    {current.ctaDesc}
                   </p>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Investment Metrics */}
-          <div className="mb-12">
-            <h3 className="heading-serif text-xl md:text-2xl font-bold text-center mb-10">
-              {current.metricsTitle}
-            </h3>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {current.metrics.map((metric, idx) => (
-                <div 
-                  key={idx} 
-                  className={`metric-card fade-in ${isVisible ? 'visible' : ''}`}
-                  style={{ transitionDelay: `${idx * 100}ms` }}
-                >
-                  <div className="text-2xl md:text-3xl font-bold text-[#F0EAAF] mb-2">
-                    {metric.value}
-                  </div>
-                  <div className="text-sm font-bold text-white mb-1">{metric.label}</div>
-                  <div className="text-xs text-white/50">{metric.desc}</div>
+                
+                <div className="text-center lg:text-right">
+                  <button className="cta-button group">
+                    <span className="relative z-10 flex items-center gap-3">
+                      {current.ctaButton}
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </button>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
-
-          {/* CTA Section */}
-          <div className={`text-center fade-in ${isVisible ? 'visible' : ''}`}>
-            <h3 className="heading-serif text-2xl md:text-3xl font-bold mb-4">
-              {current.ctaTitle}
-            </h3>
-            <p className="text-white/60 mb-8 max-w-xl mx-auto">
-              {current.ctaDesc}
-            </p>
-            <button className="bg-[#F0EAAF] text-[#193C26] px-8 py-4 rounded-full font-bold text-sm uppercase tracking-wider hover:bg-white transition-all duration-300 hover:scale-105">
-              {current.ctaButton}
-            </button>
-          </div>
-
         </div>
       </section>
     </>
