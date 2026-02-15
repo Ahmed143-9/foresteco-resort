@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Landmark, Hotel, Sprout, ShieldCheck, Map, ArrowRight, Globe } from 'lucide-react';
+import { Landmark, Hotel, Sprout, ShieldCheck, Map, ArrowRight } from 'lucide-react';
 
-const AssetSection = () => {
-  const [language, setLanguage] = useState('en');
+const AssetSection = ({ language = 'en' }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
 
@@ -555,18 +554,6 @@ const AssetSection = () => {
           
           {/* 1️⃣ Asset Structure Intro Area */}
           <div className={`text-center mb-20 fade-in ${isVisible ? 'visible' : ''}`}>
-            {/* Language Toggle */}
-            <div className="flex justify-end mb-8">
-              <button 
-                onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
-                className="flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-white/10"
-                style={{ color: '#d8c98f' }}
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span>{language === 'en' ? 'বাংলা' : 'English'}</span>
-              </button>
-            </div>
-
             <p className="luxury-top-label mb-6">
               {current.topLabel}
             </p>

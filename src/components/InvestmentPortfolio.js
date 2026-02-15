@@ -258,9 +258,16 @@ const InvestmentPortfolio = ({ language = 'en' }) => {
           background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
           border: 1px solid rgba(212, 175, 55, 0.1);
           border-radius: 24px;
-          padding: 1.75rem;
+          padding: 2rem 2.5rem;
+          margin: 0.5rem;
           transition: transform 0.3s ease, border-color 0.3s ease;
-          min-width: 200px;
+          min-width: 240px;
+          max-width: 280px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
           /* Fixed: Prevent layout shift during animation */
           backface-visibility: hidden;
         }
@@ -287,9 +294,16 @@ const InvestmentPortfolio = ({ language = 'en' }) => {
           background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
           border: 1px solid rgba(255, 255, 255, 0.05);
           border-radius: 28px;
-          padding: 2rem;
+          padding: 2rem 2.5rem;
+          margin: 0.5rem;
           transition: transform 0.3s ease, border-color 0.3s ease;
           min-width: 280px;
+          max-width: 320px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
           backface-visibility: hidden;
         }
 
@@ -467,7 +481,7 @@ const InvestmentPortfolio = ({ language = 'en' }) => {
           </div>
 
           {/* === 2. Stats Horizontal === */}
-          <div className="overflow-x-auto flex gap-6 mb-20 lg:mb-24 pb-6 justify-start lg:justify-center">
+          <div className="overflow-x-auto flex gap-16 mb-20 lg:mb-24 pb-6 justify-center" style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'center' }}>
             {current.stats.map((stat, idx) => (
               <div 
                 key={idx}
@@ -500,7 +514,7 @@ const InvestmentPortfolio = ({ language = 'en' }) => {
               </h3>
             </div>
 
-            <div className="overflow-x-auto flex gap-6 pb-6 justify-start lg:justify-center">
+            <div className="overflow-x-auto flex gap-16 pb-6 justify-center" style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'center' }}>
               {current.pillars.map((pillar, idx) => (
                 <div 
                   key={idx}
@@ -538,7 +552,7 @@ const InvestmentPortfolio = ({ language = 'en' }) => {
               </h3>
             </div>
 
-            <div className="overflow-x-auto flex gap-8 pb-6 justify-start lg:justify-center">
+            <div className="overflow-x-auto flex gap-16 pb-6 justify-start lg:justify-center">
               {current.showcase.map((item, idx) => (
                 <div 
                   key={idx}
@@ -565,35 +579,11 @@ const InvestmentPortfolio = ({ language = 'en' }) => {
             </div>
           </div>
 
-          {/* === 5. Investment Metrics === */}
-          <div className="mb-20 lg:mb-24">
-            <div className={`fade-in ${isVisible ? 'visible' : ''} text-center mb-12`}>
-              <h3 className="font-serif-luxury text-3xl md:text-4xl font-bold text-white">
-                {current.metricsHeading}
-              </h3>
-            </div>
-
-            <div className="overflow-x-auto flex gap-6 pb-6 justify-start lg:justify-center">
-              {current.metrics.map((metric, idx) => (
-                <div 
-                  key={idx}
-                  className={`metric-card flex-shrink-0 fade-in ${isVisible ? 'visible' : ''}`}
-                  style={{ transitionDelay: `${idx * 100}ms` }}
-                >
-                  <div className="text-3xl md:text-4xl font-bold text-[#d4af37] mb-2">
-                    {metric.value}
-                  </div>
-                  <div className="text-base font-semibold text-white mb-1">{metric.label}</div>
-                  <div className="text-xs text-[#9ca8a0]/60">{metric.desc}</div>
-                </div>
-              ))}
-            </div>
-          </div>
 
           {/* === 6. CTA Section === */}
           <div className={`fade-in ${isVisible ? 'visible' : ''}`}>
             <div className="cta-premium">
-              <div className="grid lg:grid-cols-2 gap-8 items-center">
+              <div className="grid lg:grid-cols-2 gap-16 items-center">
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
                     <Crown className="w-5 h-5 text-[#d4af37]" />

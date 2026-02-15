@@ -891,6 +891,8 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                 onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                 onClick={(e) => {
                   e.preventDefault();
+                  // Reset overflow to ensure scrolling works
+                  document.body.style.overflow = 'auto';
                   // Close mobile menu first
                   toggleMenu();
                   // Scroll to the investment portfolio section smoothly after a short delay
@@ -899,7 +901,9 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                     if (element) {
                       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
-                  }, 150);
+                    // Ensure overflow is reset after scroll
+                    document.body.style.overflow = 'auto';
+                  }, 200);
                 }}
               >
                 Investment Portfolio
