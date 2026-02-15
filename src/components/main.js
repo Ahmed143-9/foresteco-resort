@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import InvestmentDashboard from './investment-dashboard';
 import AssetSection from './AssetSection';
+import InvestmentPortfolio from './InvestmentPortfolio';
 import { 
   Leaf, Shield, TrendingUp, Users, ArrowRight, 
   Menu, X, Check, Calculator, Lock, Phone, 
@@ -890,8 +891,11 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
                 onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                 onClick={(e) => {
                   e.preventDefault();
-                  // Set hash to trigger file loading
-                  window.location.hash = 'investment-portfolio';
+                  // Scroll to the investment portfolio section smoothly
+                  const element = document.getElementById('investment-portfolio');
+                  if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
                   // For anchor links, close the menu after a small delay to allow navigation to complete
                   setTimeout(() => {
                     toggleMenu();
@@ -2962,8 +2966,16 @@ function App() {
           }
         }, 100);
       } else if (hash === 'investment-portfolio') {
-        loadFileContent('portfolio.txt');
-        setShowAssetSection(false);
+        // Scroll to the investment portfolio section instead of loading file
+        setFileViewMode(null);
+        setCurrentPage('home');
+        // Scroll to the investment portfolio section after render
+        setTimeout(() => {
+          const element = document.getElementById('investment-portfolio');
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
       } else {
         setCurrentPage('home');
         setFileViewMode(null);
@@ -3105,6 +3117,7 @@ function App() {
                 <div id="the-asset">
                   <AssetSection />
                 </div>
+                <InvestmentPortfolio />
                 <PortfolioGallery t={t} />
                 <ROICalculator t={t} language={language} />
                 <TiersSection t={t} language={language} />

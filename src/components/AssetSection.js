@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Landmark, Hotel, Sprout, ShieldCheck, Map, ArrowRight, Globe, Tent, Trees, Sparkles } from 'lucide-react';
+import { Landmark, Hotel, Sprout, ShieldCheck, Map, ArrowRight, Globe, Tent, Trees, Sparkles, Award, Gem, Crown } from 'lucide-react';
 
 const AssetSection = () => {
   const [language, setLanguage] = useState('en');
   const [isVisible, setIsVisible] = useState(false);
+  const [activeCard, setActiveCard] = useState(null);
   const sectionRef = useRef(null);
 
   useEffect(() => {
@@ -13,13 +14,8 @@ const AssetSection = () => {
       },
       { threshold: 0.1, rootMargin: '50px' }
     );
-    
-    const currentRef = sectionRef.current;
-    if (currentRef) observer.observe(currentRef);
-    
-    return () => {
-      if (currentRef) observer.unobserve(currentRef);
-    };
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
   }, []);
 
   const colors = {
@@ -157,7 +153,7 @@ const AssetSection = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
         
         .asset-section {
           font-family: ${language === 'bn' ? "'Hind Siliguri', sans-serif" : "'Inter', sans-serif"};
@@ -165,37 +161,52 @@ const AssetSection = () => {
           color: ${colors.angoraWhite};
           position: relative;
           overflow: hidden;
-          isolation: isolate;
         }
 
-        /* Ambient Motion Graphic */
-        .ambient-glow {
+        /* Premium Ambient Effects */
+        .premium-glow {
           position: absolute;
-          width: 60vw;
-          height: 60vw;
-          background: radial-gradient(circle, rgba(240, 234, 175, 0.03) 0%, transparent 70%);
+          width: 80vw;
+          height: 80vw;
+          background: radial-gradient(circle at center, ${colors.paleGoldenrod}08 0%, transparent 70%);
           border-radius: 50%;
-          filter: blur(80px);
-          animation: drift 20s infinite alternate ease-in-out;
+          filter: blur(100px);
+          animation: premiumFloat 25s infinite alternate ease-in-out;
           pointer-events: none;
           z-index: 0;
         }
 
-        @keyframes drift {
-          0% { transform: translate(-10%, -10%) scale(1); opacity: 0.5; }
-          100% { transform: translate(10%, 10%) scale(1.2); opacity: 0.8; }
+        @keyframes premiumFloat {
+          0% { transform: translate(-15%, -15%) scale(1); opacity: 0.3; }
+          100% { transform: translate(15%, 15%) scale(1.3); opacity: 0.5; }
         }
 
-        /* Staggered Reveal */
-        .reveal-node {
+        .gold-dust {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background-image: radial-gradient(${colors.paleGoldenrod}15 1px, transparent 1px);
+          background-size: 50px 50px;
+          pointer-events: none;
+          opacity: 0.3;
+          animation: dustFloat 60s linear infinite;
+        }
+
+        @keyframes dustFloat {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(30px, 30px); }
+        }
+
+        /* Premium Reveal Animation */
+        .premium-reveal {
           opacity: 0;
-          transform: translateY(30px);
-          transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+          transform: translateY(40px) scale(0.98);
+          transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .reveal-node.active {
+        .premium-reveal.active {
           opacity: 1;
-          transform: translateY(0);
+          transform: translateY(0) scale(1);
         }
 
         .delay-1 { transition-delay: 0.1s; }
@@ -203,274 +214,369 @@ const AssetSection = () => {
         .delay-3 { transition-delay: 0.3s; }
         .delay-4 { transition-delay: 0.4s; }
 
-        .heading-serif {
+        /* Premium Typography */
+        .premium-serif {
           font-family: 'Playfair Display', serif;
-          font-weight: 600;
+          font-weight: 700;
           letter-spacing: -0.02em;
         }
 
-        /* Asset Card */
-        .asset-card {
-          background: rgba(255, 255, 255, 0.03);
+        .premium-gold-text {
+          background: linear-gradient(135deg, ${colors.paleGoldenrod} 0%, #FFFFFF 50%, ${colors.paleGoldenrod} 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-size: 200% auto;
+          animation: premiumShine 4s linear infinite;
+        }
+
+        @keyframes premiumShine {
+          0% { background-position: 0% 0; }
+          100% { background-position: 200% 0; }
+        }
+
+        /* Premium Cards */
+        .premium-card {
+          background: rgba(255, 255, 255, 0.02);
           border: 1px solid rgba(240, 234, 175, 0.1);
-          backdrop-filter: blur(10px);
-          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-          border-radius: 40px;
-          padding: 2rem;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
+          backdrop-filter: blur(12px);
+          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .premium-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
           height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(240, 234, 175, 0.1), transparent);
+          transition: left 0.8s ease;
         }
 
-        .asset-card:hover {
-          background: rgba(240, 234, 175, 0.07);
+        .premium-card:hover::before {
+          left: 100%;
+        }
+
+        .premium-card:hover {
           border-color: ${colors.paleGoldenrod};
-          transform: translateY(-8px) scale(1.02);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+          transform: translateY(-10px) scale(1.02);
+          box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(240, 234, 175, 0.2);
         }
 
-        .asset-icon-box {
+        .premium-icon-wrapper {
+          background: linear-gradient(135deg, ${colors.paleGoldenrod}20, ${colors.paleGoldenrod}05);
+          border: 1px solid ${colors.paleGoldenrod}30;
+          color: ${colors.paleGoldenrod};
+          transition: all 0.5s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .premium-icon-wrapper::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(circle, ${colors.paleGoldenrod}40, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.5s ease;
+        }
+
+        .premium-card:hover .premium-icon-wrapper::after {
+          opacity: 1;
+        }
+
+        .premium-card:hover .premium-icon-wrapper {
+          transform: rotateY(180deg) scale(1.1);
           background: ${colors.paleGoldenrod};
           color: ${colors.phthaloGreen};
-          width: 3.5rem;
-          height: 3.5rem;
-          border-radius: 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-bottom: 1.5rem;
-          transition: transform 0.5s ease;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .asset-card:hover .asset-icon-box {
-          transform: rotateY(180deg);
-        }
-
-        .stat-highlight {
+        .premium-stat {
           color: ${colors.paleGoldenrod};
           font-family: 'Playfair Display', serif;
-          font-size: 1.25rem;
+          font-size: 1.5rem;
           font-weight: 700;
-          margin-bottom: 0.75rem;
           position: relative;
           display: inline-block;
         }
 
-        .stat-highlight::after {
-          content: "";
+        .premium-stat::after {
+          content: '';
           position: absolute;
           bottom: -4px;
           left: 0;
           width: 0;
-          height: 1px;
-          background: ${colors.paleGoldenrod};
+          height: 2px;
+          background: linear-gradient(90deg, ${colors.paleGoldenrod}, transparent);
           transition: width 0.4s ease;
         }
 
-        .asset-card:hover .stat-highlight::after {
+        .premium-card:hover .premium-stat::after {
           width: 100%;
         }
 
-        /* Visual Panel */
-        .visual-panel {
-          border-radius: 32px;
+        /* Premium Divider */
+        .premium-divider {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, ${colors.paleGoldenrod}80, ${colors.paleGoldenrod}, ${colors.paleGoldenrod}80, transparent);
+          width: 200px;
+          margin: 1.5rem auto;
+          transition: width 1s ease;
+        }
+
+        /* Premium Panels */
+        .premium-panel {
+          border-radius: 48px;
           overflow: hidden;
           position: relative;
-          height: 400px;
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+          height: 550px;
+          border: 1px solid rgba(240, 234, 175, 0.1);
+          transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
           cursor: pointer;
         }
 
-        @media (min-width: 1024px) {
-          .visual-panel {
-            height: 480px;
-          }
+        .premium-panel:hover {
+          border-color: ${colors.paleGoldenrod}60;
+          box-shadow: 0 40px 70px -20px rgba(0, 0, 0, 0.6);
         }
 
-        .visual-panel:hover {
-          box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-          border-color: ${colors.paleGoldenrod}40;
+        .premium-panel img {
+          transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .visual-panel img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        .premium-panel:hover img {
+          transform: scale(1.1);
         }
 
-        .visual-panel:hover img {
-          transform: scale(1.08);
-        }
-
-        .visual-content-overlay {
+        .premium-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to top, rgba(25, 60, 38, 0.95) 0%, rgba(25, 60, 38, 0.4) 60%, transparent 100%);
-          transition: background 0.4s ease;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          padding: 2.5rem;
+          background: linear-gradient(to top, ${colors.phthaloGreen}F2 0%, ${colors.phthaloGreen}80 40%, transparent 100%);
+          transition: all 0.5s ease;
         }
 
-        .visual-panel:hover .visual-content-overlay {
-          background: linear-gradient(to top, rgba(25, 60, 38, 1) 0%, rgba(25, 60, 38, 0.6) 60%, transparent 100%);
+        .premium-panel:hover .premium-overlay {
+          background: linear-gradient(to top, ${colors.phthaloGreen} 0%, ${colors.phthaloGreen}CC 40%, transparent 100%);
         }
 
-        .tag-pill {
+        .premium-tag {
           background: ${colors.paleGoldenrod};
           color: ${colors.phthaloGreen};
           font-size: 0.625rem;
           font-weight: 700;
-          padding: 0.25rem 0.75rem;
-          border-radius: 9999px;
+          padding: 0.375rem 1rem;
+          border-radius: 30px;
           text-transform: uppercase;
           letter-spacing: 0.1em;
-          display: inline-block;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+          display: inline-flex;
+          align-items: center;
+          gap: 0.25rem;
         }
 
-        .divider-accent {
-          height: 1px;
-          background: linear-gradient(90deg, transparent, ${colors.paleGoldenrod}, transparent);
-          width: 200px;
-          margin: 1rem auto 2rem;
-          transition: width 1s ease;
+        /* Premium Button */
+        .premium-button {
+          background: linear-gradient(135deg, ${colors.paleGoldenrod}, #FFFFFF);
+          color: ${colors.phthaloGreen};
+          padding: 1.25rem 2.5rem;
+          border-radius: 50px;
+          font-weight: 700;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          transition: all 0.4s ease;
+          border: none;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.4);
         }
 
-        .shimmer-text {
-          background: linear-gradient(90deg, ${colors.paleGoldenrod} 0%, #ffffff 50%, ${colors.paleGoldenrod} 100%);
-          background-size: 200% 100%;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          animation: shimmer 4s infinite linear;
+        .premium-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+          transition: left 0.6s ease;
         }
 
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
+        .premium-button:hover::before {
+          left: 100%;
         }
 
-        /* Utility Classes */
-        .transition-base {
+        .premium-button:hover {
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 30px 40px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Premium Footer */
+        .premium-footer-badge {
+          background: rgba(240, 234, 175, 0.05);
+          border: 1px solid rgba(240, 234, 175, 0.1);
           transition: all 0.3s ease;
         }
 
-        .glass-effect {
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
+        .premium-footer-badge:hover {
+          background: rgba(240, 234, 175, 0.1);
+          border-color: ${colors.paleGoldenrod}40;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: ${colors.phthaloGreen};
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: ${colors.paleGoldenrod}40;
+          border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+          background: ${colors.paleGoldenrod}60;
         }
       `}</style>
 
       <section 
         id="asset" 
         ref={sectionRef} 
-        className="asset-section py-20 lg:py-28 px-4 md:px-8"
-        aria-labelledby="asset-section-title"
+        className="asset-section py-28 lg:py-36 px-6"
       >
-        {/* Ambient Background Elements */}
-        <div className="ambient-glow top-0 left-0" aria-hidden="true" />
-        <div className="ambient-glow bottom-0 right-0" style={{ animationDelay: '-10s' }} aria-hidden="true" />
+        {/* Premium Ambient Background */}
+        <div className="premium-glow top-0 left-0"></div>
+        <div className="premium-glow bottom-0 right-0" style={{ animationDelay: '-12s' }}></div>
+        <div className="gold-dust"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           
-          {/* Section Header */}
-          <div className={`text-center mb-16 md:mb-20 relative reveal-node ${isVisible ? 'active' : ''}`}>
-            {/* Language Toggle */}
-            <div className="absolute -top-12 md:-top-10 right-0">
+          {/* Section Header with Premium Styling */}
+          <div className={`text-center mb-24 relative premium-reveal ${isVisible ? 'active' : ''}`}>
+            {/* Language Toggle - Premium Version */}
+            <div className="absolute -top-12 right-0">
               <button 
                 onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
-                className="flex items-center gap-2 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-[10px] font-bold text-[#F0EAAF] hover:bg-white/10 transition-all duration-300 uppercase tracking-widest"
-                aria-label={`Switch to ${language === 'en' ? 'Bengali' : 'English'}`}
+                className="flex items-center gap-3 bg-white/5 border border-[#F0EAAF]/20 px-6 py-3 rounded-full text-[11px] font-bold text-[#F0EAAF] hover:bg-white/10 transition-all duration-500 uppercase tracking-widest backdrop-blur-sm"
               >
-                <Globe className="w-3.5 h-3.5" />
+                <Globe className="w-4 h-4" />
                 <span>{language === 'en' ? 'বাংলা' : 'English'}</span>
+                <Crown className="w-3.5 h-3.5 opacity-50" />
               </button>
             </div>
 
-            <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#F0EAAF]/70 mb-4 block">
-              {current.sectionSubtitle}
-            </span>
-            
-            <h2 id="asset-section-title" className="heading-serif text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
+            <div className="inline-flex items-center gap-3 mb-6">
+              <Award className="w-5 h-5 text-[#F0EAAF]" />
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#F0EAAF]/80">
+                {current.sectionSubtitle}
+              </span>
+              <Award className="w-5 h-5 text-[#F0EAAF]" />
+            </div>
+
+            <h2 className="premium-serif text-5xl md:text-6xl lg:text-7xl font-bold mb-6 premium-gold-text">
               {current.sectionTitle}
             </h2>
             
-            <div className={`divider-accent ${isVisible ? 'w-[250px] md:w-[300px]' : 'w-0'}`}></div>
+            <div className={`premium-divider ${isVisible ? '!w-[400px]' : ''}`}></div>
             
-            <p className="text-base md:text-lg text-[#F0EAAF]/60 max-w-2xl mx-auto leading-relaxed mt-6">
+            <p className="text-lg text-[#F0EAAF]/70 max-w-3xl mx-auto leading-relaxed font-light">
               {current.desc}
             </p>
           </div>
 
-          {/* Core Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-16 md:mb-24">
+          {/* Premium Asset Cards Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-32">
             {current.assets.map((asset, idx) => (
               <div 
                 key={idx} 
-                className={`asset-card reveal-node ${isVisible ? 'active' : ''} delay-${idx + 1}`}
+                className={`premium-card p-8 rounded-[48px] flex flex-col items-center text-center premium-reveal ${isVisible ? 'active' : ''} delay-${idx + 1}`}
+                onMouseEnter={() => setActiveCard(idx)}
+                onMouseLeave={() => setActiveCard(null)}
               >
-                <div className="asset-icon-box">
+                <div className="premium-icon-wrapper w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-xl">
                   {asset.icon}
                 </div>
-                <h3 className="text-base font-bold mb-1 uppercase tracking-wider">{asset.title}</h3>
-                <div className="stat-highlight">
+                
+                <h3 className="text-sm font-bold mb-2 uppercase tracking-wider text-white/90">
+                  {asset.title}
+                </h3>
+                
+                <div className="premium-stat mb-4">
                   {asset.stat}
                 </div>
-                <p className="text-[12px] text-white/50 leading-relaxed font-light">
+                
+                <p className="text-xs text-white/40 leading-relaxed font-light">
                   {asset.detail}
                 </p>
+
+                {activeCard === idx && (
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                    <Gem className="w-4 h-4 text-[#F0EAAF] animate-pulse" />
+                  </div>
+                )}
               </div>
             ))}
           </div>
 
-          {/* Visual Showcase Gallery */}
-          <div className="mb-12 md:mb-16">
-            <div className={`flex items-center gap-4 mb-8 md:mb-10 reveal-node ${isVisible ? 'active' : ''}`}>
-              <div className="h-px flex-1 bg-white/10" aria-hidden="true" />
-              <h3 className="heading-serif text-2xl font-bold tracking-wide italic shimmer-text uppercase">
-                {current.visualHeading}
-              </h3>
-              <div className="h-px flex-1 bg-white/10" aria-hidden="true" />
+          {/* Premium Visual Showcase */}
+          <div className="mb-24">
+            <div className={`flex items-center gap-4 mb-16 premium-reveal ${isVisible ? 'active' : ''}`}>
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10"></div>
+              <div className="flex items-center gap-3">
+                <Sparkles className="w-5 h-5 text-[#F0EAAF]" />
+                <h3 className="premium-serif text-3xl font-bold tracking-wide premium-gold-text">
+                  {current.visualHeading}
+                </h3>
+                <Sparkles className="w-5 h-5 text-[#F0EAAF]" />
+              </div>
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10"></div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid lg:grid-cols-3 gap-8">
               {current.showcase.map((item, idx) => (
                 <div 
                   key={idx} 
-                  className={`visual-panel group reveal-node ${isVisible ? 'active' : ''} delay-${idx + 1}`}
+                  className={`premium-panel group premium-reveal ${isVisible ? 'active' : ''} delay-${idx + 1}`}
                 >
                   <img 
                     src={item.image} 
                     alt={item.title} 
                     className="w-full h-full object-cover"
-                    loading="lazy"
                   />
                   
-                  <div className="visual-content-overlay">
-                    <div className="mb-4 transform group-hover:-translate-y-2 transition-transform duration-500">
-                      <div className="text-[10px] text-[#F0EAAF] uppercase font-bold tracking-[0.2em] mb-1 opacity-70">
-                        {item.label}
+                  <div className="premium-overlay">
+                    <div className="absolute inset-0 flex flex-col justify-end p-8 lg:p-10">
+                      <div className="mb-4 transform group-hover:-translate-y-2 transition-transform duration-500">
+                        <div className="text-[10px] text-[#F0EAAF] uppercase font-bold tracking-[0.2em] mb-2 opacity-80">
+                          {item.label}
+                        </div>
+                        <span className="premium-tag">
+                          <Award className="w-3 h-3" />
+                          {item.tag}
+                        </span>
                       </div>
-                      <span className="tag-pill">{item.tag}</span>
-                    </div>
-                    
-                    <h4 className="heading-serif text-2xl lg:text-3xl font-bold text-white mb-3 transform group-hover:-translate-y-2 transition-transform duration-500 delay-75">
-                      {item.title}
-                    </h4>
-                    
-                    <p className="text-white/70 text-sm leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                      {item.desc}
-                    </p>
-                    
-                    <div className="flex items-center gap-2 text-[#F0EAAF] text-xs font-bold tracking-widest uppercase transform group-hover:-translate-y-1 transition-transform duration-500">
-                      <span>{language === 'en' ? 'View Details' : 'বিস্তারিত দেখুন'}</span>
-                      <ArrowRight className="w-3 h-3 group-hover:translate-x-2 transition-transform" />
+                      
+                      <h4 className="premium-serif text-2xl lg:text-3xl font-bold text-white mb-3 transform group-hover:-translate-y-2 transition-transform duration-500 delay-75">
+                        {item.title}
+                      </h4>
+                      
+                      <p className="text-white/60 text-sm leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                        {item.desc}
+                      </p>
+                      
+                      <div className="flex items-center gap-2 text-[#F0EAAF] text-xs font-bold tracking-widest uppercase transform group-hover:-translate-y-1 transition-transform duration-500">
+                        <span>{language === 'en' ? 'View Details' : 'বিস্তারিত দেখুন'}</span>
+                        <ArrowRight className="w-3 h-3 group-hover:translate-x-2 transition-transform" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -478,64 +584,80 @@ const AssetSection = () => {
             </div>
           </div>
 
-          {/* Master Plan Section */}
-          <div className={`mt-8 md:mt-12 bg-white/5 p-8 md:p-12 lg:p-14 rounded-[40px] md:rounded-[60px] border border-white/5 relative overflow-hidden reveal-node ${isVisible ? 'active' : ''}`}>
-            <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
+          {/* Premium Master Plan Section */}
+          <div className={`mt-12 bg-white/5 backdrop-blur-xl p-12 lg:p-20 rounded-[80px] border border-white/10 relative overflow-hidden premium-reveal ${isVisible ? 'active' : ''}`}>
+            {/* Decorative Elements */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#F0EAAF]/5 to-transparent"></div>
+            
+            <div className="grid lg:grid-cols-2 gap-16 items-center relative z-10">
               <div>
-                <h3 className="heading-serif text-3xl font-bold mb-6">{current.masterPlanHeading}</h3>
-                <p className="text-white/60 mb-8 leading-relaxed max-w-md">
+                <div className="flex items-center gap-3 mb-4">
+                  <Crown className="w-5 h-5 text-[#F0EAAF]" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#F0EAAF]/70">
+                    {language === 'en' ? 'Legacy Built' : 'ঐতিহ্য গড়ার প্রতিশ্রুতি'}
+                  </span>
+                </div>
+                
+                <h3 className="premium-serif text-4xl lg:text-5xl font-bold mb-6 premium-gold-text">
+                  {current.masterPlanHeading}
+                </h3>
+                
+                <p className="text-white/50 mb-10 leading-relaxed max-w-md text-lg">
                   {current.masterPlanDesc}
                 </p>
                 
-                <div className="flex flex-wrap gap-4">
-                  <div className="bg-[#193C26] px-6 py-4 rounded-3xl border border-white/10 text-center hover:bg-white/5 transition-colors duration-300">
-                    <div className="text-[10px] uppercase tracking-widest text-[#F0EAAF] mb-1">Financial Integrity</div>
-                    <div className="text-xl font-bold font-serif">{current.masterPlanStat1}</div>
+                <div className="flex flex-wrap gap-6">
+                  <div className="bg-white/5 px-8 py-6 rounded-[40px] border border-white/10 hover:border-[#F0EAAF]/30 transition-all duration-500">
+                    <div className="text-[10px] uppercase tracking-widest text-[#F0EAAF]/70 mb-2">Financial Integrity</div>
+                    <div className="text-2xl font-bold premium-serif text-white">{current.masterPlanStat1}</div>
                   </div>
                   
-                  <div className="bg-[#193C26] px-6 py-4 rounded-3xl border border-white/10 text-center hover:bg-white/5 transition-colors duration-300">
-                    <div className="text-[10px] uppercase tracking-widest text-[#F0EAAF] mb-1">Risk Mitigation</div>
-                    <div className="text-xl font-bold font-serif">{current.masterPlanStat2}</div>
+                  <div className="bg-white/5 px-8 py-6 rounded-[40px] border border-white/10 hover:border-[#F0EAAF]/30 transition-all duration-500">
+                    <div className="text-[10px] uppercase tracking-widest text-[#F0EAAF]/70 mb-2">Risk Mitigation</div>
+                    <div className="text-2xl font-bold premium-serif text-white">{current.masterPlanStat2}</div>
                   </div>
                 </div>
               </div>
               
               <div className="text-right">
-                <button className="inline-flex items-center gap-4 bg-[#F0EAAF] text-[#193C26] py-5 px-10 rounded-full font-bold uppercase text-xs tracking-[0.2em] hover:brightness-110 hover:shadow-2xl transition-all duration-300 shadow-xl group">
-                  <span>{language === 'en' ? 'View Infrastructure Roadmap' : 'অবকাঠামো উন্নয়ন পরিকল্পনা'}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-300" />
+                <button className="premium-button group">
+                  <span className="relative z-10 flex items-center gap-3">
+                    {language === 'en' ? 'View Infrastructure Roadmap' : 'অবকাঠামো উন্নয়ন পরিকল্পনা'}
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                  </span>
                 </button>
               </div>
             </div>
             
-            {/* Decorative Icon */}
-            <Tent 
-              className="absolute -bottom-10 -right-10 w-64 h-64 text-white/5 rotate-12 animate-[spin_60s_linear_infinite]" 
-              aria-hidden="true"
-            />
+            {/* Premium Decorative Icon */}
+            <Tent className="absolute -bottom-16 -right-16 w-80 h-80 text-white/5 rotate-12 animate-[spin_50s_linear_infinite]" />
           </div>
 
-          {/* Footer */}
+          {/* Premium Security Footer */}
           <div className="mt-24 flex flex-col md:flex-row items-center justify-between gap-8 border-t border-white/10 pt-12">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-[#F0EAAF]/10 animate-pulse">
-                <ShieldCheck className="w-6 h-6 text-[#F0EAAF]" />
+            <div className="flex items-center gap-4 premium-footer-badge px-6 py-3 rounded-full">
+              <div className="p-2 rounded-full bg-[#F0EAAF]/20">
+                <ShieldCheck className="w-5 h-5 text-[#F0EAAF]" />
               </div>
-              <p className="text-sm text-[#F0EAAF]/70 font-medium italic">
+              <p className="text-sm text-[#F0EAAF]/80 font-medium">
                 {current.legalNote}
               </p>
             </div>
             
-            <div className="flex items-center gap-8 opacity-40">
-              <span className="text-[9px] md:text-[10px] uppercase tracking-widest font-bold hover:opacity-100 transition-opacity duration-300 cursor-default">
-                Saf Kabla Secured
-              </span>
-              <span className="text-[9px] md:text-[10px] uppercase tracking-widest font-bold hover:opacity-100 transition-opacity duration-300 cursor-default">
-                Equity Funded
-              </span>
-              <span className="text-[9px] md:text-[10px] uppercase tracking-widest font-bold hover:opacity-100 transition-opacity duration-300 cursor-default">
-                Agro-tourism Ready
-              </span>
+            <div className="flex items-center gap-8">
+              {[
+                { icon: <Gem className="w-3 h-3" />, text: 'Saf Kabla Secured' },
+                { icon: <Crown className="w-3 h-3" />, text: 'Equity Funded' },
+                { icon: <Award className="w-3 h-3" />, text: 'Agro-tourism Ready' }
+              ].map((item, idx) => (
+                <div 
+                  key={idx} 
+                  className="flex items-center gap-2 text-[9px] md:text-[10px] uppercase tracking-widest font-bold text-white/30 hover:text-[#F0EAAF]/70 transition-all duration-300 cursor-default group"
+                >
+                  <span className="group-hover:scale-110 transition-transform">{item.icon}</span>
+                  <span>{item.text}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
