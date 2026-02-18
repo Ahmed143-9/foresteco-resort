@@ -2,9 +2,9 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import InvestmentDashboard from './investment-dashboard';
 import AssetSection from './AssetSection';
 import InvestmentPortfolio from './InvestmentPortfolio';
-import { 
-  Leaf, Shield, TrendingUp, Users, ArrowRight, 
-  Menu, X, Check, Calculator, Lock, Phone, 
+import {
+  Leaf, Shield, TrendingUp, Users, ArrowRight,
+  Menu, X, Check, Calculator, Lock, Phone,
   Mail, MapPin, Globe, Download, ChevronRight,
   Star, Award, Home, Clock, Calendar, Building,
   FileText, Share2, Target, PieChart, Plus,
@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import heroImage from '../images/hero.jpg';
-import navLogo from '../images/Forest Eco Resort_Reverse Color Logo.png';
+import navLogo from '../images/1.svg';
 import reverseLogo from '../images/Forest Eco Resort_Reverse Color Logo.png';
 import aboutBanner from '../images/aboutUSResort.png';
 import aboutImage from '../images/aboutusFinal.jpg';
@@ -23,6 +23,8 @@ import website4 from '../images/Website 3.jpg';
 import website5 from '../images/Website .jpg';
 import website6 from '../images/Website.JPG';
 import website7 from '../images/Website.jpeg';
+import nexcentLogo from '../images/NEXCENT TRANSPARENT JPG.jpg.png';
+import yessLogo from '../images/yes group logo.jpeg';
 
 // API Configuration
 const API_BASE_URL = 'https://backend.foresteco-resort.com/api';
@@ -43,18 +45,18 @@ const COLORS = {
 // --- Enhanced TRANSLATIONS DATABASE ---
 const TRANSLATIONS = {
   en: {
-    nav: { 
-      vision: "Vision", 
+    nav: {
+      vision: "Vision",
       asset: "Investment Portfolio",
-      membership: "Membership", 
-      yield: "Yield", 
+      membership: "Membership",
+      yield: "Yield",
       join: "Apply for membership"
     },
-    hero: { 
-      subtitle: "Eco-Luxury for the Modern Elite", 
-      title: "Relax, recharge, and reconnect with nature.", 
-      desc: "A fractional ownership model secured by land, engineered for yield, and designed for legacy.", 
-      cta1: "View The Tiers", 
+    hero: {
+      subtitle: "Eco-Luxury for the Modern Elite",
+      title: "Relax, recharge, and reconnect with nature.",
+      desc: "A fractional ownership model secured by land, engineered for yield, and designed for legacy.",
+      cta1: "View The Tiers",
       cta2: "How It Works",
       stats: {
         investors: "Investors",
@@ -64,11 +66,11 @@ const TRANSLATIONS = {
       }
     },
     value: {
-      hardAsset: "Hard Asset", 
+      hardAsset: "Hard Asset",
       hardAssetDesc: "Not just paper equity. You receive a registered Saf Kabla Deed for 1 Decimal of land per share in Gazipur. Permanent, heritable, and secure.",
-      yield: "Operational Yield", 
+      yield: "Operational Yield",
       yieldDesc: "Earn 50% of Net Profits from the Agro-Farm, Resort, and Adventure Zone. An asset that pays for its own maintenance.",
-      access: "Elite Access", 
+      access: "Elite Access",
       accessDesc: "Join the 600 Club. Unlock lifetime vacation benefits, voting rights, and a private sanctuary for your family just an hour from Dhaka."
     },
     portfolio: {
@@ -140,10 +142,10 @@ const TRANSLATIONS = {
       legal: "Legal",
       address: "Bhabanipur, Gazipur.\nAn Agro-Tourism Project established under the joint management of YESS Cooperative Society and NEXCENT.",
       rights: "© 2026 Forest Eco Resort Ltd. All rights reserved.",
-      links: { 
-        privacy: "Privacy Policy", 
-        terms: "Terms of Use", 
-        deed: "Saf Kabla Explained", 
+      links: {
+        privacy: "Privacy Policy",
+        terms: "Terms of Use",
+        deed: "Saf Kabla Explained",
         brochure: "Download Brochure",
         faq: "FAQ",
         blog: "Blog"
@@ -164,18 +166,18 @@ const TRANSLATIONS = {
     }
   },
   bn: {
-    nav: { 
-      vision: "রূপকল্প", 
-      asset: "বিনিয়োগ ড্যাশবোর্ড", 
-      membership: "সদস্যপদ", 
-      yield: "বিনিয়োগ ও মুনাফা", 
+    nav: {
+      vision: "রূপকল্প",
+      asset: "বিনিয়োগ ড্যাশবোর্ড",
+      membership: "সদস্যপদ",
+      yield: "বিনিয়োগ ও মুনাফা",
       join: "সদস্য হন"
     },
-    hero: { 
-      subtitle: "অরণ্যের স্নিগ্ধ স্পন্দন", 
-      title: "গড়ে তুলুন নিজের এক টুকরো পৃথিবী", 
-      desc: "সাফ কবলা দলিলে জমির মালিকানা ও নিশ্চিত আয়ের এক যুগান্তকারী মডেল, যা আপনার এবং আপনার পরবর্তী প্রজন্মের জন্য এক গর্বিত উত্তরাধিকার।", 
-      cta1: "মালিকানা ধরণ দেখুন", 
+    hero: {
+      subtitle: "অরণ্যের স্নিগ্ধ স্পন্দন",
+      title: "গড়ে তুলুন নিজের এক টুকরো পৃথিবী",
+      desc: "সাফ কবলা দলিলে জমির মালিকানা ও নিশ্চিত আয়ের এক যুগান্তকারী মডেল, যা আপনার এবং আপনার পরবর্তী প্রজন্মের জন্য এক গর্বিত উত্তরাধিকার।",
+      cta1: "মালিকানা ধরণ দেখুন",
       cta2: "কার্যপদ্ধতি জানুন",
       stats: {
         investors: "বিনিয়োগকারী",
@@ -185,11 +187,11 @@ const TRANSLATIONS = {
       }
     },
     value: {
-      hardAsset: "নিষ্কণ্টক মালিকানা", 
+      hardAsset: "নিষ্কণ্টক মালিকানা",
       hardAssetDesc: "কেবলমাত্র কাগুজে শেয়ার নয়। গাজীপুরের ভবানিপুরে প্রতি শেয়ারের বিপরীতে পাচ্ছেন ১ শতাংশ জমির রেজিস্টার্ড সাফ কবলা দলিল। যা সম্পূর্ণ স্থায়ী, হস্তান্তরযোগ্য ও নিরাপদ।",
-      yield: "পরিচালন লভ্যাংশ", 
+      yield: "পরিচালন লভ্যাংশ",
       yieldDesc: "এগ্রো-ফার্ম, রিসোর্ট এবং অ্যাডভেঞ্চার পার্ক থেকে অর্জিত নিট মুনাফার ৫০% লভ্যাংশ উপভোগ করুন। এমন একটি সম্পদ যা নিজের রক্ষণাবেক্ষণ ব্যয় নিজেই বহন করে।",
-      access: "এক্সক্লুসিভ লাইফস্টাইল", 
+      access: "এক্সক্লুসিভ লাইফস্টাইল",
       accessDesc: "৬০০ ক্লাবের অভিজাত সদস্য হন। আজীবন অবকাশ যাপন, ভোটিং অধিকার এবং ঢাকা থেকে মাত্র এক ঘণ্টা দূরত্বে আপনার পরিবারের জন্য নিশ্চিত করুন এক নিভৃত আপনালয়।"
     },
     portfolio: {
@@ -261,10 +263,10 @@ const TRANSLATIONS = {
       legal: "আইনি তথ্য",
       address: "ভবানীপুর, গাজীপুর।\nYESS কো-অপারেটিভ সোসাইটি এবং নেক্সেন্ট (NEXCENT)-এর যৌথ ব্যবস্থাপনায় পরিচালিত একটি এগ্রো-ট্যুরিজম প্রকল্প।",
       rights: "© ২০২৬ ফরেস্ট ইকো রিসোর্ট লিমিটেড। সর্বস্বত্ব সংরক্ষিত।",
-      links: { 
-        privacy: "গোপনীয়তা নীতি", 
-        terms: "শর্তাবলী", 
-        deed: "সাফ কবলা বিস্তারিত", 
+      links: {
+        privacy: "গোপনীয়তা নীতি",
+        terms: "শর্তাবলী",
+        deed: "সাফ কবলা বিস্তারিত",
         brochure: "ব্রোশিওর সংগ্রহ করুন",
         faq: "প্রশ্নোত্তর",
         blog: "ব্লগ"
@@ -293,60 +295,60 @@ const getTiersData = (lang) => {
       offerPrice: 750000,
       mrpPrice: 750000,
       land: lang === 'en' ? '1 Decimal' : '১ শতাংশ',
-    benefits: lang === 'en'
-      ? ['One-time Domestic Tour', 'Lifetime 20% Resort Discount', 'Voting Weight: 1', 'Annual Dividend']
-      : ['এককালীন ডোমেস্টিক ট্যুর', 'আজীবন ২০% রিসোর্ট ডিসকাউন্ট', 'ভোটিং ওয়েট: ১', 'বাৎসরিক লভ্যাংশ'],
-    color: 'bg-white',
-    text: 'text-gray-900',
-    border: 'border-gray-200',
-    tag: null
-  },
-  {
-    id: 'silver',
-    name: lang === 'en' ? 'Silver' : 'সিলভার',
-    shares: 5,
-    offerPrice: 3550000,
-    mrpPrice: 3750000,
-    land: lang === 'en' ? '5 Decimals' : '৫ শতাংশ',
-    benefits: lang === 'en'
-      ? ['One-time International Tour', 'Extended Resort Access', 'Voting Weight: 5', 'Higher Dividend Share', 'Priority Booking']
-      : ['এককালীন ইন্টারন্যাশনাল ট্যুর', 'বর্ধিত রিসোর্ট অ্যাক্সেস', 'ভোটিং ওয়েট: ৫', 'উচ্চতর লভ্যাংশ', 'অগ্রাধিকার বুকিং'],
-    color: 'bg-gray-50',
-    text: 'text-gray-900',
-    border: 'border-gray-300',
-    tag: 'mostPopular'
-  },
-  {
-    id: 'golden',
-    name: lang === 'en' ? 'Golden' : 'গোল্ডেন',
-    shares: 10,
-    offerPrice: 6750000,
-    mrpPrice: 7500000,
-    land: lang === 'en' ? '10 Decimals' : '১০ শতাংশ',
-    benefits: lang === 'en'
-      ? ['Founder Privilege', 'Premium Villa Access', 'Name on Founder Wall', 'Voting Weight: 10', 'VIP Events']
-      : ['ফাউন্ডার প্রিভিলেজ', 'প্রিমিয়াম ভিলা অ্যাক্সেস', 'ফাউন্ডার ওয়ালে নাম', 'ভোটিং ওয়েট: ১০', 'ভিআইপি ইভেন্ট'],
-    color: 'bg-[#F0EAAF]',
-    text: 'text-[#193C26]',
-    border: 'border-[#F0EAAF]',
-    tag: 'bestValue'
-  },
-  {
-    id: 'platinum',
-    name: lang === 'en' ? 'Platinum' : 'প্লাটিনাম',
-    shares: 50,
-    offerPrice: 32000000,
-    mrpPrice: 37500000,
-    land: lang === 'en' ? '50 Decimals' : '৫০ শতাংশ',
-    benefits: lang === 'en'
-      ? ['Director Eligibility', 'Board Advisory Seat', 'Veto Rights', 'Voting Weight: 50', 'Revenue Sharing+']
-      : ['পরিচালক হওয়ার যোগ্যতা', 'বোর্ড অ্যাডভাইজরি সিট', 'ভেটো অধিকার', 'ভোটিং ওয়েট: ৫০', 'রাজস্ব শেয়ারিং+'],
-    color: 'bg-[#193C26]',
-    text: 'text-[#F0EAAF]',
-    border: 'border-[#193C26]',
-    tag: null
-  }
-];
+      benefits: lang === 'en'
+        ? ['One-time Domestic Tour', 'Lifetime 20% Resort Discount', 'Voting Weight: 1', 'Annual Dividend']
+        : ['এককালীন ডোমেস্টিক ট্যুর', 'আজীবন ২০% রিসোর্ট ডিসকাউন্ট', 'ভোটিং ওয়েট: ১', 'বাৎসরিক লভ্যাংশ'],
+      color: 'bg-white',
+      text: 'text-gray-900',
+      border: 'border-gray-200',
+      tag: null
+    },
+    {
+      id: 'silver',
+      name: lang === 'en' ? 'Silver' : 'সিলভার',
+      shares: 5,
+      offerPrice: 3550000,
+      mrpPrice: 3750000,
+      land: lang === 'en' ? '5 Decimals' : '৫ শতাংশ',
+      benefits: lang === 'en'
+        ? ['One-time International Tour', 'Extended Resort Access', 'Voting Weight: 5', 'Higher Dividend Share', 'Priority Booking']
+        : ['এককালীন ইন্টারন্যাশনাল ট্যুর', 'বর্ধিত রিসোর্ট অ্যাক্সেস', 'ভোটিং ওয়েট: ৫', 'উচ্চতর লভ্যাংশ', 'অগ্রাধিকার বুকিং'],
+      color: 'bg-gray-50',
+      text: 'text-gray-900',
+      border: 'border-gray-300',
+      tag: 'mostPopular'
+    },
+    {
+      id: 'golden',
+      name: lang === 'en' ? 'Golden' : 'গোল্ডেন',
+      shares: 10,
+      offerPrice: 6750000,
+      mrpPrice: 7500000,
+      land: lang === 'en' ? '10 Decimals' : '১০ শতাংশ',
+      benefits: lang === 'en'
+        ? ['Founder Privilege', 'Premium Villa Access', 'Name on Founder Wall', 'Voting Weight: 10', 'VIP Events']
+        : ['ফাউন্ডার প্রিভিলেজ', 'প্রিমিয়াম ভিলা অ্যাক্সেস', 'ফাউন্ডার ওয়ালে নাম', 'ভোটিং ওয়েট: ১০', 'ভিআইপি ইভেন্ট'],
+      color: 'bg-[#F0EAAF]',
+      text: 'text-[#193C26]',
+      border: 'border-[#F0EAAF]',
+      tag: 'bestValue'
+    },
+    {
+      id: 'platinum',
+      name: lang === 'en' ? 'Platinum' : 'প্লাটিনাম',
+      shares: 50,
+      offerPrice: 32000000,
+      mrpPrice: 37500000,
+      land: lang === 'en' ? '50 Decimals' : '৫০ শতাংশ',
+      benefits: lang === 'en'
+        ? ['Director Eligibility', 'Board Advisory Seat', 'Veto Rights', 'Voting Weight: 50', 'Revenue Sharing+']
+        : ['পরিচালক হওয়ার যোগ্যতা', 'বোর্ড অ্যাডভাইজরি সিট', 'ভেটো অধিকার', 'ভোটিং ওয়েট: ৫০', 'রাজস্ব শেয়ারিং+'],
+      color: 'bg-[#193C26]',
+      text: 'text-[#F0EAAF]',
+      border: 'border-[#193C26]',
+      tag: null
+    }
+  ];
 
   // Add discount information to each tier
   return tiers.map(tier => {
@@ -363,14 +365,14 @@ const getTiersData = (lang) => {
 const formatCurrency = (amount, language = 'en') => {
   const lakh = amount / 100000;
   const crore = amount / 10000000;
-  
+
   if (language === 'bn') {
     if (amount >= 10000000) {
       return `৳ ${crore.toFixed(2)} কোটি`;
     }
     return `৳ ${lakh.toFixed(2)} লাখ`;
   }
-  
+
   if (amount >= 10000000) {
     return `BDT ${crore.toFixed(2)} Crore`;
   }
@@ -402,21 +404,21 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
   const [submitted, setSubmitted] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [submissionMessage, setSubmissionMessage] = useState({ type: '', text: '' });
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const response = await axios.post(`${API_BASE_URL}/join-pilot`, {
         name: formData.name,
         mobile: formData.mobile,
         email: formData.email
       });
-      
+
       if (response.data.success) {
-        setSubmissionMessage({ 
-          type: 'success', 
-          text: language === 'en' ? 'Application submitted successfully!' : 'আবেদন সফলভাবে জমা দেওয়া হয়েছে!' 
+        setSubmissionMessage({
+          type: 'success',
+          text: language === 'en' ? 'Application submitted successfully!' : 'আবেদন সফলভাবে জমা দেওয়া হয়েছে!'
         });
         setSubmitted(true);
       }
@@ -424,7 +426,7 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
       console.error('Error submitting form:', error.response || error.message || error);
       let errorMessage = '';
       if (error.response) {
-        errorMessage = language === 'en' ? 
+        errorMessage = language === 'en' ?
           `Error: ${error.response.status} - ${error.response.statusText || 'Server Error'}` :
           `ত্রুটি: ${error.response.status} - ${error.response.statusText || 'সার্ভার ত্রুটি'}`;
       } else if (error.request) {
@@ -436,14 +438,14 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
           `Error: ${error.message || 'Unknown error'}` :
           `ত্রুটি: ${error.message || 'অজানা ত্রুটি'}`;
       }
-      setSubmissionMessage({ 
-        type: 'error', 
-        text: errorMessage 
+      setSubmissionMessage({
+        type: 'error',
+        text: errorMessage
       });
       setSubmitted(true);
     }
   };
-  
+
   const closeSubmissionMessage = () => {
     setSubmitted(false);
     setSubmissionMessage({ type: '', text: '' });
@@ -461,8 +463,8 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
+    <div
+      className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
       style={{
         zIndex: 9999,
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
@@ -471,7 +473,7 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
       }}
       onClick={onClose}
     >
-      <div 
+      <div
         className="position-relative rounded-4 overflow-hidden shadow-lg"
         style={{
           width: '90%',
@@ -482,7 +484,7 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Background Image */}
-        <div 
+        <div
           className="position-absolute top-0 start-0 w-100 h-100"
           style={{
             backgroundImage: !imageError ? 'url(/form.jpg)' : 'linear-gradient(135deg, #193C26, #2a5238)',
@@ -491,9 +493,9 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
             filter: 'brightness(0.4)'
           }}
         >
-          <img 
-            src="/form.jpg" 
-            alt="" 
+          <img
+            src="/form.jpg"
+            alt=""
             style={{ display: 'none' }}
             onError={() => setImageError(true)}
           />
@@ -522,8 +524,8 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
                 {language === 'en' ? 'FOREST ECO RESORT' : 'FOREST ECO RESORT'}
               </h2>
               <p className="text-center mb-4 mb-md-5" style={{ color: '#F0EAAF', opacity: 0.9 }}>
-                {language === 'en' 
-                  ? 'Secure your exclusive membership today' 
+                {language === 'en'
+                  ? 'Secure your exclusive membership today'
                   : 'আজই আপনার এক্সক্লুসিভ সদস্যপদ নিশ্চিত করুন'}
               </p>
 
@@ -615,8 +617,8 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
               </form>
 
               <p className="text-center mt-4 small" style={{ color: '#F0EAAF', opacity: 0.8 }}>
-                {language === 'en' 
-                  ? 'Our team will contact you within 24 hours' 
+                {language === 'en'
+                  ? 'Our team will contact you within 24 hours'
                   : 'আমাদের টিম ২৪ ঘন্টার মধ্যে আপনার সাথে যোগাযোগ করবে'}
               </p>
             </>
@@ -651,9 +653,9 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
               >
                 <X style={{ width: '16px', height: '16px', strokeWidth: '3' }} />
               </button>
-              
+
               <div className="text-center py-5">
-                <div 
+                <div
                   className="rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
                   style={{
                     width: '80px',
@@ -668,8 +670,8 @@ const JoinPilotModal = ({ isOpen, onClose, language }) => {
                   )}
                 </div>
                 <h3 className="h3 fw-bold mb-3" style={{ color: '#F0EAAF' }}>
-                  {submissionMessage.type === 'success' ? 
-                    (language === 'en' ? 'Application Submitted!' : 'আবেদন সফল হয়েছে!') : 
+                  {submissionMessage.type === 'success' ?
+                    (language === 'en' ? 'Application Submitted!' : 'আবেদন সফল হয়েছে!') :
                     (language === 'en' ? 'Submission Failed' : 'জমা দেওয়া ব্যর্থ হয়েছে')}
                 </h3>
                 <p style={{ color: '#F0EAAF', opacity: 0.9 }}>
@@ -729,7 +731,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
   }, []);
 
   const navTextColor = '#F0EAAF';
-  const navBgColor = isHeroVisible 
+  const navBgColor = isHeroVisible
     ? 'transparent'
     : 'rgba(25, 60, 38, 0.95)';
 
@@ -749,15 +751,15 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
               src={navLogo}
               alt="Forest Eco Resort"
               className="img-fluid"
-              style={{ 
-                height: '40px', 
+              style={{
+                height: '40px',
                 transition: 'transform 0.2s',
                 marginRight: '10px'
               }}
               onError={() => setLogoError(true)}
             />
           ) : (
-            <Leaf className="me-3" style={{ 
+            <Leaf className="me-3" style={{
               color: navTextColor,
               filter: 'drop-shadow(0 0 2px rgba(240, 234, 175, 0.5))'
             }} />
@@ -766,16 +768,18 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
             color: navTextColor,
             fontWeight: 'bold',
             fontSize: '1.5rem',
-            textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+            textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+            fontFamily: "'Prettywise', serif",
+            letterSpacing: '0.05em'
           }}>
-          FOREST ECO RESORT
+            FOREST ECO RESORT
           </span>
         </a>
 
         {/* Toggle Button */}
-        <button 
+        <button
           className="navbar-toggler border-0"
-          type="button" 
+          type="button"
           onClick={toggleMenu}
           style={{
             padding: '0.25rem 0.5rem',
@@ -822,7 +826,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
         </button>
 
         {/* Navbar Menu */}
-        <div 
+        <div
           className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}
           style={{
             transition: 'all 0.3s ease-in-out'
@@ -842,10 +846,10 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
               }
             `}</style>
             <li className="nav-item mx-2 mx-lg-1">
-              <a 
-                href="#the-asset" 
-                className="nav-link" 
-                style={{ 
+              <a
+                href="#the-asset"
+                className="nav-link"
+                style={{
                   color: navTextColor,
                   fontWeight: '500',
                   padding: '12px 20px',
@@ -876,10 +880,10 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
               </a>
             </li>
             <li className="nav-item mx-2 mx-lg-1">
-              <a 
-                href="#investment-portfolio" 
-                className="nav-link" 
-                style={{ 
+              <a
+                href="#investment-portfolio"
+                className="nav-link"
+                style={{
                   color: navTextColor,
                   fontWeight: '500',
                   padding: '12px 20px',
@@ -911,10 +915,10 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
               </a>
             </li>
             <li className="nav-item mx-2 mx-lg-1">
-              <a 
-                href="#tiers" 
-                className="nav-link" 
-                style={{ 
+              <a
+                href="#tiers"
+                className="nav-link"
+                style={{
                   color: navTextColor,
                   fontWeight: '500',
                   padding: '12px 20px',
@@ -940,10 +944,10 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
               </a>
             </li>
             <li className="nav-item mx-2 mx-lg-1">
-              <a 
-                href="#calculator" 
-                className="nav-link" 
-                style={{ 
+              <a
+                href="#calculator"
+                className="nav-link"
+                style={{
                   color: navTextColor,
                   fontWeight: '500',
                   padding: '12px 20px',
@@ -1000,7 +1004,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
 
             {/* Join Button */}
             <li className="nav-item ms-2 mt-2 mt-lg-0">
-              <button 
+              <button
                 className="btn rounded-pill"
                 style={{
                   background: 'linear-gradient(135deg, #F0EAAF, #e6de9a)',
@@ -1038,15 +1042,15 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
 const Hero = ({ t, language }) => {
   const [heroData, setHeroData] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // Only for API fetch, not initial render
-  
+
   useEffect(() => {
     // Create AbortController for timeout management
     const abortController = new AbortController();
-    
+
     const fetchHeroData = async () => {
       // Don't show loading for initial render
       setIsLoading(true);
-      
+
       try {
         const normalizeLanguage = (lang) => {
           if (!lang) return 'en'; // Default to 'en' if language is undefined/null
@@ -1055,10 +1059,10 @@ const Hero = ({ t, language }) => {
           if (lang.startsWith('bn')) return 'bn';
           return lang;
         };
-        
+
         const apiLang = normalizeLanguage(language);
         console.log("Normalized language:", apiLang);
-        
+
         // Fast-fail API call with timeout
         const response = await axios.get(`${API_BASE_URL}/hero?lang=${apiLang}`, {
           signal: abortController.signal,
@@ -1068,9 +1072,9 @@ const Hero = ({ t, language }) => {
             'Pragma': 'no-cache',
           }
         });
-        
+
         console.log("Hero API response:", response.data);
-        
+
         if (response.data.success) {
           setHeroData(response.data.data);
         }
@@ -1083,32 +1087,32 @@ const Hero = ({ t, language }) => {
         setIsLoading(false);
       }
     };
-    
+
     // Debounce API calls to prevent rapid requests
     const timer = setTimeout(() => {
       if (!abortController.signal.aborted) {
         fetchHeroData();
       }
     }, 100); // Small delay to ensure component is mounted
-    
+
     // Cleanup
     return () => {
       clearTimeout(timer);
       abortController.abort();
     };
   }, [language]);
-  
+
   // Optimistic UI: Always render with fallback first, then update if API succeeds
   const subtitle = heroData?.subtitle ?? t.hero.subtitle;
   const title = heroData?.title ?? t.hero.title;
   const description = heroData?.description ?? t.hero.desc;
   const backgroundImage = heroData?.background_image;
-  console.log("Background cudir vai",backgroundImage);
-  
+  console.log("Background cudir vai", backgroundImage);
+
   // Log the values being used for debugging
   console.log('Current values being used:', { subtitle, title, description, backgroundImage, heroData, t });
   console.log('Has API data?', !!heroData, 'Language:', language);
-  
+
   // Render immediately with fallback content - no loading state blocking
   return (
     <section id="home" className="position-relative min-vh-100 w-100 overflow-hidden d-flex align-items-center justify-content-center" style={{
@@ -1116,31 +1120,31 @@ const Hero = ({ t, language }) => {
     }}>
       {/* Background Image */}
       <div className="position-absolute top-0 start-0 w-100 h-100 z-0">
-     {backgroundImage ? (
-  <img
-    src={`${IMAGE_BASE_URL}${backgroundImage}`}
-    alt="Hero Background"
-    className="w-100 h-100 object-fit-cover opacity-10"
-    onError={(e) => {
-      e.currentTarget.style.display = 'none';
-    }}
-  />
-) : (
-  <img
-    src={heroImage}
-    alt="Forest Background"
-    className="w-100 h-100 object-fit-cover opacity-10"
-    onError={(e) => {
-      e.currentTarget.style.display = 'none';
-    }}
-  />
-)}
+        {backgroundImage ? (
+          <img
+            src={`${IMAGE_BASE_URL}${backgroundImage}`}
+            alt="Hero Background"
+            className="w-100 h-100 object-fit-cover opacity-10"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        ) : (
+          <img
+            src={heroImage}
+            alt="Forest Background"
+            className="w-100 h-100 object-fit-cover opacity-10"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        )}
       </div>
 
       {/* Animated background elements */}
       <div className="position-absolute top-0 start-0 w-100 h-100 z-0">
-        <div className="position-absolute top-25 start-25 w-25 h-25 rounded-circle bg-warning" style={{opacity: 0.1, filter: 'blur(60px)'}}></div>
-        <div className="position-absolute bottom-25 end-25 w-37 h-37 rounded-circle bg-success" style={{opacity: 0.05, filter: 'blur(60px)'}}></div>
+        <div className="position-absolute top-25 start-25 w-25 h-25 rounded-circle bg-warning" style={{ opacity: 0.1, filter: 'blur(60px)' }}></div>
+        <div className="position-absolute bottom-25 end-25 w-37 h-37 rounded-circle bg-success" style={{ opacity: 0.05, filter: 'blur(60px)' }}></div>
       </div>
 
       <div className="position-relative z-10 text-center container px-4">
@@ -1151,14 +1155,14 @@ const Hero = ({ t, language }) => {
         }}>
           {subtitle}
         </p>
-        
+
         <h1 className="display-1 display-md-2 display-lg-1 fw-bold text-success mb-4 mb-md-6" style={{
           lineHeight: 1,
           whiteSpace: 'pre-line'
         }}>
           {title}
         </h1>
-        
+
         <p className="text-white text-xl mb-6 mb-md-8" style={{
           maxWidth: '75rem',
           margin: '0 auto',
@@ -1167,7 +1171,7 @@ const Hero = ({ t, language }) => {
         }}>
           {description}
         </p>
-        
+
         {/* Loading indicator for background API fetch only */}
         {isLoading && (
           <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-black bg-opacity-50" style={{ borderRadius: '0.5rem' }}>
@@ -1176,7 +1180,7 @@ const Hero = ({ t, language }) => {
             </div>
           </div>
         )}
-        
+
         {/* REMOVED Scroll Indicator */}
         {/* <div className="position-absolute bottom-0 start-50 translate-middle-x animate-bounce mb-4">
           <ChevronRight className="text-success" style={{width: '1.5rem', height: '1.5rem', transform: 'rotate(90deg)'}} />
@@ -1189,20 +1193,20 @@ const Hero = ({ t, language }) => {
 const AboutUs = ({ t, language }) => {
   const [aboutData, setAboutData] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // Only for API fetch, not initial render
-  
+
   useEffect(() => {
     // Create AbortController for timeout management
     const abortController = new AbortController();
-    
+
     const fetchAboutData = async () => {
       // Don't show loading for initial render
       setIsLoading(true);
-      
+
       try {
         const normalizedLang = language?.startsWith('bn') ? 'bn' : 'en';
         console.log("Language:", language);
         console.log("Normalized:", normalizedLang);
-        
+
         // Fast-fail API call with timeout
         const response = await axios.get(`${API_BASE_URL}/about-us?lang=${normalizedLang}`, {
           signal: abortController.signal,
@@ -1212,9 +1216,9 @@ const AboutUs = ({ t, language }) => {
             'Pragma': 'no-cache',
           }
         });
-        
+
         console.log("About API data:", response.data);
-        
+
         if (response.data.success) {
           setAboutData(response.data.data);
         }
@@ -1227,25 +1231,25 @@ const AboutUs = ({ t, language }) => {
         setIsLoading(false);
       }
     };
-    
+
     // Debounce API calls to prevent rapid requests
     const timer = setTimeout(() => {
       if (!abortController.signal.aborted) {
         fetchAboutData();
       }
     }, 100); // Small delay to ensure component is mounted
-    
+
     // Cleanup
     return () => {
       clearTimeout(timer);
       abortController.abort();
     };
   }, [language]);
-  
+
   const normalizedLang = language?.startsWith('bn') ? 'bn' : 'en';
   // Optimistic UI: Always render with fallback first, then update if API succeeds
   const aboutContent = aboutData?.content ?? (t && t.about && t.about.desc ? t.about.desc : 'Forest Eco Resort is an agro-tourism destination in Bhabanipur, Gazipur, Bangladesh, jointly managed by YESS Cooperative Society and NEXCENT. The resort blends eco-luxury with sustainable living, offering a peaceful retreat for nature lovers. With organic farming, adventure activities, and comfortable accommodations, we promote environmental conservation and community development while redefining eco-friendly tourism. Experience forest tranquility, farm-to-table dining, and outdoor activities that reconnect you with nature.');
-  
+
   // Render immediately with fallback content - no loading state blocking
   return (
     <section id="about" className={`position-relative w-100 overflow-hidden ${normalizedLang === 'bn' ? 'font-bn' : ''}`} style={{
@@ -1276,7 +1280,7 @@ const AboutUs = ({ t, language }) => {
             </div>
           </div>
         </div>
-          
+
         {/* Professional Content Section */}
         <div className="row justify-content-center">
           <div className="col-12 col-lg-10 col-xl-8">
@@ -1301,11 +1305,11 @@ const AboutUs = ({ t, language }) => {
                   Our Story, Our Commitment
                 </p>
               </div>
-                            
+
               {/* Main Content - Always renders immediately with fallback */}
               <div className="position-relative">
                 {aboutContent && (
-                  <div 
+                  <div
                     className="fs-5 lh-base"
                     style={{
                       color: '#2d3748',
@@ -1319,7 +1323,7 @@ const AboutUs = ({ t, language }) => {
                     {aboutContent}
                   </div>
                 )}
-                
+
                 {/* Loading indicator for background API fetch only */}
                 {isLoading && (
                   <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75" style={{ borderRadius: '0.5rem' }}>
@@ -1328,10 +1332,10 @@ const AboutUs = ({ t, language }) => {
                     </div>
                   </div>
                 )}
-                  
+
 
               </div>
-                            
+
               {/* Professional Footer */}
               <div className="mt-6 pt-4 border-top" style={{ borderColor: 'rgba(25, 60, 38, 0.1)' }}>
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
@@ -1391,7 +1395,7 @@ const VisionSection = ({ t }) => (
         <div className="col-12 col-lg-10">
           <div className="row g-4 g-md-5">
             <div className="col-12 col-md-6">
-              <div className="card h-100 border-0 shadow-sm p-4 rounded-3" 
+              <div className="card h-100 border-0 shadow-sm p-4 rounded-3"
                 style={{
                   backgroundColor: '#FFFFFF',
                   transition: 'all 0.3s ease',
@@ -1406,7 +1410,7 @@ const VisionSection = ({ t }) => (
                     color: 'white'
                   }}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
                     </svg>
                   </div>
                   <h3 className="h5 fw-bold text-success mb-0">Sustainability</h3>
@@ -1416,9 +1420,9 @@ const VisionSection = ({ t }) => (
                 </p>
               </div>
             </div>
-            
+
             <div className="col-12 col-md-6">
-              <div className="card h-100 border-0 shadow-sm p-4 rounded-3" 
+              <div className="card h-100 border-0 shadow-sm p-4 rounded-3"
                 style={{
                   backgroundColor: '#FFFFFF',
                   transition: 'all 0.3s ease',
@@ -1433,7 +1437,7 @@ const VisionSection = ({ t }) => (
                     color: '#193C26'
                   }}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
                     </svg>
                   </div>
                   <h3 className="h5 fw-bold text-success mb-0">Legacy</h3>
@@ -1467,7 +1471,7 @@ const ValueProp = ({ t }) => (
 
       <div className="row g-4 g-md-5">
         <div className="col-12 col-md-4">
-          <div className="card h-100 border-0 shadow p-4 p-md-5 rounded-3" 
+          <div className="card h-100 border-0 shadow p-4 p-md-5 rounded-3"
             style={{
               backgroundColor: '#FFFFFF',
               transition: 'all 0.3s ease',
@@ -1493,21 +1497,21 @@ const ValueProp = ({ t }) => (
               color: 'white',
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
             }}>
-              <Shield className="" style={{width: '32px', height: '32px'}} />
+              <Shield className="" style={{ width: '32px', height: '32px' }} />
             </div>
             <h3 className="h3 fw-bold text-success mb-3 mb-md-4">{t.value.hardAsset}</h3>
-            <p className="text-muted mb-3 mb-md-4" style={{lineHeight: '1.7'}}>{t.value.hardAssetDesc}</p>
+            <p className="text-muted mb-3 mb-md-4" style={{ lineHeight: '1.7' }}>{t.value.hardAssetDesc}</p>
             <div className="d-flex align-items-center fw-medium text-success" style={{
               transition: 'transform 0.2s ease'
             }} onMouseEnter={(e) => e.target.style.transform = 'translateX(8px)'}
-            onMouseLeave={(e) => e.target.style.transform = 'translateX(0)'}>
-              Learn more <ArrowRight className="ms-2" style={{width: '16px', height: '16px'}} />
+              onMouseLeave={(e) => e.target.style.transform = 'translateX(0)'}>
+              Learn more <ArrowRight className="ms-2" style={{ width: '16px', height: '16px' }} />
             </div>
           </div>
         </div>
 
         <div className="col-12 col-md-4">
-          <div id="yield" className="card h-100 border-0 shadow p-4 p-md-5 rounded-3" 
+          <div id="yield" className="card h-100 border-0 shadow p-4 p-md-5 rounded-3"
             style={{
               backgroundColor: '#FFFFFF',
               transition: 'all 0.3s ease',
@@ -1533,21 +1537,21 @@ const ValueProp = ({ t }) => (
               color: '#193C26',
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
             }}>
-              <TrendingUp className="" style={{width: '32px', height: '32px'}} />
+              <TrendingUp className="" style={{ width: '32px', height: '32px' }} />
             </div>
             <h3 className="h3 fw-bold text-success mb-3 mb-md-4">{t.value.yield}</h3>
-            <p className="text-muted mb-3 mb-md-4" style={{lineHeight: '1.7'}}>{t.value.yieldDesc}</p>
+            <p className="text-muted mb-3 mb-md-4" style={{ lineHeight: '1.7' }}>{t.value.yieldDesc}</p>
             <div className="d-flex align-items-center fw-medium text-success" style={{
               transition: 'transform 0.2s ease'
             }} onMouseEnter={(e) => e.target.style.transform = 'translateX(8px)'}
-            onMouseLeave={(e) => e.target.style.transform = 'translateX(0)'}>
-              View projections <ArrowRight className="ms-2" style={{width: '16px', height: '16px'}} />
+              onMouseLeave={(e) => e.target.style.transform = 'translateX(0)'}>
+              View projections <ArrowRight className="ms-2" style={{ width: '16px', height: '16px' }} />
             </div>
           </div>
         </div>
 
         <div className="col-12 col-md-4">
-          <div className="card h-100 border-0 shadow p-4 p-md-5 rounded-3" 
+          <div className="card h-100 border-0 shadow p-4 p-md-5 rounded-3"
             style={{
               backgroundColor: '#FFFFFF',
               transition: 'all 0.3s ease',
@@ -1573,15 +1577,15 @@ const ValueProp = ({ t }) => (
               color: 'white',
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
             }}>
-              <Users className="" style={{width: '32px', height: '32px'}} />
+              <Users className="" style={{ width: '32px', height: '32px' }} />
             </div>
             <h3 className="h3 fw-bold text-success mb-3 mb-md-4">{t.value.access}</h3>
-            <p className="text-muted mb-3 mb-md-4" style={{lineHeight: '1.7'}}>{t.value.accessDesc}</p>
+            <p className="text-muted mb-3 mb-md-4" style={{ lineHeight: '1.7' }}>{t.value.accessDesc}</p>
             <div className="d-flex align-items-center fw-medium text-success" style={{
               transition: 'transform 0.2s ease'
             }} onMouseEnter={(e) => e.target.style.transform = 'translateX(8px)'}
-            onMouseLeave={(e) => e.target.style.transform = 'translateX(0)'}>
-              Explore benefits <ArrowRight className="ms-2" style={{width: '16px', height: '16px'}} />
+              onMouseLeave={(e) => e.target.style.transform = 'translateX(0)'}>
+              Explore benefits <ArrowRight className="ms-2" style={{ width: '16px', height: '16px' }} />
             </div>
           </div>
         </div>
@@ -1593,10 +1597,10 @@ const ValueProp = ({ t }) => (
 const VideoSection = ({ t }) => {
   const [videoLink, setVideoLink] = useState('https://www.youtube.com/embed/cEHP_LeBeyQ?list=PLGoWuvyH709vpTCVrjaJtaaFfite9U6u8&autoplay=1&mute=1');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   useEffect(() => {
     const abortController = new AbortController();
-    
+
     const fetchVideoLink = async () => {
       setIsLoading(true);
       try {
@@ -1608,7 +1612,7 @@ const VideoSection = ({ t }) => {
             'Pragma': 'no-cache',
           }
         });
-        
+
         if (response.data.success && response.data.data?.video_link) {
           setVideoLink(response.data.data.video_link);
         }
@@ -1620,19 +1624,19 @@ const VideoSection = ({ t }) => {
         setIsLoading(false);
       }
     };
-    
+
     const timer = setTimeout(() => {
       if (!abortController.signal.aborted) {
         fetchVideoLink();
       }
     }, 100);
-    
+
     return () => {
       clearTimeout(timer);
       abortController.abort();
     };
   }, []);
-  
+
   return (
     <div className="mb-4 mb-md-5">
       <div className="position-relative rounded-4 overflow-hidden shadow-lg" style={{
@@ -1702,11 +1706,11 @@ const PortfolioGallery = ({ t }) => {
             maxWidth: '600px',
             margin: '0 auto'
           }}>{t.portfolio.desc}</p>
-          
+
           <div className="d-flex justify-content-center gap-3 gap-md-4">
             <button className="btn btn-success d-flex align-items-center gap-2 px-4 px-md-5 py-2 py-md-3 fw-bold">
               {t.portfolio.viewGallery}
-              <ArrowRight className="" style={{width: '16px', height: '16px'}} />
+              <ArrowRight className="" style={{ width: '16px', height: '16px' }} />
             </button>
             <button className="btn btn-outline-success px-4 px-md-5 py-2 py-md-3 fw-bold">
               {t.portfolio.viewProject}
@@ -1748,9 +1752,8 @@ const PortfolioGallery = ({ t }) => {
             <div key={idx} className="col-6 col-md-3">
               <button
                 onClick={() => setSelectedImage(idx)}
-                className={`position-relative rounded-3 overflow-hidden d-block w-100 ${
-                  selectedImage === idx ? 'border-success border-2' : 'border border-light'
-                }`}
+                className={`position-relative rounded-3 overflow-hidden d-block w-100 ${selectedImage === idx ? 'border-success border-2' : 'border border-light'
+                  }`}
                 style={{
                   paddingTop: '75%', /* 4:3 aspect ratio */
                   transition: 'transform 0.2s ease',
@@ -1765,12 +1768,11 @@ const PortfolioGallery = ({ t }) => {
                   className="position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
                   onError={(e) => handleImageError(idx, e)}
                 />
-                <div className={`position-absolute top-0 start-0 w-100 h-100 ${
-                  selectedImage === idx ? 'bg-success' : 'bg-dark'
-                }`} style={{
-                  opacity: selectedImage === idx ? '0.2' : '0',
-                  transition: 'opacity 0.3s ease'
-                }} />
+                <div className={`position-absolute top-0 start-0 w-100 h-100 ${selectedImage === idx ? 'bg-success' : 'bg-dark'
+                  }`} style={{
+                    opacity: selectedImage === idx ? '0.2' : '0',
+                    transition: 'opacity 0.3s ease'
+                  }} />
               </button>
             </div>
           ))}
@@ -1816,7 +1818,7 @@ const ROICalculator = ({ t, language }) => {
               "Rooted in land, strengthened by time, protected by structure."
             </p>
             <p className="text-muted mb-5 mb-md-6 lead">{t.calc.desc}</p>
-            
+
             <div className="mb-4">
               {/* Tier Selection */}
               <div className="mb-4 mb-md-5">
@@ -1828,11 +1830,10 @@ const ROICalculator = ({ t, language }) => {
                     <div key={tier.id} className="col-6 col-md-3">
                       <button
                         onClick={() => setSelectedTier(tier)}
-                        className={`btn w-100 py-3 py-md-4 ${
-                          selectedTier.id === tier.id
-                            ? 'btn-success'
-                            : 'btn-light border'
-                        }`}
+                        className={`btn w-100 py-3 py-md-4 ${selectedTier.id === tier.id
+                          ? 'btn-success'
+                          : 'btn-light border'
+                          }`}
                         style={{
                           backgroundColor: selectedTier.id === tier.id ? '#193C26' : '#FFFFFF',
                           color: selectedTier.id === tier.id ? '#F0EAAF' : '#6c757d',
@@ -1859,9 +1860,8 @@ const ROICalculator = ({ t, language }) => {
                     <div key={key} className="col-4">
                       <button
                         onClick={() => setScenario(key)}
-                        className={`btn w-100 py-2 py-md-3 ${
-                          scenario === key ? 'border-success' : 'border-light'
-                        }`}
+                        className={`btn w-100 py-2 py-md-3 ${scenario === key ? 'border-success' : 'border-light'
+                          }`}
                         style={{
                           backgroundColor: scenario === key ? '#f8f9fa' : 'transparent',
                           borderColor: scenario === key ? '#193C26' : '#dee2e6',
@@ -1872,8 +1872,8 @@ const ROICalculator = ({ t, language }) => {
                         <div className="fw-bold text-success">{key}</div>
                         <div className="small text-muted mt-1">
                           {key === 'best' ? t.calc.scenario :
-                           key === 'moderate' ? t.calc.moderate :
-                           t.calc.conservative}
+                            key === 'moderate' ? t.calc.moderate :
+                              t.calc.conservative}
                         </div>
                       </button>
                     </div>
@@ -1946,7 +1946,7 @@ const ROICalculator = ({ t, language }) => {
                   {formatCurrency(totalValue, language)}
                 </div>
                 <div className="d-inline-flex align-items-center gap-2 px-3 px-md-4 py-2 bg-success bg-opacity-10 text-success rounded-pill">
-                  <TrendingUp className="" style={{width: '16px', height: '16px'}} />
+                  <TrendingUp className="" style={{ width: '16px', height: '16px' }} />
                   +{selectedTier.id === 'platinum' ? '15' : roiPercentage.toFixed(0)}% {t.calc.totalRoi}
                 </div>
               </div>
@@ -1954,7 +1954,7 @@ const ROICalculator = ({ t, language }) => {
               <div className="border-top pt-4 pt-md-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <span className="text-muted d-flex align-items-center gap-2">
-                    <PieChart className="" style={{width: '16px', height: '16px'}} />
+                    <PieChart className="" style={{ width: '16px', height: '16px' }} />
                     {t.calc.estDiv}
                   </span>
                   <span className="fw-bold text-success">
@@ -1963,7 +1963,7 @@ const ROICalculator = ({ t, language }) => {
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <span className="text-muted d-flex align-items-center gap-2">
-                    <Home className="" style={{width: '16px', height: '16px'}} />
+                    <Home className="" style={{ width: '16px', height: '16px' }} />
                     {t.calc.estAppr}
                   </span>
                   <span className="fw-bold text-success">
@@ -1983,24 +1983,24 @@ const ROICalculator = ({ t, language }) => {
                 <div className="mb-3">
                   <div className="d-flex justify-content-between small text-muted mb-1">
                     <span>Dividend Growth</span>
-                    <span>{(currentScenario.dividend/115000*100).toFixed(0)}%</span>
+                    <span>{(currentScenario.dividend / 115000 * 100).toFixed(0)}%</span>
                   </div>
-                  <div className="progress" style={{height: '8px'}}>
+                  <div className="progress" style={{ height: '8px' }}>
                     <div
                       className="progress-bar bg-success"
-                      style={{ width: `${(currentScenario.dividend/115000*100)}%` }}
+                      style={{ width: `${(currentScenario.dividend / 115000 * 100)}%` }}
                     ></div>
                   </div>
                 </div>
                 <div className="mb-4">
                   <div className="d-flex justify-content-between small text-muted mb-1">
                     <span>Land Appreciation</span>
-                    <span>{(currentScenario.appreciation*100).toFixed(0)}%</span>
+                    <span>{(currentScenario.appreciation * 100).toFixed(0)}%</span>
                   </div>
-                  <div className="progress" style={{height: '8px'}}>
+                  <div className="progress" style={{ height: '8px' }}>
                     <div
                       className="progress-bar bg-primary"
-                      style={{ width: `${(currentScenario.appreciation*100)}%` }}
+                      style={{ width: `${(currentScenario.appreciation * 100)}%` }}
                     ></div>
                   </div>
                 </div>
@@ -2055,7 +2055,7 @@ const CenteredLoopingSlider = ({ steps }) => {
   };
 
   return (
-    <div 
+    <div
       className="position-relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -2065,14 +2065,14 @@ const CenteredLoopingSlider = ({ steps }) => {
       }}
     >
       {/* Slider Container */}
-      <div 
+      <div
         className="position-relative w-100 h-100 overflow-hidden"
         style={{
           borderRadius: '16px'
         }}
       >
         {/* Slides */}
-        <div 
+        <div
           className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
           style={{
             transition: 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
@@ -2082,12 +2082,12 @@ const CenteredLoopingSlider = ({ steps }) => {
             const isActive = index === currentIndex;
             const isPrev = index === (currentIndex === 0 ? steps.length - 1 : currentIndex - 1);
             const isNext = index === (currentIndex === steps.length - 1 ? 0 : currentIndex + 1);
-            
+
             let positionClass = '';
             let scale = 1;
             let opacity = 1;
             let translateX = 0;
-            
+
             if (isActive) {
               positionClass = 'position-relative';
               scale = 1;
@@ -2122,7 +2122,7 @@ const CenteredLoopingSlider = ({ steps }) => {
                 }}
               >
                 {/* Step Number */}
-                <div 
+                <div
                   className="rounded-circle d-flex align-items-center justify-content-center mb-4"
                   style={{
                     width: '64px',
@@ -2137,9 +2137,9 @@ const CenteredLoopingSlider = ({ steps }) => {
                 >
                   {(index + 1).toString().padStart(2, '0')}
                 </div>
-                
+
                 {/* Title */}
-                <h3 
+                <h3
                   className="fw-bold mb-3"
                   style={{
                     color: '#193C26',
@@ -2149,9 +2149,9 @@ const CenteredLoopingSlider = ({ steps }) => {
                 >
                   {step.title}
                 </h3>
-                
+
                 {/* Description */}
-                <p 
+                <p
                   className="text-muted px-3"
                   style={{
                     fontSize: isActive ? '1rem' : '0.9rem',
@@ -2166,7 +2166,7 @@ const CenteredLoopingSlider = ({ steps }) => {
             );
           })}
         </div>
-        
+
         {/* Navigation Arrows */}
         <button
           onClick={goToPrev}
@@ -2191,9 +2191,9 @@ const CenteredLoopingSlider = ({ steps }) => {
           }}
           aria-label="Previous step"
         >
-          <ChevronRight style={{width: '20px', height: '20px', transform: 'rotate(180deg)'}} />
+          <ChevronRight style={{ width: '20px', height: '20px', transform: 'rotate(180deg)' }} />
         </button>
-        
+
         <button
           onClick={goToNext}
           className="position-absolute top-50 end-0 translate-middle-y btn btn-link p-0 border-0"
@@ -2217,9 +2217,9 @@ const CenteredLoopingSlider = ({ steps }) => {
           }}
           aria-label="Next step"
         >
-          <ChevronRight style={{width: '20px', height: '20px'}} />
+          <ChevronRight style={{ width: '20px', height: '20px' }} />
         </button>
-        
+
         {/* Position Indicators */}
         <div className="position-absolute bottom-0 start-50 translate-middle-x d-flex gap-2 mb-3">
           {steps.map((_, index) => (
@@ -2271,8 +2271,8 @@ const TiersSection = ({ t, language, openJoinModal }) => {
             maxWidth: '600px',
             margin: '0 auto'
           }}>{t.tiers.desc}</p>
-          
-          <div className="d-flex flex-wrap justify-content-center gap-2" style={{maxWidth: 'fit-content', margin: '0 auto'}}>
+
+          <div className="d-flex flex-wrap justify-content-center gap-2" style={{ maxWidth: 'fit-content', margin: '0 auto' }}>
             {['all', 'mostPopular', 'bestValue'].map((tab) => (
               <button
                 key={tab}
@@ -2304,8 +2304,8 @@ const TiersSection = ({ t, language, openJoinModal }) => {
                 }}
               >
                 {tab === 'all' ? 'All Tiers' :
-                 tab === 'mostPopular' ? t.tiers.mostPopular :
-                 t.tiers.bestValue}
+                  tab === 'mostPopular' ? t.tiers.mostPopular :
+                    t.tiers.bestValue}
               </button>
             ))}
           </div>
@@ -2317,14 +2317,14 @@ const TiersSection = ({ t, language, openJoinModal }) => {
               key={tier.id}
               className="col-12 col-md-6 col-lg-3"
             >
-              <div 
-                className="card h-100 border-2 position-relative" 
+              <div
+                className="card h-100 border-2 position-relative"
                 style={{
-                  backgroundColor: tier.color.includes('#F0EAAF') ? '#F0EAAF' : 
-                                  tier.color.includes('#193C26') ? '#193C26' : '#FFFFFF',
+                  backgroundColor: tier.color.includes('#F0EAAF') ? '#F0EAAF' :
+                    tier.color.includes('#193C26') ? '#193C26' : '#FFFFFF',
                   color: tier.text.includes('#F0EAAF') ? '#F0EAAF' : '#193C26',
-                  borderColor: tier.border.includes('#F0EAAF') ? '#F0EAAF' : 
-                               tier.border.includes('#193C26') ? '#193C26' : '#dee2e6',
+                  borderColor: tier.border.includes('#F0EAAF') ? '#F0EAAF' :
+                    tier.border.includes('#193C26') ? '#193C26' : '#dee2e6',
                   transition: 'all 0.3s ease',
                   boxShadow: '0 8px 20px -4px rgba(0, 0, 0, 0.1)',
                   cursor: 'pointer',
@@ -2336,14 +2336,14 @@ const TiersSection = ({ t, language, openJoinModal }) => {
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-8px)';
                   e.currentTarget.style.boxShadow = '0 16px 32px -6px rgba(0, 0, 0, 0.2)';
-                  e.currentTarget.style.borderColor = tier.border.includes('#F0EAAF') ? '#F0EAAF' : 
-                                                       tier.border.includes('#193C26') ? '#193C26' : '#193C26';
+                  e.currentTarget.style.borderColor = tier.border.includes('#F0EAAF') ? '#F0EAAF' :
+                    tier.border.includes('#193C26') ? '#193C26' : '#193C26';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.boxShadow = '0 8px 20px -4px rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.borderColor = tier.border.includes('#F0EAAF') ? '#F0EAAF' : 
-                                                       tier.border.includes('#193C26') ? '#193C26' : '#dee2e6';
+                  e.currentTarget.style.borderColor = tier.border.includes('#F0EAAF') ? '#F0EAAF' :
+                    tier.border.includes('#193C26') ? '#193C26' : '#dee2e6';
                 }}
               >
                 {/* Tags */}
@@ -2354,11 +2354,11 @@ const TiersSection = ({ t, language, openJoinModal }) => {
                     whiteSpace: 'nowrap',
                     fontSize: '0.7rem'
                   }}>
-                    <Award className="me-1" style={{width: '10px', height: '10px'}} />
+                    <Award className="me-1" style={{ width: '10px', height: '10px' }} />
                     {t.tiers.boardroom}
                   </div>
                 )}
-                
+
                 {tier.tag && (
                   <div className="position-absolute top-0 start-50 translate-middle-x bg-gradient bg-warning text-success xsmall fw-bold px-2 py-1 rounded-pill mt-n5" style={{
                     zIndex: 2,
@@ -2366,7 +2366,7 @@ const TiersSection = ({ t, language, openJoinModal }) => {
                     whiteSpace: 'nowrap',
                     fontSize: '0.7rem'
                   }}>
-                    <Star className="me-1" style={{width: '10px', height: '10px'}} />
+                    <Star className="me-1" style={{ width: '10px', height: '10px' }} />
                     {tier.tag === 'mostPopular' ? t.tiers.mostPopular : t.tiers.bestValue}
                   </div>
                 )}
@@ -2404,14 +2404,14 @@ const TiersSection = ({ t, language, openJoinModal }) => {
                   <ul className="list-unstyled mb-0">
                     {tier.benefits.slice(0, 3).map((benefit, idx) => (
                       <li key={idx} className="d-flex align-items-start mb-1">
-                        <Check className="me-1 mt-1 flex-shrink-0 opacity-70" style={{width: '14px', height: '14px'}} />
-                        <span className="xsmall" style={{lineHeight: '1.3'}}>{benefit}</span>
+                        <Check className="me-1 mt-1 flex-shrink-0 opacity-70" style={{ width: '14px', height: '14px' }} />
+                        <span className="xsmall" style={{ lineHeight: '1.3' }}>{benefit}</span>
                       </li>
                     ))}
                     {tier.benefits.length > 3 && (
                       <li className="d-flex align-items-start">
-                        <Plus className="me-1 mt-1 flex-shrink-0 opacity-70" style={{width: '14px', height: '14px'}} />
-                        <span className="xsmall" style={{lineHeight: '1.3'}}>+{tier.benefits.length - 3} more</span>
+                        <Plus className="me-1 mt-1 flex-shrink-0 opacity-70" style={{ width: '14px', height: '14px' }} />
+                        <span className="xsmall" style={{ lineHeight: '1.3' }}>+{tier.benefits.length - 3} more</span>
                       </li>
                     )}
                   </ul>
@@ -2422,8 +2422,8 @@ const TiersSection = ({ t, language, openJoinModal }) => {
                   <button
                     className="btn w-100 fw-bold py-2 rounded"
                     style={{
-                      background: tier.id === 'platinum' ? 
-                        'linear-gradient(90deg, #9c27b0, #673ab7)' : 
+                      background: tier.id === 'platinum' ?
+                        'linear-gradient(90deg, #9c27b0, #673ab7)' :
                         'linear-gradient(90deg, #193C26, #2a5238)',
                       color: tier.id === 'platinum' ? '#FFFFFF' : '#F0EAAF',
                       border: 'none',
@@ -2452,7 +2452,7 @@ const TiersSection = ({ t, language, openJoinModal }) => {
         {/* Investment Process */}
         <div className="mt-5 mt-md-8">
           <h3 className="h2 fw-bold text-success text-center mb-4 mb-md-5">{t.process.title}</h3>
-          
+
           {/* Desktop Version - Grid Layout */}
           <div className="d-none d-md-block">
             <div className="row g-4 g-md-5">
@@ -2474,14 +2474,14 @@ const TiersSection = ({ t, language, openJoinModal }) => {
                   </div>
                   {index < t.process.steps.length - 1 && (
                     <div className="d-none d-md-block position-absolute top-50 end-0 translate-middle-y">
-                      <ChevronRight className="text-muted" style={{width: '24px', height: '24px'}} />
+                      <ChevronRight className="text-muted" style={{ width: '24px', height: '24px' }} />
                     </div>
                   )}
                 </div>
               ))}
             </div>
           </div>
-          
+
           {/* Mobile Version - Centered Looping Slider */}
           <div className="d-md-none">
             <CenteredLoopingSlider steps={t.process.steps} />
@@ -2497,7 +2497,7 @@ const FAQSection = ({ t }) => {
 
   return (
     <section className="py-5 py-md-8 bg-white">
-      <div className="container" style={{maxWidth: '900px'}}>
+      <div className="container" style={{ maxWidth: '900px' }}>
         <h2 className="h1 fw-bold text-success text-center mb-5 mb-md-6">{t.faq.title}</h2>
         <div className="accordion" id="faqAccordion">
           {t.faq.items.map((item, index) => (
@@ -2572,7 +2572,7 @@ const Footer = ({ t }) => {
         const response = await axios.post(`${API_BASE_URL}/stay-updated`, {
           email: email
         });
-        
+
         if (response.data.success) {
           setSubscribed(true);
           setEmail('');
@@ -2625,12 +2625,12 @@ const Footer = ({ t }) => {
         <div className="row mb-5 mb-md-6">
           <div className="col-12 col-md-4 mb-4 mb-md-0">
             <div className="d-flex align-items-center gap-2 mb-3">
-              <Globe className="" style={{width: '20px', height: '20px', color: '#F0EAAF'}} />
+              <Globe className="" style={{ width: '20px', height: '20px', color: '#F0EAAF' }} />
               <span className="fw-bold text-white">WEB</span>
             </div>
-            <a 
-              href="https://www.foresteco-resort.com" 
-              target="_blank" 
+            <a
+              href="https://www.foresteco-resort.com"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-light text-decoration-none d-block"
               style={{
@@ -2643,58 +2643,76 @@ const Footer = ({ t }) => {
               www.foresteco-resort.com
             </a>
           </div>
-          
+
           <div className="col-12 col-md-4 mb-4 mb-md-0">
             <div className="d-flex align-items-center gap-2 mb-3">
-              <Mail className="" style={{width: '20px', height: '20px', color: '#F0EAAF'}} />
+              <Mail className="" style={{ width: '20px', height: '20px', color: '#F0EAAF' }} />
               <span className="fw-bold text-white">EMAIL</span>
             </div>
-            <a 
-              href="mailto:invest@foresteco-resort.com" 
+            <a
+              href="mailto:invest@foresteco-resort.com"
               className="text-light text-decoration-none d-block"
-              style={{
-                transition: 'color 0.3s ease',
-                fontSize: '1.1rem'
-              }}
+              style={{ transition: 'color 0.3s ease', fontSize: '1.1rem' }}
               onMouseEnter={(e) => e.target.style.color = '#F0EAAF'}
               onMouseLeave={(e) => e.target.style.color = '#F0EAAF'}
             >
               invest@foresteco-resort.com
             </a>
-          </div>
-          
-          <div className="col-12 col-md-4">
-            <div className="d-flex align-items-center gap-2 mb-3">
-              <Phone className="" style={{width: '20px', height: '20px', color: '#F0EAAF'}} />
-              <span className="fw-bold text-white">PHONE</span>
-            </div>
-            <a 
-              href="tel:+8801629024441" 
-              className="text-light text-decoration-none d-block"
-              style={{
-                transition: 'color 0.3s ease',
-                fontSize: '1.1rem'
-              }}
+            <a
+              href="mailto:admin@nexcentgroup.com"
+              className="text-light text-decoration-none d-block mt-1"
+              style={{ transition: 'color 0.3s ease', fontSize: '1.1rem' }}
               onMouseEnter={(e) => e.target.style.color = '#F0EAAF'}
               onMouseLeave={(e) => e.target.style.color = '#F0EAAF'}
             >
-              +880 1629 024441
+              admin@nexcentgroup.com
             </a>
+          </div>
+
+          <div className="col-12 col-md-4">
+            <div className="d-flex align-items-center gap-2 mb-3">
+              <Phone className="" style={{ width: '20px', height: '20px', color: '#F0EAAF' }} />
+              <span className="fw-bold text-white">PHONE</span>
+            </div>
+            <a href="tel:+8801831585751" className="text-light text-decoration-none d-block"
+              style={{ transition: 'color 0.3s ease', fontSize: '1.1rem' }}
+              onMouseEnter={(e) => e.target.style.color = '#F0EAAF'}
+              onMouseLeave={(e) => e.target.style.color = '#F0EAAF'}
+            >+880 1831 585751</a>
+            <a href="tel:+8801711779787" className="text-light text-decoration-none d-block mt-1"
+              style={{ transition: 'color 0.3s ease', fontSize: '1.1rem' }}
+              onMouseEnter={(e) => e.target.style.color = '#F0EAAF'}
+              onMouseLeave={(e) => e.target.style.color = '#F0EAAF'}
+            >+880 1711 779787</a>
+            <a href="tel:+8801897660045" className="text-light text-decoration-none d-block mt-1"
+              style={{ transition: 'color 0.3s ease', fontSize: '1.1rem' }}
+              onMouseEnter={(e) => e.target.style.color = '#F0EAAF'}
+              onMouseLeave={(e) => e.target.style.color = '#F0EAAF'}
+            >+880 1897 660045</a>
           </div>
         </div>
 
-        {/* Office Address */}
+        {/* Office Addresses */}
         <div className="mb-5 mb-md-6 p-4 p-md-5 rounded-3" style={{
           background: 'rgba(255, 255, 255, 0.05)',
           border: '1px solid rgba(255, 255, 255, 0.1)'
         }}>
-          <div className="d-flex align-items-start gap-3">
-            <MapPin className="mt-1" style={{width: '24px', height: '24px', color: '#F0EAAF'}} />
+          <h4 className="text-white fw-bold mb-4">OFFICE ADDRESSES</h4>
+          <div className="d-flex align-items-start gap-3 mb-3">
+            <MapPin className="mt-1 flex-shrink-0" style={{ width: '20px', height: '20px', color: '#F0EAAF' }} />
             <div>
-              <h4 className="text-white fw-bold mb-2">OFFICE ADDRESS</h4>
-              <p className="text-light mb-0" style={{lineHeight: '1.6'}}>
-                House 31, Road 1, Block A, Niketan Housing Project,<br />
-                Gulshan 1, Dhaka.
+              <div className="text-warning small fw-bold mb-1">OFFICE 1</div>
+              <p className="text-light mb-0" style={{ lineHeight: '1.6' }}>
+                House: 31, Road: 1, Block: A, Niketan, Gulshan, Dhaka-1212
+              </p>
+            </div>
+          </div>
+          <div className="d-flex align-items-start gap-3">
+            <MapPin className="mt-1 flex-shrink-0" style={{ width: '20px', height: '20px', color: '#F0EAAF' }} />
+            <div>
+              <div className="text-warning small fw-bold mb-1">OFFICE 2</div>
+              <p className="text-light mb-0" style={{ lineHeight: '1.6' }}>
+                House: 1028, Road: 09, Avenue 9, Mirpur DOHS
               </p>
             </div>
           </div>
@@ -2705,17 +2723,17 @@ const Footer = ({ t }) => {
           {/* Brand Info */}
           <div className="col-12 col-md-6">
             <div className="d-flex align-items-center gap-2 mb-4 mb-md-5">
-              <Leaf className="" style={{width: '32px', height: '32px', color: '#F0EAAF'}} />
+              <Leaf className="" style={{ width: '32px', height: '32px', color: '#F0EAAF' }} />
               <span className="h3 fw-bold text-white mb-0">
                 FOREST ECO RESORT
               </span>
             </div>
-            <p className="text-light mb-4 mb-md-5" style={{maxWidth: '500px'}}>
+            <p className="text-light mb-4 mb-md-5" style={{ maxWidth: '500px' }}>
               {t.footer.address}
             </p>
 
             {/* Newsletter */}
-            <div className="mb-4 mb-md-0" style={{maxWidth: '500px'}}>
+            <div className="mb-4 mb-md-0" style={{ maxWidth: '500px' }}>
               <h4 className="text-white fw-bold mb-3 mb-md-4">{t.footer.newsletter.title}</h4>
               <form onSubmit={handleSubscribe} className="d-flex flex-column flex-md-row gap-2">
                 <input
@@ -2755,21 +2773,22 @@ const Footer = ({ t }) => {
             <h4 className="text-white fw-bold mb-4 mb-md-5">{t.footer.contact}</h4>
             <ul className="list-unstyled">
               <li className="d-flex align-items-start gap-3 mb-3 mb-md-4">
-                <Phone className="mt-1" style={{width: '20px', height: '20px'}} />
+                <Phone className="mt-1 flex-shrink-0" style={{ width: '20px', height: '20px' }} />
                 <div>
-                  <div>+880 1629 024441</div>
-                  <div className="text-light text-opacity-75 small">Investment Desk</div>
+                  <div>+880 1831 585751</div>
+                  <div>+880 1711 779787</div>
+                  <div>+880 1897 660045</div>
                 </div>
               </li>
               <li className="d-flex align-items-start gap-3 mb-3 mb-md-4">
-                <Mail className="mt-1" style={{width: '20px', height: '20px'}} />
+                <Mail className="mt-1 flex-shrink-0" style={{ width: '20px', height: '20px' }} />
                 <div>
-                  <div>info@foresteco-resort.com</div>
-                  <div className="text-light text-opacity-75 small">General Inquiries</div>
+                  <div>invest@foresteco-resort.com</div>
+                  <div>admin@nexcentgroup.com</div>
                 </div>
               </li>
               <li className="d-flex align-items-start gap-3">
-                <Clock className="mt-1" style={{width: '20px', height: '20px'}} />
+                <Clock className="mt-1 flex-shrink-0" style={{ width: '20px', height: '20px' }} />
                 <div>
                   <div>Business Hours</div>
                   <div className="text-light text-opacity-75 small">10:00 AM - 6:00 PM</div>
@@ -2794,7 +2813,7 @@ const Footer = ({ t }) => {
                     onMouseEnter={(e) => e.target.style.color = '#F0EAAF'}
                     onMouseLeave={(e) => e.target.style.color = '#F0EAAF'}
                   >
-                    <ChevronRight className="" style={{width: '12px', height: '12px'}} />
+                    <ChevronRight className="" style={{ width: '12px', height: '12px' }} />
                     {value}
                   </a>
                 </li>
@@ -2810,31 +2829,31 @@ const Footer = ({ t }) => {
           </p>
           <div className="d-flex flex-column flex-md-row align-items-center justify-content-center gap-4 gap-md-5">
             <div className="text-center">
-              <Building className="mb-2" style={{width: '40px', height: '40px', color: '#FFFFFF'}} />
+              <img
+                src={yessLogo}
+                alt="YESS Cooperative Society"
+                className="img-fluid mb-2"
+                style={{ height: '40px', objectFit: 'contain', opacity: 0.9 }}
+              />
               <div>
                 <span className="fw-bold text-white h5 d-block">YESS</span>
                 <div className="text-light text-opacity-75 small">COOPERATIVE SOCIETY</div>
               </div>
             </div>
-            <div className="d-none d-md-block" style={{width: '1px', height: '48px', backgroundColor: '#6c757d'}}></div>
-            <div className="d-md-none w-100" style={{height: '1px', backgroundColor: '#6c757d'}}></div>
-            {!nexcentError ? (
+            <div className="d-none d-md-block" style={{ width: '1px', height: '48px', backgroundColor: '#6c757d' }}></div>
+            <div className="d-md-none w-100" style={{ height: '1px', backgroundColor: '#6c757d' }}></div>
+            <div className="text-center">
               <img
-                src="Untitled design.png"
+                src={nexcentLogo}
                 alt="NEXCENT"
-                className="img-fluid"
-                style={{height: '40px', opacity: 0.8, transition: 'opacity 0.3s ease'}}
-                onError={() => setNexcentError(true)}
+                className="img-fluid mb-2"
+                style={{ height: '40px', objectFit: 'contain', opacity: 0.9 }}
               />
-            ) : (
-              <div className="text-center">
-                <Target className="mb-2" style={{width: '40px', height: '40px', color: '#FFFFFF'}} />
-                <div>
-                  <span className="fw-bold text-white h5 d-block">NEXCENT</span>
-                  <div className="text-light text-opacity-75 small">INVESTMENT GROUP</div>
-                </div>
+              <div>
+                <span className="fw-bold text-white h5 d-block">NEXCENT</span>
+                <div className="text-light text-opacity-75 small">INVESTMENT GROUP</div>
               </div>
-            )}
+            </div>
           </div>
         </div>
 
@@ -2866,16 +2885,16 @@ const CTABar = ({ t }) => (
             boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2)',
             transform: 'translateY(0)'
           }}
-          onMouseEnter={(e) => {
-            e.target.style.transform = 'translateY(-3px)';
-            e.target.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.transform = 'translateY(0)';
-            e.target.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.2)';
-          }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'translateY(-3px)';
+              e.target.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.2)';
+            }}
           >
-            <Download className="" style={{width: '20px', height: '20px'}} />
+            <Download className="" style={{ width: '20px', height: '20px' }} />
             {t.ctaBar.btn}
           </button>
           {/* <button className="btn btn-outline-light fw-bold px-4 px-md-5 py-3" style={{
@@ -2994,7 +3013,7 @@ const App = () => {
       // Reset overflow to visible/scroll when menu/modal is closed
       document.body.style.overflow = 'visible';
     }
-    
+
     // Clean up function
     return () => {
       document.body.style.overflow = 'visible'; // Changed from 'unset' to 'visible'
@@ -3076,10 +3095,10 @@ const App = () => {
                      transform 0.3s ease;
         }
       `}</style>
-      
+
       <div className={`min-h-screen ${language === 'bn' ? 'font-bengali' : ''}`}>
         {/* File Viewer Overlay - Show when in file view mode */}
-        <FileViewer 
+        <FileViewer
           content={fileContent}
           fileName={fileViewMode}
           isLoading={isLoading}
@@ -3100,13 +3119,13 @@ const App = () => {
                   t={t}
                   openJoinModal={() => setIsJoinModalOpen(true)}
                 />
-                
-                <JoinPilotModal 
+
+                <JoinPilotModal
                   isOpen={isJoinModalOpen}
                   onClose={() => setIsJoinModalOpen(false)}
                   language={language}
                 />
-                
+
                 <Hero t={t} language={language} />
                 <div id="the-asset">
                   <AssetSection language={language} />
@@ -3138,7 +3157,7 @@ const FileViewer = ({ content, fileName, isLoading, error, onClose }) => {
   if (!content && !isLoading && !error) return null;
 
   return (
-    <div 
+    <div
       id="file-view"
       style={{
         position: 'fixed',
