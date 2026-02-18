@@ -1,621 +1,735 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Map, Hotel, Users, TreePine, ArrowRight, Shield, 
-  TrendingUp, Award, Gem, Crown, Sparkles, ChevronRight,
-  Building, Sprout, Landmark, CheckCircle, Star
-} from 'lucide-react';
+// InvestmentPortfolioRebuilt.js
+import React, { useState } from 'react';
 
-const InvestmentPortfolio = ({ language = 'en' }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [activePillar, setActivePillar] = useState(null);
-  const sectionRef = useRef(null);
-  const observerRef = useRef(null);
+const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
+  const [shareCount, setShareCount] = useState(5);
 
-  // Fixed: Simplified intersection observer
-  useEffect(() => {
-    // Clean up previous observer
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    // Create new observer with optimal settings
-    observerRef.current = new IntersectionObserver(
-      ([entry]) => {
-        // Use requestAnimationFrame to prevent blocking
-        requestAnimationFrame(() => {
-          setIsVisible(entry.isIntersecting);
-        });
-      },
-      { 
-        threshold: 0.1, 
-        rootMargin: '50px',
-        // Added to improve performance
-        passive: true 
-      }
-    );
-
-    const currentRef = sectionRef.current;
-    if (currentRef) {
-      observerRef.current.observe(currentRef);
-    }
-    
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []); // Empty dependency array - only run once
-
-  // Fixed: Optimized content structure
-  const content = {
+  const translations = {
     en: {
-      topLabel: "INVESTMENT PORTFOLIO",
-      heading: "Secured by Land. Driven by Yield.",
-      description: "A disciplined approach to wealth creation. Every investment is backed by tangible assets—registered land and revenue-generating infrastructure—designed to deliver consistent returns while preserving capital.",
-      
-      stats: [
-        { value: "32.84", unit: "Bighas", label: "Total Land Bank", icon: <Map className="w-5 h-5" /> },
-        { value: "36", unit: "Rooms", label: "Hospitality Keys", icon: <Hotel className="w-5 h-5" /> },
-        { value: "400", unit: "Pax", label: "Event Capacity", icon: <Users className="w-5 h-5" /> },
-        { value: "3,300+", unit: "Trees", label: "Fruit Plantation", icon: <TreePine className="w-5 h-5" /> }
-      ],
-
-      pillarsHeading: "Asset Pillars",
-      
-      pillars: [
-        {
-          label: "LAND ASSET",
-          title: "Registered Land Bank",
-          stat: "32.84 Bighas",
-          desc: "Prime agricultural land in Gazipur's growth corridor. Registered Saf Kabla deeds provide legal ownership and intrinsic value floor.",
-          highlight: "Deed Secured"
-        },
-        {
-          label: "HOSPITALITY",
-          title: "Premium Resort",
-          stat: "36 Rooms + 400 Pax",
-          desc: "Six-story guest house and multipurpose hall targeting premium corporate and social events with consistent occupancy.",
-          highlight: "Operational"
-        },
-        {
-          label: "AGRICULTURE",
-          title: "Revenue Orchards",
-          stat: "10 Bigha Zone",
-          desc: "High-density BARI Malta-1 and Dragon Fruit cultivation generating sustainable operational yields.",
-          highlight: "Revenue Generator"
-        },
-        {
-          label: "LEGAL STRUCTURE",
-          title: "Protected Structure",
-          stat: "99-Year Term",
-          desc: "Indivisible utility structure prevents fragmentation. Full regulatory compliance with 600 exclusive shares.",
-          highlight: "Compliant"
-        }
-      ],
-
-      showcaseHeading: "Asset Showcase",
-      
-      showcase: [
-        {
-          category: "HOSPITALITY",
-          title: "The Forest Lodge",
-          desc: "36 premium rooms blending luxury with nature",
-          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1200",
-          tag: "Operational"
-        },
-        {
-          category: "EVENTS",
-          title: "The Gathering Grounds",
-          desc: "400-pax capacity for corporate and social events",
-          image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200",
-          tag: "MICE Venue"
-        },
-        {
-          category: "AGRICULTURE",
-          title: "The Auspicious Zone",
-          desc: "1,100 Malta trees & 2,200 Dragon Fruit pillars",
-          image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1200",
-          tag: "Revenue"
-        }
-      ],
-
-      metricsHeading: "Investment Metrics",
-      
-      metrics: [
-        { value: "18-24%", label: "Projected ROI", desc: "At maturity" },
-        { value: "12-15%", label: "Land Appreciation", desc: "Annual compound" },
-        { value: "8-12%", label: "Dividend Yield", desc: "From operations" },
-        { value: "3-7 Years", label: "Holding Period", desc: "To peak value" }
-      ],
-
-      ctaHeading: "Investment Thesis",
-      ctaDesc: "100% equity-funded. Zero debt liability. Your capital is secured within tangible assets—free from bank debt and financial leverage.",
-      ctaButton: "VIEW INVESTMENT TIERS"
+      hero_badge: "By Invitation Only",
+      hero_title: "The Exclusive 600",
+      hero_subtitle: "A private sanctuary where land ownership meets living legacy. Debt-free. Asset-backed. Yours forever.",
+      strategy_badge: "THE BUSINESS OF LEISURE",
+      strategy_title: "Twin Pillars of Wealth",
+      agro_title: "The Organic Soul",
+      agro_subtitle: "10-Bigha Agro Zone",
+      agro_desc: "High-yield Dragon Fruit and Malta orchards generating sustainable revenue while feeding our farm-to-table restaurants.",
+      complex_title: "The Commercial Engine",
+      complex_subtitle: "400-Pax Multipurpose Complex",
+      complex_desc: "Corporate retreats and grand weddings ensuring year-round occupancy and massive single-check revenue.",
+      gallery_title: "Your Estate Portfolio",
+      gallery_subtitle: "Tangible ownership. Saf Kabla Registration.",
+      calc_title: "Design Your Legacy",
+      calc_desc: "Join a circle of visionaries. As a shareholder, you unlock lifestyle privileges, international travel, and recognition.",
+      calc_keys: "Number of Keys (Shares)",
+      calc_investment: "Your Investment",
+      calc_value: "5-Year Asset Value",
+      calc_cta: "Secure Your Allocation",
+      tiers: {
+        executive: "Executive Member",
+        silver: "Silver Member",
+        golden: "Golden Member",
+        platinum: "Platinum Founder"
+      }
     },
     bn: {
-      topLabel: "বিনিয়োগ পোর্টফোলিও",
-      heading: "জমি দ্বারা নিশ্চিত। মুনাফা দ্বারা চালিত।",
-      description: "সম্পদ সৃষ্টির একটি শৃঙ্খলাবদ্ধ পদ্ধতি। প্রতিটি বিনিয়োগ মূর্ত ভৌত সম্পদ—নিবন্ধিত জমি এবং রাজস্ব উৎপাদনকারী অবকাঠামো—দ্বারা সুরক্ষিত।",
-      
-      stats: [
-        { value: "৩২.৮৪", unit: "বিঘা", label: "মোট জমি ব্যাংক", icon: <Map className="w-5 h-5" /> },
-        { value: "৩৬", unit: "টি রুম", label: "আতিথেয়তা কী", icon: <Hotel className="w-5 h-5" /> },
-        { value: "৪০০", unit: "জন", label: "ইভেন্ট ক্ষমতা", icon: <Users className="w-5 h-5" /> },
-        { value: "৩,৩০০+", unit: "টি", label: "ফলের গাছ", icon: <TreePine className="w-5 h-5" /> }
-      ],
-
-      pillarsHeading: "সম্পদ স্তম্ভ",
-      
-      pillars: [
-        {
-          label: "জমি সম্পদ",
-          title: "নিবন্ধিত জমি ব্যাংক",
-          stat: "৩২.৮৪ বিঘা",
-          desc: "গাজীপুরের বৃদ্ধি করিডোরে প্রিমিয়াম কৃষি জমি। নিবন্ধিত সাফ কবলা দলিল আইনি মালিকানা প্রদান করে।",
-          highlight: "দলিল সুরক্ষিত"
-        },
-        {
-          label: "আতিথেয়তা",
-          title: "প্রিমিয়াম রিসোর্ট",
-          stat: "৩৬ রুম + ৪০০ জন",
-          desc: "ছয় তলা গেস্ট হাউস এবং মাল্টিপারপাস হল প্রিমিয়াম কর্পোরেট ও সামাজিক ইভেন্টের জন্য।",
-          highlight: "পরিচালনাধীন"
-        },
-        {
-          label: "কৃষি",
-          title: "রাজস্ব বাগান",
-          stat: "১০ বিঘা জোন",
-          desc: "উচ্চ-ঘনত্বের বারি মাল্টা-১ এবং ড্রাগন ফ্রুট চাষ টেকসই রাজস্ব উৎপাদন করে।",
-          highlight: "রাজস্ব উৎপাদক"
-        },
-        {
-          label: "আইনি কাঠামো",
-          title: "সুরক্ষিত কাঠামো",
-          stat: "৯৯ বছর মেয়াদ",
-          desc: "অবিভাজ্য ইউটিলিটি কাঠামো বিভাজন রোধ করে। ৬০০ এক্সক্লুসিভ শেয়ার সহ সম্পূর্ণ নিয়ন্ত্রক সম্মতি।",
-          highlight: "অনুমোদিত"
-        }
-      ],
-
-      showcaseHeading: "সম্পদ প্রদর্শনী",
-      
-      showcase: [
-        {
-          category: "আতিথেয়তা",
-          title: "দ্য ফরেস্ট লজ",
-          desc: "৩৬টি প্রিমিয়াম রুম প্রকৃতির সাথে বিলাসিতার মিলন",
-          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1200",
-          tag: "পরিচালনাধীন"
-        },
-        {
-          category: "ইভেন্ট",
-          title: "দ্য গাদারিং গ্রাউন্ডস",
-          desc: "কর্পোরেট ও সামাজিক ইভেন্টের জন্য ৪০০ জন ক্ষমতা",
-          image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200",
-          tag: "MICE ভেন্যু"
-        },
-        {
-          category: "কৃষি",
-          title: "দ্য অশুভ জোন",
-          desc: "১,১০০ মাল্টা গাছ ও ২,২০০ ড্রাগন ফ্রুট পিলার",
-          image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1200",
-          tag: "রাজস্ব"
-        }
-      ],
-
-      metricsHeading: "বিনিয়োগ মেট্রিক্স",
-      
-      metrics: [
-        { value: "১৮-২৪%", label: "প্রত্যাশিত ROI", desc: "পরিপক্কতায়" },
-        { value: "১২-১৫%", label: "জমির মূল্যবৃদ্ধি", desc: "বার্ষিক কম্পাউন্ড" },
-        { value: "৮-১২%", label: "লভ্যাংশ ইয়েল্ড", desc: "অপারেশন থেকে" },
-        { value: "৩-৭ বছর", label: "ধরে রাখার সময়", desc: "শীর্ষ মূল্যে" }
-      ],
-
-      ctaHeading: "বিনিয়োগ থিসিস",
-      ctaDesc: "১০০% ইক্যুইটি অর্থায়িত। শূন্য ঋণ দায়। আপনার পুঁজি মূর্ত সম্পদের মধ্যে নিরাপদ—ব্যাংক ঋণ এবং আর্থিক লিভারেজ থেকে মুক্ত।",
-      ctaButton: "বিনিয়োগ স্তর দেখুন"
+      hero_badge: "শুধুমাত্র আমন্ত্রিতদের জন্য",
+      hero_title: "এক্সক্লুসিভ ৬০০",
+      hero_subtitle: "ইট-পাথরের জঙ্গল থেকে দূরে, আপনার নিজস্ব এক নিভৃত স্বর্গ। যেখানে জমির মালিকানা আর আভিজাত্য মিলেমিশে একাকার।",
+      strategy_badge: "অবকাশ যাপনের অর্থনীতি",
+      strategy_title: "সমৃদ্ধির দুই স্তম্ভ",
+      agro_title: "প্রাণের স্পন্দন",
+      agro_subtitle: "১০ বিঘার অর্গানিক অ্যাগ্রো জোন",
+      agro_desc: "ড্রাগন ফ্রুট আর মাল্টা বাগান শুধু মুনাফাই দেয় না, রিসোর্টের অতিথিদের জন্য জোগান দেয় সতেজ অর্গানিক খাবার।",
+      complex_title: "বাণিজ্যিক শক্তি",
+      complex_subtitle: "৪০০ জনের মাল্টিপারপাস কমপ্লেক্স",
+      complex_desc: "কর্পোরেট রিট্রিট এবং রাজকীয় বিয়ে আয়োজনের মাধ্যমে আমরা নিশ্চিত করি সারা বছর জমজমাট অকুপেন্সি।",
+      gallery_title: "আপনার এস্টেট পোর্টফোলিও",
+      gallery_subtitle: "দৃশ্যমান মালিকানা। সাফ কবলা রেজিস্ট্রি।",
+      calc_title: "সাজিয়ে নিন আপনার উত্তরাধিকার",
+      calc_desc: "যুক্ত হোন ৬০০ জন স্বপ্নদ্রষ্টার অভিজাত বৃত্তে। একজন শেয়ারহোল্ডার হিসেবে আপনি কেবল মুনাফাই পাবেন না; উপভোগ করবেন আন্তর্জাতিক ভ্রমণ ও বিশেষ মর্যাদা।",
+      calc_keys: "শেয়ার সংখ্যা (চাবি)",
+      calc_investment: "আপনার বিনিয়োগ",
+      calc_value: "৫ বছর পর সম্পদের মূল্য",
+      calc_cta: "আপনার বরাদ্দ নিশ্চিত করুন",
+      tiers: {
+        executive: "এক্সিকিউটিভ মেম্বার",
+        silver: "সিলভার মেম্বার",
+        golden: "গোল্ডেন মেম্বার",
+        platinum: "প্লাটিনাম ফাউন্ডার"
+      }
     }
   };
 
-  const current = content[language];
+  const t = translations[language];
+
+  // Calculator logic
+  const BASE_PRICE = 750000;
+  const APPRECIATION_RATE = 1.15; // 15% annual
+
+  const calculateTier = (shares) => {
+    if (shares >= 50) return { name: t.tiers.platinum, discount: 0.15, perks: "Board Eligibility + Audit Rights" };
+    if (shares >= 10) return { name: t.tiers.golden, discount: 0.10, perks: "Founder Recognition + Thailand Tour" };
+    if (shares >= 5) return { name: t.tiers.silver, discount: 0.0533, perks: "Complimentary Thailand Tour (3N/4D)" };
+    return { name: t.tiers.executive, discount: 0, perks: "Cox's Bazar Tour (2N/3D)" };
+  };
+
+  const tier = calculateTier(shareCount);
+  const investment = shareCount * BASE_PRICE * (1 - tier.discount);
+  const futureValue = investment * Math.pow(APPRECIATION_RATE, 5);
+
+  const formatCurrency = (value) => {
+    if (value >= 10000000) {
+      return `BDT ${(value / 10000000).toFixed(2)} Cr`;
+    }
+    return `BDT ${(value / 100000).toFixed(2)} Lakh`;
+  };
+
+  // Gallery images
+  const galleryImages = [
+    {
+      url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=1000",
+      title: language === 'en' ? "The Guest House" : "দ্য গেস্ট হাউস",
+      subtitle: language === 'en' ? "30 Premium Suites" : "৩০টি প্রিমিয়াম স্যুট",
+      span: "col-span-2 row-span-2"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=800",
+      title: language === 'en' ? "The Grand Hall" : "দ্য গ্র্যান্ড হল",
+      subtitle: language === 'en' ? "Weddings & Retreats" : "বিয়ে এবং কর্পোরেট ইভেন্ট",
+      span: "col-span-2"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1559828854-1fa99042c16c?auto=format&fit=crop&q=80&w=600",
+      title: language === 'en' ? "Organic Agro" : "অর্গানিক অ্যাগ্রো",
+      subtitle: language === 'en' ? "Dragon Fruit Yields" : "ড্রাগন ফলের ফলন",
+      span: ""
+    },
+    {
+      url: "https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?auto=format&fit=crop&q=80&w=600",
+      title: language === 'en' ? "Attractions" : "অ্যাট্রাকশন জোন",
+      subtitle: language === 'en' ? "Ferris Wheel & Base Camp" : "নাগরদোলা এবং বেস ক্যাম্প",
+      span: ""
+    }
+  ];
+
+  const styles = `
+    /* Font Imports */
+    @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+    /* Base Styles */
+    .portfolio-section {
+      background-color: #F9F9F5;
+      color: #0D261E;
+      line-height: 1.5;
+    }
+
+    .portfolio-section .font-serif-custom {
+      font-family: ${language === 'bn' ? "'Hind Siliguri', serif" : "'Montserrat', serif"};
+      font-weight: 600;
+    }
+
+    .portfolio-section .font-sans-custom {
+      font-family: ${language === 'bn' ? "'Hind Siliguri', sans-serif" : "'Lora', serif"};
+    }
+
+    /* Text Colors */
+    .portfolio-section .text-gold {
+      color: #D4AF37;
+    }
+
+    .portfolio-section .text-gold-light {
+      color: #F3E5AB;
+    }
+
+    .portfolio-section .text-forest {
+      color: #1B4D3E;
+    }
+
+    .portfolio-section .text-forest-dark {
+      color: #0D261E;
+    }
+
+    .portfolio-section .text-ivory {
+      color: #F9F9F5;
+    }
+
+    /* Background Colors */
+    .portfolio-section .bg-gold {
+      background-color: #D4AF37;
+    }
+
+    .portfolio-section .bg-forest {
+      background-color: #1B4D3E;
+    }
+
+    .portfolio-section .bg-forest-dark {
+      background-color: #0D261E;
+    }
+
+    .portfolio-section .bg-ivory {
+      background-color: #F9F9F5;
+    }
+
+    /* Glass Effects */
+    .portfolio-section .dark-glass {
+      background: rgba(13, 38, 30, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    /* Hover Effects */
+    .portfolio-section .hover-lift {
+      transition: transform 0.3s ease;
+    }
+
+    .portfolio-section .hover-lift:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Range Slider */
+    .portfolio-section input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      outline: none;
+    }
+
+    .portfolio-section input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #D4AF37;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+      margin-top: -10px;
+    }
+
+    .portfolio-section input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+    }
+
+    /* Utility Classes */
+    .portfolio-section .tracking-widest {
+      letter-spacing: 0.2em;
+    }
+
+    .portfolio-section .border-gold {
+      border-color: #D4AF37;
+    }
+
+    .portfolio-section .hover-gold:hover {
+      color: #D4AF37;
+    }
+
+    /* Gallery Grid */
+    .portfolio-section .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: minmax(200px, auto);
+      gap: 1.5rem;
+    }
+
+    .portfolio-section .col-span-2 {
+      grid-column: span 2;
+    }
+
+    .portfolio-section .row-span-2 {
+      grid-row: span 2;
+    }
+
+    @media (max-width: 768px) {
+      .portfolio-section .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .portfolio-section .col-span-2,
+      .portfolio-section .row-span-2 {
+        grid-column: span 1;
+        grid-row: span 1;
+      }
+    }
+  `;
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
-        
-        .portfolio-section {
-          font-family: ${language === 'bn' ? "'Hind Siliguri', sans-serif" : "'Inter', sans-serif"};
-          background: linear-gradient(135deg, #0a1f17 0%, #0d2a20 50%, #0a1f17 100%);
-          color: #e8ebe4;
-          position: relative;
-          overflow: hidden;
-          /* Fixed: Ensure hardware acceleration doesn't block scrolling */
-          transform: translateZ(0);
-          will-change: transform;
-        }
+      <style>{styles}</style>
+      <div className="portfolio-section font-sans-custom">
 
-        .font-serif-luxury {
-          font-family: ${language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif"};
-        }
-
-        /* Fixed: Optimized animations - use transform only, no layout triggers */
-        .fade-in {
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-          /* Fixed: Use will-change sparingly */
-        }
-
-        .fade-in.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        /* Fixed: Reduced animation complexity */
-        .stat-card {
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-          border: 1px solid rgba(212, 175, 55, 0.1);
-          border-radius: 24px;
-          padding: 2rem 2.5rem;
-          margin: 0.5rem;
-          transition: transform 0.3s ease, border-color 0.3s ease;
-          min-width: 240px;
-          max-width: 280px;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          /* Fixed: Prevent layout shift during animation */
-          backface-visibility: hidden;
-        }
-
-        .stat-card:hover {
-          border-color: rgba(212, 175, 55, 0.3);
-          transform: translateY(-4px);
-        }
-
-        .stat-icon {
-          width: 48px;
-          height: 48px;
-          background: linear-gradient(135deg, #d4af37, #b38f2c);
-          border-radius: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #0a1f17;
-          margin-bottom: 1.25rem;
-        }
-
-        /* Fixed: Simplified pillar cards */
-        .pillar-card {
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 28px;
-          padding: 2rem 2.5rem;
-          margin: 0.5rem;
-          transition: transform 0.3s ease, border-color 0.3s ease;
-          min-width: 280px;
-          max-width: 320px;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          backface-visibility: hidden;
-        }
-
-        .pillar-card:hover {
-          border-color: rgba(212, 175, 55, 0.2);
-          transform: translateY(-4px);
-        }
-
-        .pillar-highlight {
-          background: rgba(212, 175, 55, 0.1);
-          color: #d4af37;
-          padding: 0.25rem 1rem;
-          border-radius: 50px;
-          font-size: 0.7rem;
-          font-weight: 600;
-          display: inline-block;
-        }
-
-        /* Fixed: Optimized showcase cards */
-        .showcase-card {
-          border-radius: 28px;
-          overflow: hidden;
-          position: relative;
-          height: 450px;
-          min-width: 350px;
-          cursor: pointer;
-          box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-          /* Fixed: Use transform for performance */
-          transform: translateZ(0);
-        }
-
-        .showcase-card img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s ease;
-        }
-
-        .showcase-card:hover img {
-          transform: scale(1.05);
-        }
-
-        .showcase-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, 
-            rgba(10, 31, 23, 0.95) 0%, 
-            rgba(10, 31, 23, 0.7) 40%, 
-            transparent 100%
-          );
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          padding: 2rem;
-        }
-
-        .showcase-tag {
-          background: #d4af37;
-          color: #0a1f17;
-          padding: 0.4rem 1rem;
-          border-radius: 50px;
-          font-size: 0.7rem;
-          font-weight: 700;
-          display: inline-block;
-          width: fit-content;
-          margin-bottom: 1rem;
-        }
-
-        /* Fixed: Optimized metric cards */
-        .metric-card {
-          background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
-          border: 1px solid rgba(212, 175, 55, 0.15);
-          border-radius: 24px;
-          padding: 2rem 1.5rem;
-          text-align: center;
-          min-width: 200px;
-          transition: transform 0.3s ease;
-          backface-visibility: hidden;
-        }
-
-        .metric-card:hover {
-          transform: translateY(-4px);
-        }
-
-        /* Fixed: Simplified CTA section */
-        .cta-premium {
-          background: linear-gradient(135deg, 
-            rgba(255, 255, 255, 0.03) 0%, 
-            rgba(212, 175, 55, 0.05) 100%
-          );
-          border: 1px solid rgba(212, 175, 55, 0.15);
-          border-radius: 32px;
-          padding: 3rem;
-        }
-
-        .cta-button {
-          background: linear-gradient(135deg, #d4af37, #b38f2c);
-          color: #0a1f17;
-          padding: 1.25rem 2.5rem;
-          border-radius: 60px;
-          font-weight: 700;
-          font-size: 0.85rem;
-          letter-spacing: 0.15em;
-          text-transform: uppercase;
-          border: none;
-          cursor: pointer;
-          transition: transform 0.3s ease;
-          box-shadow: 0 20px 30px -10px rgba(212, 175, 55, 0.3);
-        }
-
-        .cta-button:hover {
-          transform: translateY(-2px);
-        }
-
-        /* Fixed: Custom scrollbar - lighter weight */
-        .overflow-x-auto {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(212, 175, 55, 0.3) rgba(255, 255, 255, 0.05);
-          -webkit-overflow-scrolling: touch; /* Fixed: Smooth iOS scrolling */
-        }
-
-        .overflow-x-auto::-webkit-scrollbar {
-          height: 4px;
-        }
-
-        .overflow-x-auto::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-        }
-
-        .overflow-x-auto::-webkit-scrollbar-thumb {
-          background: rgba(212, 175, 55, 0.3);
-          border-radius: 10px;
-        }
-
-        /* Fixed: Prevent layout shift during loading */
-        .gold-divider {
-          width: 100px;
-          height: 2px;
-          background: linear-gradient(90deg, transparent, #d4af37, #d4af37, #d4af37, transparent);
-          margin: 2rem auto;
-          transition: width 0.5s ease;
-        }
-
-        .gold-divider.active {
-          width: 200px;
-        }
-      `}</style>
-
-      <section 
-        id="investment-portfolio" 
-        ref={sectionRef} 
-        className="portfolio-section py-24 lg:py-32 px-4 md:px-6"
-      >
-        <div className="max-w-7xl mx-auto relative z-10">
-          
-          {/* === 1. Portfolio Intro === */}
-          <div className={`fade-in ${isVisible ? 'visible' : ''} text-center mb-16 lg:mb-20`}>
-            <div className="inline-flex items-center gap-3 mb-4">
-              <Sparkles className="w-4 h-4 text-[#d4af37]" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#d4af37]/70">
-                {current.topLabel}
+        {/* Strategy Section - Twin Pillars */}
+        <section style={{ backgroundColor: '#F9F9F5', padding: '6rem 1rem' }}>
+          <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+              <span style={{ 
+                color: '#1B4D3E', 
+                fontSize: '0.75rem', 
+                fontWeight: 'bold',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase'
+              }}>
+                {t.strategy_badge}
               </span>
-              <Sparkles className="w-4 h-4 text-[#d4af37]" />
-            </div>
-            
-            <h2 className="font-serif-luxury text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
-              {current.heading}
-            </h2>
-            
-            <div className={`gold-divider ${isVisible ? 'active' : ''}`} />
-            
-            <p className="text-base md:text-lg text-[#9ca8a0] max-w-3xl mx-auto leading-relaxed font-light">
-              {current.description}
-            </p>
-          </div>
-
-          {/* === 2. Stats Horizontal === */}
-          <div className="overflow-x-auto flex gap-16 mb-20 lg:mb-24 pb-6 justify-center" style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'center' }}>
-            {current.stats.map((stat, idx) => (
-              <div 
-                key={idx}
-                className={`stat-card flex-shrink-0 fade-in ${isVisible ? 'visible' : ''}`}
-                style={{ transitionDelay: `${idx * 100}ms` }}
-              >
-                <div className="stat-icon">
-                  {stat.icon}
-                </div>
-                
-                <div className="flex items-end gap-2 mb-2">
-                  <span className="text-3xl md:text-4xl font-bold text-[#d4af37]">
-                    {stat.value}
-                  </span>
-                  <span className="text-xs text-[#9ca8a0] uppercase tracking-wider pb-1">
-                    {stat.unit}
-                  </span>
-                </div>
-                
-                <div className="text-sm font-medium text-white/90">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* === 3. Asset Pillars === */}
-          <div className="mb-20 lg:mb-24">
-            <div className={`fade-in ${isVisible ? 'visible' : ''} text-center mb-12`}>
-              <h3 className="font-serif-luxury text-3xl md:text-4xl font-bold text-white">
-                {current.pillarsHeading}
-              </h3>
+              <h2 style={{ 
+                fontSize: 'clamp(2rem, 5vw, 3rem)', 
+                color: '#0D261E', 
+                marginTop: '0.75rem',
+                fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif",
+                fontWeight: 600
+              }}>
+                {t.strategy_title}
+              </h2>
             </div>
 
-            <div className="overflow-x-auto flex gap-16 pb-6 justify-center" style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'center' }}>
-              {current.pillars.map((pillar, idx) => (
-                <div 
-                  key={idx}
-                  className={`pillar-card flex-shrink-0 fade-in ${isVisible ? 'visible' : ''}`}
-                  style={{ transitionDelay: `${idx * 100}ms` }}
-                  onMouseEnter={() => setActivePillar(idx)}
-                  onMouseLeave={() => setActivePillar(null)}
-                >
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d4af37]/60 block mb-3">
-                    {pillar.label}
-                  </span>
-                  
-                  <h4 className="text-xl font-bold text-white mb-3">{pillar.title}</h4>
-                  
-                  <div className="text-2xl font-bold text-[#d4af37] mb-4">{pillar.stat}</div>
-                  
-                  <p className="text-sm text-[#9ca8a0]/80 leading-relaxed mb-4">
-                    {pillar.desc}
-                  </p>
-                  
-                  <span className="pillar-highlight">
-                    <CheckCircle className="w-3 h-3 inline mr-1" />
-                    {pillar.highlight}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* === 4. Showcase Cards === */}
-          <div className="mb-20 lg:mb-24">
-            <div className={`fade-in ${isVisible ? 'visible' : ''} text-center mb-12`}>
-              <h3 className="font-serif-luxury text-3xl md:text-4xl font-bold text-white">
-                {current.showcaseHeading}
-              </h3>
-            </div>
-
-            <div className="overflow-x-auto flex gap-16 pb-6 justify-start lg:justify-center">
-              {current.showcase.map((item, idx) => (
-                <div 
-                  key={idx}
-                  className={`showcase-card flex-shrink-0 fade-in ${isVisible ? 'visible' : ''}`}
-                  style={{ transitionDelay: `${idx * 100}ms` }}
-                >
-                  <img src={item.image} alt={item.title} loading="lazy" />
-                  
-                  <div className="showcase-overlay">
-                    <span className="showcase-tag">{item.tag}</span>
-                    
-                    <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#d4af37]/70 block mb-2">
-                      {item.category}
-                    </span>
-                    
-                    <h4 className="font-serif-luxury text-2xl font-bold text-white mb-2">
-                      {item.title}
-                    </h4>
-                    
-                    <p className="text-sm text-white/70">{item.desc}</p>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '2rem'
+            }}>
+              {/* Agro Pillar */}
+              <div style={{ position: 'relative' }}>
+                <div style={{ 
+                  position: 'absolute', 
+                  inset: '-0.5rem',
+                  background: 'linear-gradient(to right, rgba(212, 175, 55, 0.2), rgba(27, 77, 62, 0.2))',
+                  borderRadius: '0.75rem',
+                  filter: 'blur(8px)',
+                  opacity: 0.5,
+                  transition: 'opacity 0.5s'
+                }}></div>
+                <div style={{ 
+                  position: 'relative',
+                  background: 'white',
+                  padding: '3rem',
+                  borderRadius: '0.75rem',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                  border: '1px solid #f3f4f6'
+                }}>
+                  <div style={{ 
+                    width: '4rem',
+                    height: '4rem',
+                    background: 'rgba(27, 77, 62, 0.05)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1.5rem',
+                    fontSize: '1.5rem',
+                    color: '#1B4D3E'
+                  }}>
+                    🌿
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-
-          {/* === 6. CTA Section === */}
-          <div className={`fade-in ${isVisible ? 'visible' : ''}`}>
-            <div className="cta-premium">
-              <div className="grid lg:grid-cols-2 gap-16 items-center">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <Crown className="w-5 h-5 text-[#d4af37]" />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d4af37]/70">
-                      EXCLUSIVE OFFERING
-                    </span>
-                  </div>
-                  
-                  <h3 className="font-serif-luxury text-3xl md:text-4xl font-bold text-white">
-                    {current.ctaHeading}
+                  <h3 style={{ 
+                    fontSize: '1.875rem',
+                    color: '#0D261E',
+                    marginBottom: '0.5rem',
+                    fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif"
+                  }}>
+                    {t.agro_title}
                   </h3>
-                  
-                  <p className="text-[#9ca8a0] leading-relaxed text-base">
-                    {current.ctaDesc}
+                  <h4 style={{ 
+                    fontSize: '0.75rem',
+                    fontWeight: 'bold',
+                    color: '#D4AF37',
+                    letterSpacing: '0.2em',
+                    textTransform: 'uppercase',
+                    marginBottom: '1.5rem'
+                  }}>
+                    {t.agro_subtitle}
+                  </h4>
+                  <p style={{ color: '#4b5563', lineHeight: '1.625' }}>
+                    {t.agro_desc}
                   </p>
                 </div>
+              </div>
+
+              {/* Complex Pillar */}
+              <div style={{ position: 'relative' }}>
+                <div style={{ 
+                  position: 'absolute', 
+                  inset: '-0.5rem',
+                  background: 'linear-gradient(to right, rgba(27, 77, 62, 0.2), rgba(212, 175, 55, 0.2))',
+                  borderRadius: '0.75rem',
+                  filter: 'blur(8px)',
+                  opacity: 0.5,
+                  transition: 'opacity 0.5s'
+                }}></div>
+                <div style={{ 
+                  position: 'relative',
+                  background: 'white',
+                  padding: '3rem',
+                  borderRadius: '0.75rem',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                  border: '1px solid #f3f4f6'
+                }}>
+                  <div style={{ 
+                    width: '4rem',
+                    height: '4rem',
+                    background: 'rgba(212, 175, 55, 0.1)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1.5rem',
+                    fontSize: '1.5rem',
+                    color: '#D4AF37'
+                  }}>
+                    🏛️
+                  </div>
+                  <h3 style={{ 
+                    fontSize: '1.875rem',
+                    color: '#0D261E',
+                    marginBottom: '0.5rem',
+                    fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif"
+                  }}>
+                    {t.complex_title}
+                  </h3>
+                  <h4 style={{ 
+                    fontSize: '0.75rem',
+                    fontWeight: 'bold',
+                    color: '#1B4D3E',
+                    letterSpacing: '0.2em',
+                    textTransform: 'uppercase',
+                    marginBottom: '1.5rem'
+                  }}>
+                    {t.complex_subtitle}
+                  </h4>
+                  <p style={{ color: '#4b5563', lineHeight: '1.625' }}>
+                    {t.complex_desc}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Gallery Section */}
+        <section style={{ backgroundColor: '#0D261E', padding: '6rem 1rem' }}>
+          <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+            <div style={{ 
+              display: 'flex',
+              flexDirection: window.innerWidth > 768 ? 'row' : 'column',
+              justifyContent: 'space-between',
+              alignItems: window.innerWidth > 768 ? 'flex-end' : 'flex-start',
+              borderBottom: '1px solid rgba(255,255,255,0.1)',
+              paddingBottom: '2rem',
+              marginBottom: '3rem'
+            }}>
+              <div>
+                <h2 style={{ 
+                  fontSize: 'clamp(2rem, 5vw, 3rem)',
+                  color: 'white',
+                  fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif"
+                }}>
+                  {t.gallery_title}
+                </h2>
+                <p style={{ color: '#9ca3af', marginTop: '0.5rem', fontWeight: 300 }}>
+                  {t.gallery_subtitle}
+                </p>
+              </div>
+              <button style={{ 
+                color: '#D4AF37',
+                fontSize: '0.875rem',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                marginTop: window.innerWidth > 768 ? '0' : '1rem'
+              }}>
+                View Master Plan →
+              </button>
+            </div>
+
+            <div style={{ 
+              display: 'grid',
+              gridTemplateColumns: window.innerWidth > 768 ? 'repeat(4, 1fr)' : '1fr',
+              gap: '1.5rem',
+              minHeight: window.innerWidth > 768 ? '600px' : 'auto'
+            }}>
+              {galleryImages.map((img, idx) => (
+                <div
+                  key={idx}
+                  style={{ 
+                    gridColumn: window.innerWidth > 768 ? img.span.includes('col-span-2') ? 'span 2' : 'span 1' : 'span 1',
+                    gridRow: window.innerWidth > 768 ? img.span.includes('row-span-2') ? 'span 2' : 'span 1' : 'span 1',
+                    position: 'relative',
+                    borderRadius: '0.125rem',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    height: window.innerWidth > 768 ? 'auto' : '300px'
+                  }}
+                >
+                  <img
+                    src={img.url}
+                    alt={img.title}
+                    style={{ 
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      transition: 'transform 0.7s',
+                      opacity: 0.8
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                    onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                  />
+                  <div style={{ 
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)'
+                  }}></div>
+                  <div style={{ 
+                    position: 'absolute',
+                    bottom: '1.5rem',
+                    left: '1.5rem'
+                  }}>
+                    <h3 style={{ 
+                      fontSize: '1.25rem',
+                      color: 'white',
+                      fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif"
+                    }}>
+                      {img.title}
+                    </h3>
+                    <p style={{ 
+                      color: '#D4AF37',
+                      fontSize: '0.75rem',
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      marginTop: '0.25rem'
+                    }}>
+                      {img.subtitle}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Legacy Calculator */}
+        <section style={{ 
+          backgroundColor: '#0D261E', 
+          position: 'relative',
+          padding: '6rem 1rem'
+        }}>
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '600px',
+            height: '600px',
+            background: '#D4AF37',
+            borderRadius: '50%',
+            filter: 'blur(150px)',
+            opacity: 0.1,
+            pointerEvents: 'none'
+          }}></div>
+
+          {/* <div style={{ maxWidth: '1152px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+            <div style={{ 
+              display: 'grid',
+              gridTemplateColumns: window.innerWidth > 1024 ? 'repeat(12, 1fr)' : '1fr',
+              gap: '4rem',
+              alignItems: 'center'
+            }}>
+             
+              <div style={{ gridColumn: window.innerWidth > 1024 ? 'span 5' : 'span 1', color: 'white' }}>
+                <h2 style={{ 
+                  fontSize: 'clamp(2rem, 5vw, 3rem)',
+                  fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif",
+                  marginBottom: '1.5rem'
+                }}>
+                  {t.calc_title}
+                </h2>
+                <p style={{ color: '#9ca3af', fontWeight: 300, lineHeight: '1.625', marginBottom: '1.5rem' }}>
+                  {t.calc_desc}
+                </p>
+
+                <div style={{ 
+                  paddingTop: '1.5rem',
+                  borderTop: '1px solid rgba(255,255,255,0.1)'
+                }}>
+                  <div style={{ 
+                    fontSize: '0.75rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    color: '#D4AF37',
+                    marginBottom: '0.5rem'
+                  }}>
+                    {language === 'en' ? 'Your Privileges' : 'আপনার বিশেষ সুবিধাসমূহ'}
+                  </div>
+                  <h3 style={{ 
+                    fontSize: '1.5rem',
+                    fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif",
+                    marginBottom: '0.5rem'
+                  }}>
+                    {tier.name}
+                  </h3>
+                  <p style={{ fontSize: '0.875rem', color: '#9ca3af' }}>
+                    {tier.perks}
+                  </p>
+                </div>
+              </div>
+
+              
+              <div style={{ gridColumn: window.innerWidth > 1024 ? 'span 7' : 'span 1' }}>
+                <div style={{
+                  background: 'rgba(13, 38, 30, 0.85)',
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(212, 175, 55, 0.2)',
+                  padding: '2.5rem',
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                }}>
                 
-                <div className="text-center lg:text-right">
-                  <button className="cta-button group">
-                    <span className="relative z-10 flex items-center gap-3">
-                      {current.ctaButton}
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </span>
+                  <div style={{ marginBottom: '2.5rem' }}>
+                    <div style={{ 
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-end',
+                      marginBottom: '1rem'
+                    }}>
+                      <label style={{ 
+                        fontSize: '0.75rem',
+                        color: '#D4AF37',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em'
+                      }}>
+                        {t.calc_keys}
+                      </label>
+                      <div style={{ 
+                        fontSize: '3rem',
+                        fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif",
+                        color: 'white'
+                      }}>
+                        {shareCount}
+                      </div>
+                    </div>
+                    <input
+                      type="range"
+                      min="1"
+                      max="60"
+                      value={shareCount}
+                      onChange={(e) => setShareCount(parseInt(e.target.value))}
+                      step="1"
+                      style={{ width: '100%' }}
+                    />
+                    <div style={{ 
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      marginTop: '0.75rem',
+                      fontSize: '0.625rem',
+                      color: '#6b7280',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em'
+                    }}>
+                      <span>{t.tiers.executive} (1)</span>
+                      <span>{t.tiers.platinum} (50+)</span>
+                    </div>
+                  </div>
+
+                 
+                  <div style={{ 
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '2rem',
+                    borderTop: '1px solid rgba(255,255,255,0.1)',
+                    paddingTop: '2rem',
+                    marginBottom: '2rem'
+                  }}>
+                    <div>
+                      <span style={{ 
+                        fontSize: '0.75rem',
+                        color: '#6b7280',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        display: 'block',
+                        marginBottom: '0.25rem'
+                      }}>
+                        {t.calc_investment}
+                      </span>
+                      <div style={{ 
+                        fontSize: '1.875rem',
+                        fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Montserrat', serif",
+                        color: 'white'
+                      }}>
+                        {formatCurrency(investment)}
+                      </div>
+                      {tier.discount > 0 && (
+                        <div style={{ 
+                          fontSize: '0.75rem',
+                          color: '#D4AF37',
+                          marginTop: '0.25rem'
+                        }}>
+                          {(tier.discount * 100).toFixed(1)}% {language === 'en' ? 'Privilege Applied' : 'ছাড় প্রযোজ্য'}
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <span style={{ 
+                        fontSize: '0.75rem',
+                        color: '#6b7280',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        display: 'block',
+                        marginBottom: '0.25rem'
+                      }}>
+                        {t.calc_value}
+                      </span>
+                      <div style={{ 
+                        fontSize: '1.875rem',
+                        fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Montserrat', serif",
+                        color: '#D4AF37'
+                      }}>
+                        {formatCurrency(futureValue)}
+                      </div>
+                      <div style={{ 
+                        fontSize: '0.75rem',
+                        color: '#6b7280',
+                        marginTop: '0.25rem'
+                      }}>
+                        {language === 'en' ? 'With Capital Appreciation' : 'জমির মূল্যবৃদ্ধি সহ'}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button style={{
+                    width: '100%',
+                    padding: '1.25rem',
+                    backgroundColor: '#D4AF37',
+                    border: 'none',
+                    color: '#0D261E',
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    fontSize: '0.75rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = 'white';
+                    e.target.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = '#D4AF37';
+                    e.target.style.transform = 'translateY(0)';
+                  }}>
+                    {t.calc_cta}
                   </button>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </div> */}
+        </section>
+      </div>
     </>
   );
 };
 
-export default InvestmentPortfolio;
+export default InvestmentPortfolioRebuilt;

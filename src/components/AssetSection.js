@@ -18,14 +18,14 @@ const AssetSection = ({ language = 'en' }) => {
 
   const content = {
     en: {
-      topLabel: "TANGIBLE. SECURED. PRODUCTIVE.",
+      topLabel: "",
       mainHeading: "The Asset Structure",
       description: "Your investment is backed by registered land and revenue-generating infrastructure that hedges against inflation and market volatility.",
       
       assets: [
         {
           label: "THE LAND",
-          stat: "32.84 Bighas",
+          stat: "40 Bighas",
           description: "Registered Saf Kabla land in the high-growth Bhabanipur-Gazipur corridor.",
           icon: <Map className="w-8 h-8" />
         },
@@ -79,7 +79,7 @@ const AssetSection = ({ language = 'en' }) => {
       ctaButton: "VIEW INFRASTRUCTURE ROADMAP"
     },
     bn: {
-      topLabel: "বাস্তব। সুরক্ষিত। উৎপাদনশীল।",
+      topLabel: "",
       mainHeading: "সম্পদের কাঠামো",
       description: "আপনার বিনিয়োগ রেজিস্টার্ড জমি এবং রাজস্ব-উৎপাদনকারী অবকাঠামো দ্বারা সমর্থিত।",
       
@@ -301,13 +301,12 @@ const AssetSection = ({ language = 'en' }) => {
         }
 
         .luxury-divider-text {
-          font-size: 2rem;
+          font-size: clamp(1.25rem, 3vw, 2rem);
           font-weight: 700;
           color: #f5f3ed;
           text-transform: uppercase;
           letter-spacing: 0.05em;
           font-family: 'Playfair Display', serif;
-          white-space: nowrap;
         }
 
         .luxury-showcase-card {
@@ -532,10 +531,6 @@ const AssetSection = ({ language = 'en' }) => {
           
           .luxury-showcase-title {
             font-size: 1.75rem;
-          }
-
-          .luxury-divider-text {
-            font-size: 1.5rem;
           }
 
           .luxury-cta-box {

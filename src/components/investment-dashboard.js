@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Leaf, Shield, TrendingUp, Users, ArrowRight, Menu, X, Calculator, Lock, Phone, Mail, MapPin, Globe, Download, ChevronRight, Star, Award, Home, Clock, Calendar, Building, FileText, Share2, Target, PieChart, BarChart3, DollarSign, Activity } from 'lucide-react';
+import reverseLogo from '../images/Forest Eco Resort_Reverse Color Logo.png';
+import navLogo from '../images/Forest Eco Resort_Reverse Color Logo.png';
 
 const TRANSLATIONS = {
   en: {
@@ -212,7 +214,7 @@ const InvestmentDashboard = ({ language, t }) => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      const heroSection = document.getElementById('hero');
+      const heroSection = document.getElementById('home');
       
       if (heroSection) {
         const rect = heroSection.getBoundingClientRect();
@@ -267,7 +269,7 @@ const InvestmentDashboard = ({ language, t }) => {
   return (
     <div className={`min-h-screen ${language === 'bn' ? 'font-bengali' : ''}`}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
         
         * {
           box-sizing: border-box;
@@ -281,7 +283,7 @@ const InvestmentDashboard = ({ language, t }) => {
         }
         
         body {
-          font-family: 'Outfit', sans-serif;
+          font-family: 'Lora', serif;
           background-color: #F6F6F7;
           scroll-behavior: smooth;
           overflow-y: auto;
@@ -307,7 +309,7 @@ const InvestmentDashboard = ({ language, t }) => {
         }
         
         h1, h2, h3, h4, h5, h6 {
-          font-family: 'Inter', sans-serif;
+          font-family: 'Montserrat', sans-serif;
         }
         
         @keyframes fade-in-up {
@@ -350,7 +352,7 @@ const InvestmentDashboard = ({ language, t }) => {
         borderBottom: isHeroVisible ? 'none' : '1px solid rgba(240, 234, 175, 0.1)'
       }}>
         <div className="container-fluid px-4 px-lg-5">
-          <a href="#hero" className="navbar-brand d-flex align-items-center">
+          <a href="#home" className="navbar-brand d-flex align-items-center">
             {!logoError ? (
               <img
                 src={reverseLogo}
@@ -628,7 +630,7 @@ const InvestmentDashboard = ({ language, t }) => {
       </nav>
 
       {/* Hero Section */}
-      <section id="hero" className="py-8 py-md-12" style={{
+      <section id="home" className="py-8 py-md-12" style={{
         background: 'linear-gradient(135deg, #F0EAAF, #e6de9a)',
         minHeight: '100vh',
         display: 'flex',

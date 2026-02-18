@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import heroImage from '../images/hero.jpg';
+import navLogo from '../images/Forest Eco Resort_Reverse Color Logo.png';
 import reverseLogo from '../images/Forest Eco Resort_Reverse Color Logo.png';
 import aboutBanner from '../images/aboutUSResort.png';
 import aboutImage from '../images/aboutusFinal.jpg';
@@ -717,7 +718,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
       { threshold: 0.1 }
     );
 
-    const heroSection = document.getElementById('hero');
+    const heroSection = document.getElementById('home');
     if (heroSection) {
       observer.observe(heroSection);
     }
@@ -742,10 +743,10 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
       borderBottom: isHeroVisible ? 'none' : '1px solid rgba(240, 234, 175, 0.1)'
     }}>
       <div className="container-fluid px-4 px-lg-5">
-        <a href="#hero" className="navbar-brand d-flex align-items-center">
+        <a href="#home" className="navbar-brand d-flex align-items-center">
           {!logoError ? (
             <img
-              src={reverseLogo}
+              src={navLogo}
               alt="Forest Eco Resort"
               className="img-fluid"
               style={{ 
@@ -767,7 +768,7 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
             fontSize: '1.5rem',
             textShadow: '0 2px 4px rgba(0,0,0,0.3)'
           }}>
-          FOREST ECO <span style={{ fontWeight: 'normal' }}>RESORT</span>
+          FOREST ECO RESORT
           </span>
         </a>
 
@@ -1110,7 +1111,7 @@ const Hero = ({ t, language }) => {
   
   // Render immediately with fallback content - no loading state blocking
   return (
-    <section id="hero" className="position-relative min-vh-100 w-100 overflow-hidden d-flex align-items-center justify-content-center" style={{
+    <section id="home" className="position-relative min-vh-100 w-100 overflow-hidden d-flex align-items-center justify-content-center" style={{
       background: 'linear-gradient(to bottom, #F6F6F7, #FFFFFF)'
     }}>
       {/* Background Image */}
@@ -2242,7 +2243,7 @@ const CenteredLoopingSlider = ({ steps }) => {
   );
 };
 
-const TiersSection = ({ t, language }) => {
+const TiersSection = ({ t, language, openJoinModal }) => {
   const TIERS = useMemo(() => getTiersData(language), [language]);
   const [activeTab, setActiveTab] = useState('all');
 
@@ -2438,6 +2439,7 @@ const TiersSection = ({ t, language }) => {
                       e.currentTarget.style.transform = 'translateY(0)';
                       e.currentTarget.style.boxShadow = 'none';
                     }}
+                    onClick={openJoinModal}
                   >
                     {t.tiers.reqAccess}
                   </button>
@@ -2898,62 +2900,49 @@ const CTABar = ({ t }) => (
   </section>
 );
 
-// Main App Component
-function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const App = () => {
   const [language, setLanguage] = useState('en');
+  const [currentPage, setCurrentPage] = useState('home');
+  const [fileViewMode, setFileViewMode] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState('home'); // 'home' or 'dashboard'
-  const [fileViewMode, setFileViewMode] = useState(null); // null, 'asset', or 'portfolio'
+  const [showAssetSection, setShowAssetSection] = useState(true);
   const [fileContent, setFileContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [showAssetSection, setShowAssetSection] = useState(false); // New state for AssetSection view
+  const [error, setError] = useState(null);
 
   const t = TRANSLATIONS[language];
+  const PUBLIC_URL = process.env.PUBLIC_URL || '';
 
-  // Handle file viewing
+  // Function to load file content
   const loadFileContent = async (fileName) => {
     setIsLoading(true);
-    setError('');
-    setFileContent('');
-    
+    setError(null);
     try {
-      const response = await fetch(`/${fileName}`);
-      if (!response.ok) {
-        throw new Error(`Failed to load ${fileName}`);
-      }
-      const text = await response.text();
-      setFileContent(text);
-      setFileViewMode(fileName.replace('.txt', ''));
+      const response = await fetch(`${PUBLIC_URL}/${fileName}.txt`);
+      if (!response.ok) throw new Error('File not found');
+      const content = await response.text();
+      setFileContent(content);
     } catch (err) {
-      setError(`Error loading ${fileName}: ${err.message}`);
-      setFileViewMode(null);
+      setError(err.message);
+      setFileContent('');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Close file view and return to normal layout
+  // Close file view
   const closeFileView = () => {
     setFileViewMode(null);
     setFileContent('');
-    setError('');
-    setShowAssetSection(false);
-    // Reset URL hash to home
-    window.location.hash = '';
+    setError(null);
   };
 
-  // Handle URL hash changes for routing
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.slice(1); // Remove #
-      
-      if (hash === 'investment-dashboard') {
-        setCurrentPage('dashboard');
-        setFileViewMode(null);
-        setShowAssetSection(false);
-      } else if (hash === 'the-asset') {
+      const hash = window.location.hash.substring(1); // Remove the # symbol
+
+      if (hash === 'the-asset') {
         // Scroll to the asset section instead of showing separate view
         setShowAssetSection(false);
         setFileViewMode(null);
@@ -2983,15 +2972,20 @@ function App() {
       }
     };
 
-    // Initial check
+    // Handle initial hash
     handleHashChange();
-    
-    window.addEventListener('hashchange', handleHashChange);
-    
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
+
+    // Listen for hash changes
+    const handlePopState = () => {
+      handleHashChange();
     };
-  }, []);
+
+    window.addEventListener('hashchange', handlePopState);
+
+    return () => {
+      window.removeEventListener('hashchange', handlePopState);
+    };
+  }, [setShowAssetSection, setFileViewMode, setCurrentPage]);
 
   useEffect(() => {
     if (isMenuOpen || isJoinModalOpen) {
@@ -3010,7 +3004,7 @@ function App() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
         
         * {
           box-sizing: border-box;
@@ -3024,7 +3018,7 @@ function App() {
         }
         
         body {
-          font-family: 'Outfit', sans-serif;
+          font-family: 'Lora', serif;
           background-color: #F6F6F7;
           scroll-behavior: smooth;
           overflow-y: auto;
@@ -3050,7 +3044,7 @@ function App() {
         }
         
         h1, h2, h3, h4, h5, h6 {
-          font-family: 'Inter', sans-serif;
+          font-family: 'Montserrat', sans-serif;
         }
         
         @keyframes fade-in-up {
@@ -3117,10 +3111,12 @@ function App() {
                 <div id="the-asset">
                   <AssetSection language={language} />
                 </div>
-                <InvestmentPortfolio language={language} />
+                <div id="investment-portfolio">
+                  <InvestmentPortfolio language={language} />
+                </div>
                 <PortfolioGallery t={t} />
                 <ROICalculator t={t} language={language} />
-                <TiersSection t={t} language={language} />
+                <TiersSection t={t} language={language} openJoinModal={() => setIsJoinModalOpen(true)} />
                 <FAQSection t={t} />
                 <CTABar t={t} />
                 <Footer t={t} />
