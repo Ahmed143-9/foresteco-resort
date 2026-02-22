@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Landmark, Hotel, Sprout, ShieldCheck, Map, ArrowRight } from 'lucide-react';
+import forestLodge from '../images/The Forest Lodge.jpeg';
+import gatheringGrounds from '../images/The Gathering Grounds.jpeg';
+import auspiciousZone from '../images/Auspicious Zone.jpeg';
 
 const AssetSection = ({ language = 'en' }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -21,7 +24,7 @@ const AssetSection = ({ language = 'en' }) => {
       topLabel: "",
       mainHeading: "The Asset Structure",
       description: "Your investment is backed by registered land and revenue-generating infrastructure that hedges against inflation and market volatility.",
-      
+
       assets: [
         {
           label: "THE LAND",
@@ -56,19 +59,19 @@ const AssetSection = ({ language = 'en' }) => {
           category: "LIFESTYLE FOCUS",
           badge: "Hospitality Pillar",
           title: "The Forest Lodge",
-          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1200"
+          image: forestLodge
         },
         {
           category: "EVENT FOCUS",
           badge: "MICE & Recreation",
           title: "The Gathering Grounds",
-          image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200"
+          image: gatheringGrounds
         },
         {
           category: "YIELD FOCUS",
           badge: "Revenue Driver",
           title: "The Auspicious Zone",
-          image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1200"
+          image: auspiciousZone
         }
       ],
 
@@ -82,7 +85,7 @@ const AssetSection = ({ language = 'en' }) => {
       topLabel: "",
       mainHeading: "সম্পদের কাঠামো",
       description: "আপনার বিনিয়োগ রেজিস্টার্ড জমি এবং রাজস্ব-উৎপাদনকারী অবকাঠামো দ্বারা সমর্থিত।",
-      
+
       assets: [
         {
           label: "জমি",
@@ -117,19 +120,19 @@ const AssetSection = ({ language = 'en' }) => {
           category: "জীবনযাত্রার ফোকাস",
           badge: "আতিথেয়তা স্তম্ভ",
           title: "দ্য ফরেস্ট লজ",
-          image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1200"
+          image: forestLodge
         },
         {
           category: "ইভেন্ট ফোকাস",
           badge: "MICE এবং বিনোদন",
           title: "দ্য গ্যাদারিং গ্রাউন্ডস",
-          image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200"
+          image: gatheringGrounds
         },
         {
           category: "ফলন ফোকাস",
           badge: "রাজস্ব চালক",
           title: "দ্য অসপিশাস জোন",
-          image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1200"
+          image: auspiciousZone
         }
       ],
 
@@ -539,23 +542,23 @@ const AssetSection = ({ language = 'en' }) => {
         }
       `}</style>
 
-      <section 
-        id="the-asset" 
-        ref={sectionRef} 
+      <section
+        id="the-asset"
+        ref={sectionRef}
         className="luxury-asset-section py-20 lg:py-32 px-4 md:px-8"
       >
         <div className="max-w-7xl mx-auto">
-          
+
           {/* 1️⃣ Asset Structure Intro Area */}
           <div className={`text-center mb-20 fade-in ${isVisible ? 'visible' : ''} mt-12`}>
             <p className="luxury-top-label mb-4">
               {current.topLabel}
             </p>
-            
+
             <h2 className="luxury-main-heading luxury-serif mb-6">
               {current.mainHeading}
             </h2>
-            
+
             <p className="luxury-description mt-4">
               {current.description}
             </p>
@@ -566,23 +569,23 @@ const AssetSection = ({ language = 'en' }) => {
             <div className="horizontal-scroll-container">
               <div className="asset-cards-row">
                 {current.assets.map((asset, idx) => (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     className="luxury-asset-card"
                     style={{ transitionDelay: `${idx * 100}ms` }}
                   >
                     <div className="luxury-icon-container">
                       {asset.icon}
                     </div>
-                    
+
                     <p className="luxury-asset-label">
                       {asset.label}
                     </p>
-                    
+
                     <div className="luxury-asset-stat">
                       {asset.stat}
                     </div>
-                    
+
                     <p className="luxury-asset-desc">
                       {asset.description}
                     </p>
@@ -605,30 +608,30 @@ const AssetSection = ({ language = 'en' }) => {
             <div className="horizontal-scroll-container">
               <div className="showcase-cards-row">
                 {current.showcase.map((item, idx) => (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     className="luxury-showcase-card"
                     style={{ transitionDelay: `${idx * 150}ms` }}
                   >
-                    <img 
-                      src={item.image} 
+                    <img
+                      src={item.image}
                       alt={item.title}
                       className="luxury-showcase-image"
                     />
-                    
+
                     <div className="luxury-showcase-overlay">
                       <p className="luxury-showcase-category">
                         {item.category}
                       </p>
-                      
+
                       <span className="luxury-showcase-badge">
                         {item.badge}
                       </span>
-                      
+
                       <h4 className="luxury-showcase-title luxury-serif">
                         {item.title}
                       </h4>
-                      
+
                       <div className="luxury-showcase-link">
                         <span>View Details</span>
                         <ArrowRight className="w-4 h-4" />
@@ -647,24 +650,24 @@ const AssetSection = ({ language = 'en' }) => {
                 <h3 className="luxury-cta-heading luxury-serif">
                   {current.ctaHeading}
                 </h3>
-                
+
                 <p className="luxury-cta-description">
                   {current.ctaDescription}
                 </p>
-                
+
                 <div className="luxury-badge-container">
                   <div className="luxury-badge">
                     <p className="luxury-badge-label">Financial Integrity</p>
                     <div className="luxury-badge-value">{current.badge1}</div>
                   </div>
-                  
+
                   <div className="luxury-badge">
                     <p className="luxury-badge-label">Risk Mitigation</p>
                     <div className="luxury-badge-value">{current.badge2}</div>
                   </div>
                 </div>
               </div>
-              
+
               <div className="text-center lg:text-right">
                 <button className="luxury-cta-button">
                   <span>{current.ctaButton}</span>

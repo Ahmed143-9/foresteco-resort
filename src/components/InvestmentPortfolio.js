@@ -1,5 +1,7 @@
-// InvestmentPortfolioRebuilt.js
 import React, { useState } from 'react';
+import guestHouse from '../images/Guest House.jpeg';
+import organicAgro from '../images/Organic Agro.jpeg';
+import attractions from '../images/Attractions.jpeg';
 
 const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
   const [shareCount, setShareCount] = useState(5);
@@ -88,7 +90,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
   // Gallery images
   const galleryImages = [
     {
-      url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=1000",
+      url: guestHouse,
       title: language === 'en' ? "The Guest House" : "দ্য গেস্ট হাউস",
       subtitle: language === 'en' ? "30 Premium Suites" : "৩০টি প্রিমিয়াম স্যুট",
       span: "col-span-2 row-span-2"
@@ -100,13 +102,13 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
       span: "col-span-2"
     },
     {
-      url: "https://images.unsplash.com/photo-1559828854-1fa99042c16c?auto=format&fit=crop&q=80&w=600",
+      url: organicAgro,
       title: language === 'en' ? "Organic Agro" : "অর্গানিক অ্যাগ্রো",
       subtitle: language === 'en' ? "Dragon Fruit Yields" : "ড্রাগন ফলের ফলন",
       span: ""
     },
     {
-      url: "https://images.unsplash.com/photo-1515516089376-88db1e26e9c0?auto=format&fit=crop&q=80&w=600",
+      url: attractions,
       title: language === 'en' ? "Attractions" : "অ্যাট্রাকশন জোন",
       subtitle: language === 'en' ? "Ferris Wheel & Base Camp" : "নাগরদোলা এবং বেস ক্যাম্প",
       span: ""
@@ -268,18 +270,18 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
         <section style={{ backgroundColor: '#F9F9F5', padding: '6rem 1rem' }}>
           <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-              <span style={{ 
-                color: '#1B4D3E', 
-                fontSize: '0.75rem', 
+              <span style={{
+                color: '#1B4D3E',
+                fontSize: '0.75rem',
                 fontWeight: 'bold',
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase'
               }}>
                 {t.strategy_badge}
               </span>
-              <h2 style={{ 
-                fontSize: 'clamp(2rem, 5vw, 3rem)', 
-                color: '#0D261E', 
+              <h2 style={{
+                fontSize: 'clamp(2rem, 5vw, 3rem)',
+                color: '#0D261E',
                 marginTop: '0.75rem',
                 fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif",
                 fontWeight: 600
@@ -288,15 +290,15 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
               </h2>
             </div>
 
-            <div style={{ 
-              display: 'grid', 
+            <div style={{
+              display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
               gap: '2rem'
             }}>
               {/* Agro Pillar */}
               <div style={{ position: 'relative' }}>
-                <div style={{ 
-                  position: 'absolute', 
+                <div style={{
+                  position: 'absolute',
                   inset: '-0.5rem',
                   background: 'linear-gradient(to right, rgba(212, 175, 55, 0.2), rgba(27, 77, 62, 0.2))',
                   borderRadius: '0.75rem',
@@ -304,7 +306,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                   opacity: 0.5,
                   transition: 'opacity 0.5s'
                 }}></div>
-                <div style={{ 
+                <div style={{
                   position: 'relative',
                   background: 'white',
                   padding: '3rem',
@@ -312,7 +314,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                   boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
                   border: '1px solid #f3f4f6'
                 }}>
-                  <div style={{ 
+                  <div style={{
                     width: '4rem',
                     height: '4rem',
                     background: 'rgba(27, 77, 62, 0.05)',
@@ -326,7 +328,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                   }}>
                     🌿
                   </div>
-                  <h3 style={{ 
+                  <h3 style={{
                     fontSize: '1.875rem',
                     color: '#0D261E',
                     marginBottom: '0.5rem',
@@ -334,7 +336,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                   }}>
                     {t.agro_title}
                   </h3>
-                  <h4 style={{ 
+                  <h4 style={{
                     fontSize: '0.75rem',
                     fontWeight: 'bold',
                     color: '#D4AF37',
@@ -352,8 +354,8 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
 
               {/* Complex Pillar */}
               <div style={{ position: 'relative' }}>
-                <div style={{ 
-                  position: 'absolute', 
+                <div style={{
+                  position: 'absolute',
                   inset: '-0.5rem',
                   background: 'linear-gradient(to right, rgba(27, 77, 62, 0.2), rgba(212, 175, 55, 0.2))',
                   borderRadius: '0.75rem',
@@ -361,7 +363,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                   opacity: 0.5,
                   transition: 'opacity 0.5s'
                 }}></div>
-                <div style={{ 
+                <div style={{
                   position: 'relative',
                   background: 'white',
                   padding: '3rem',
@@ -369,7 +371,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                   boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
                   border: '1px solid #f3f4f6'
                 }}>
-                  <div style={{ 
+                  <div style={{
                     width: '4rem',
                     height: '4rem',
                     background: 'rgba(212, 175, 55, 0.1)',
@@ -383,7 +385,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                   }}>
                     🏛️
                   </div>
-                  <h3 style={{ 
+                  <h3 style={{
                     fontSize: '1.875rem',
                     color: '#0D261E',
                     marginBottom: '0.5rem',
@@ -391,7 +393,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                   }}>
                     {t.complex_title}
                   </h3>
-                  <h4 style={{ 
+                  <h4 style={{
                     fontSize: '0.75rem',
                     fontWeight: 'bold',
                     color: '#1B4D3E',
@@ -413,7 +415,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
         {/* Gallery Section */}
         <section style={{ backgroundColor: '#0D261E', padding: '6rem 1rem' }}>
           <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-            <div style={{ 
+            <div style={{
               display: 'flex',
               flexDirection: window.innerWidth > 768 ? 'row' : 'column',
               justifyContent: 'space-between',
@@ -423,7 +425,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
               marginBottom: '3rem'
             }}>
               <div>
-                <h2 style={{ 
+                <h2 style={{
                   fontSize: 'clamp(2rem, 5vw, 3rem)',
                   color: 'white',
                   fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif"
@@ -434,7 +436,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                   {t.gallery_subtitle}
                 </p>
               </div>
-              <button style={{ 
+              <button style={{
                 color: '#D4AF37',
                 fontSize: '0.875rem',
                 letterSpacing: '0.1em',
@@ -448,7 +450,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
               </button>
             </div>
 
-            <div style={{ 
+            <div style={{
               display: 'grid',
               gridTemplateColumns: window.innerWidth > 768 ? 'repeat(4, 1fr)' : '1fr',
               gap: '1.5rem',
@@ -457,7 +459,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
               {galleryImages.map((img, idx) => (
                 <div
                   key={idx}
-                  style={{ 
+                  style={{
                     gridColumn: window.innerWidth > 768 ? img.span.includes('col-span-2') ? 'span 2' : 'span 1' : 'span 1',
                     gridRow: window.innerWidth > 768 ? img.span.includes('row-span-2') ? 'span 2' : 'span 1' : 'span 1',
                     position: 'relative',
@@ -470,7 +472,7 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                   <img
                     src={img.url}
                     alt={img.title}
-                    style={{ 
+                    style={{
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover',
@@ -480,24 +482,24 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                   />
-                  <div style={{ 
+                  <div style={{
                     position: 'absolute',
                     inset: 0,
                     background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)'
                   }}></div>
-                  <div style={{ 
+                  <div style={{
                     position: 'absolute',
                     bottom: '1.5rem',
                     left: '1.5rem'
                   }}>
-                    <h3 style={{ 
+                    <h3 style={{
                       fontSize: '1.25rem',
                       color: 'white',
                       fontFamily: language === 'bn' ? "'Hind Siliguri', serif" : "'Cormorant Garamond', serif"
                     }}>
                       {img.title}
                     </h3>
-                    <p style={{ 
+                    <p style={{
                       color: '#D4AF37',
                       fontSize: '0.75rem',
                       letterSpacing: '0.1em',
@@ -514,8 +516,8 @@ const InvestmentPortfolioRebuilt = ({ language = 'en' }) => {
         </section>
 
         {/* Legacy Calculator */}
-        <section style={{ 
-          backgroundColor: '#0D261E', 
+        <section style={{
+          backgroundColor: '#0D261E',
           position: 'relative',
           padding: '6rem 1rem'
         }}>

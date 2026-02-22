@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import heroImage from '../images/hero.jpg';
-import navLogo from '../images/1.svg';
+import navLogo from '../images/Forest Eco Resort_Reverse Color Logo.png';
 import reverseLogo from '../images/Forest Eco Resort_Reverse Color Logo.png';
 import aboutBanner from '../images/aboutUSResort.png';
 import aboutImage from '../images/aboutusFinal.jpg';
@@ -140,7 +140,7 @@ const TRANSLATIONS = {
     footer: {
       contact: "Contact",
       legal: "Legal",
-      address: "Bhabanipur, Gazipur.\nAn Agro-Tourism Project established under the joint management of YESS Cooperative Society and NEXCENT.",
+      address: "Bhabanipur, Gazipur.\nAn Agro-Tourism Project established under the joint management of  YESS Group and NEXCENT.",
       rights: "© 2026 Forest Eco Resort Ltd. All rights reserved.",
       links: {
         privacy: "Privacy Policy",
@@ -158,7 +158,7 @@ const TRANSLATIONS = {
     },
     ctaBar: {
       title: "Pilot Phase Closing Soon",
-      desc: "Only 50 shares available at discounted Executive rates.",
+      desc: "Limited Shares Available",
       btn: "Download Investment Dossier"
     },
     about: {
@@ -279,7 +279,7 @@ const TRANSLATIONS = {
     },
     ctaBar: {
       title: "পাইলট ফেজ শীঘ্রই শেষ হচ্ছে",
-      desc: "ডিসকাউন্টেড এক্সিকিউটিভ মূল্যে আর মাত্র ৫০টি শেয়ার বাকি।",
+      desc: "সীমিত শেয়ার অবশিষ্ট আছে",
       btn: "ইনভেস্টমেন্ট বিস্তারিত দেখুন"
     }
   }
@@ -754,7 +754,8 @@ const Navigation = ({ toggleMenu, isMenuOpen, language, setLanguage, t, openJoin
               style={{
                 height: '40px',
                 transition: 'transform 0.2s',
-                marginRight: '10px'
+                marginRight: '10px',
+                borderRadius: '20%'
               }}
               onError={() => setLogoError(true)}
             />
@@ -1595,7 +1596,7 @@ const ValueProp = ({ t }) => (
 );
 
 const VideoSection = ({ t }) => {
-  const [videoLink, setVideoLink] = useState('https://www.youtube.com/embed/cEHP_LeBeyQ?list=PLGoWuvyH709vpTCVrjaJtaaFfite9U6u8&autoplay=1&mute=1');
+  const [videoLink, setVideoLink] = useState('https://www.youtube.com/embed/0d7Zmbot2DM?autoplay=1&mute=1');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -2514,7 +2515,7 @@ const FAQSection = ({ t }) => {
             >
               <h2 className="accordion-header">
                 <button
-                  className="accordion-button fs-5 fw-bold text-success text-start p-4"
+                  className={`accordion-button ${openIndex === index ? '' : 'collapsed'} fs-5 fw-bold text-success text-start p-4`}
                   type="button"
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
                   style={{
@@ -2526,16 +2527,6 @@ const FAQSection = ({ t }) => {
                   aria-expanded={openIndex === index ? 'true' : 'false'}
                 >
                   {item.q}
-                  <ChevronRight
-                    className="ms-auto"
-                    style={{
-                      width: '20px',
-                      height: '20px',
-                      transition: 'transform 0.3s ease',
-                      transform: openIndex === index ? 'rotate(90deg)' : 'rotate(0deg)',
-                      color: '#193C26'
-                    }}
-                  />
                 </button>
               </h2>
               <div
@@ -2564,6 +2555,7 @@ const Footer = ({ t }) => {
   const [nexcentError, setNexcentError] = useState(false);
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [footerLogoError, setFooterLogoError] = useState(false);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -2607,7 +2599,7 @@ const Footer = ({ t }) => {
             <div className="col-12 col-md-8">
               <h3 className="h4 fw-bold text-warning mb-2">LIMITED INVENTORY ALERT</h3>
               <p className="text-light mb-2">
-                Only 50 Shares are released in this Pilot Phase.
+                Limited Shares are released in this Pilot Phase.
               </p>
               <p className="text-light mb-3 mb-md-0">
                 Allocation is on a first-come, first-served basis.
@@ -2723,8 +2715,25 @@ const Footer = ({ t }) => {
           {/* Brand Info */}
           <div className="col-12 col-md-6">
             <div className="d-flex align-items-center gap-2 mb-4 mb-md-5">
-              <Leaf className="" style={{ width: '32px', height: '32px', color: '#F0EAAF' }} />
-              <span className="h3 fw-bold text-white mb-0">
+              {!footerLogoError ? (
+                <img
+                  src={navLogo}
+                  alt="Forest Eco Resort"
+                  className="img-fluid"
+                  style={{ height: '40px', marginRight: '10px', borderRadius: '20%' }}
+                  onError={() => setFooterLogoError(true)}
+                />
+              ) : (
+                <Leaf className="me-3" style={{ color: '#F0EAAF', filter: 'drop-shadow(0 0 2px rgba(240, 234, 175, 0.5))' }} />
+              )}
+              <span style={{
+                color: '#F0EAAF',
+                fontWeight: 'bold',
+                fontSize: '1.5rem',
+                textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                fontFamily: "'Prettywise', serif",
+                letterSpacing: '0.05em'
+              }}>
                 FOREST ECO RESORT
               </span>
             </div>
@@ -2831,13 +2840,13 @@ const Footer = ({ t }) => {
             <div className="text-center">
               <img
                 src={yessLogo}
-                alt="YESS Cooperative Society"
+                alt="YESS Group"
                 className="img-fluid mb-2"
                 style={{ height: '40px', objectFit: 'contain', opacity: 0.9 }}
               />
               <div>
-                <span className="fw-bold text-white h5 d-block">YESS</span>
-                <div className="text-light text-opacity-75 small">COOPERATIVE SOCIETY</div>
+
+                <div className="text-light text-opacity-75 small">YESS Group</div>
               </div>
             </div>
             <div className="d-none d-md-block" style={{ width: '1px', height: '48px', backgroundColor: '#6c757d' }}></div>
@@ -2850,8 +2859,8 @@ const Footer = ({ t }) => {
                 style={{ height: '40px', objectFit: 'contain', opacity: 0.9 }}
               />
               <div>
-                <span className="fw-bold text-white h5 d-block">NEXCENT</span>
-                <div className="text-light text-opacity-75 small">INVESTMENT GROUP</div>
+
+                <div className="text-light text-opacity-75 small">NEXCENT GROUP</div>
               </div>
             </div>
           </div>
@@ -3093,6 +3102,10 @@ const App = () => {
           transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
                      opacity 0.3s ease,
                      transform 0.3s ease;
+        }
+
+        .accordion-button::after {
+          display: none !important;
         }
       `}</style>
 
